@@ -1,0 +1,53 @@
+@import "base/_variaveis.scss";
+@import "base/estilos_default";
+
+main {
+    display: grid;
+    grid-template:
+            "topbar topbar topbar topbar topbar"
+            "sidebar content content content content"
+            "sidebar content content content content" / 1fr 1fr 1fr 1fr 1fr;
+
+    #topbar {
+        background-color: red;
+        grid-area: topbar;
+        min-height: $altura-header-large;
+        height: $altura-header-large;
+        display: flex;
+        justify-content: space-between;
+        padding: 1rem 2rem;
+
+        .topbar__wrapper-account {
+            .topbar__wrapper-account__inner-wrapper {
+                display: flex;
+                align-items: center;
+                //justify-content: space-between;
+                width: 100%;
+            }
+        }
+
+        .topbar__wrapper-logo {
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    #sidebar {
+        background-color: green;
+        grid-area: sidebar;
+
+    }
+
+    #content {
+        background-color: blue;
+        grid-area: content;
+        min-height: calc(100vh - $altura-header-large - $altura-footer-large);
+
+    }
+
+}
+
+footer {
+    background-color: yellow;
+    min-height: $altura-header-large;
+}

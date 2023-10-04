@@ -1,0 +1,45 @@
+body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+}
+
+a {
+  color: #FDBF50;
+}
+
+main {
+  display: grid;
+  grid-template: "topbar topbar topbar topbar topbar" "sidebar content content content content" "sidebar content content content content"/1fr 1fr 1fr 1fr 1fr;
+}
+main #topbar {
+  background-color: red;
+  grid-area: topbar;
+  min-height: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+}
+main #topbar .topbar__wrapper-account .topbar__wrapper-account__inner-wrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+main #topbar .topbar__wrapper-logo {
+  display: flex;
+  align-items: center;
+}
+main #sidebar {
+  background-color: green;
+  grid-area: sidebar;
+}
+main #content {
+  background-color: blue;
+  grid-area: content;
+  min-height: calc(100vh - 60px - 50px);
+}
+
+footer {
+  background-color: yellow;
+  min-height: 60px;
+}
