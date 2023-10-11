@@ -1,0 +1,37 @@
+#sidebar {
+    transition: all 0.3s ease-in-out;
+
+}
+
+body {
+
+    .open-menu-btn {
+        transition: all 0.3s ease-in-out;
+
+        img {
+            transition: all 0.3s ease-in-out;
+        }
+    }
+
+    &.closed-menu {
+        #sidebar {
+            transform: translate3d(-100%, 0px, 0px);
+        }
+
+        .open-menu-btn {
+            transform: translate3d(-200%, 0px, 0px);
+
+            img {
+                transform: rotate(180deg);
+            }
+        }
+
+        main {
+            grid-template:
+            "topbar topbar topbar topbar topbar"
+            "content content content content content"
+            "content content content content content" / 1fr 1fr 1fr 1fr 1fr !important;
+        }
+    }
+
+}
