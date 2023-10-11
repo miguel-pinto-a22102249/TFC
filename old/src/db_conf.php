@@ -3,7 +3,7 @@
 define('DB_HOST', 'localhost');
 #define('DB_USER', 'root1');
 define('DB_USER', 'root');
-define('DB_PASS', 'ola123');
+define('DB_PASS', '');
 #define('DB_NAME', 'tfc1');
 define('DB_NAME', 'tfc');
 
