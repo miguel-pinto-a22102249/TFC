@@ -1,11 +1,14 @@
 $(document).ready(function() {
-    console.log('menu.js');
+
     $('.open-menu-btn').on('click', function() {
-        console.log('open-menu-btn');
         if ($('body').hasClass('closed-menu')) {
             $('body').removeClass('closed-menu');
+            $('#logo').removeClass('hide');
+            $('#icon').addClass('hide');
         } else {
             $('body').addClass('closed-menu');
+            $('#logo').addClass('hide');
+            $('#icon').removeClass('hide');
         }
     });
 });

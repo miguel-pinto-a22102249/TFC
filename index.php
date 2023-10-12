@@ -7,7 +7,7 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
 
         <link href="css/base.css" rel="stylesheet">
         <script src="js/jquery.min.js"></script>
@@ -18,7 +18,8 @@
         <main>
             <div id="topbar">
                 <div class="topbar__wrapper-logo">
-                    <span style="font-size: 3rem;">🍔 </span>
+                    <img src="src/CEBI_branco.svg" id="logo">
+                    <img class="hide" src="src/icon_branco.svg" id="icon">
                     <span class="open-menu-btn"><img loading="lazy" src="src/icons/arrow_back_FILL0_wght400_GRAD0_opsz24.svg"></span>
                 </div>
                 <div class="topbar__wrapper-account">

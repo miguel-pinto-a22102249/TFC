@@ -1,11 +1,18 @@
 @import "base/_includes.scss";
 
+body.closed-menu {
+    #content {
+        width: 100%;
+    }
+}
+
 main {
     //display: grid;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     background-color: $cor-cinza-claro;
+
 
     #topbar {
         background-color: $cor-azul-escuro;
@@ -32,7 +39,7 @@ main {
             min-width: calc(20% - 1rem);
             justify-content: space-between;
 
-            .open-menu-btn{
+            .open-menu-btn {
                 width: 2rem;
             }
         }

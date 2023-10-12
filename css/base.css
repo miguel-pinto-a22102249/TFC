@@ -2,6 +2,14 @@
   transition: all 0.3s ease-in-out;
 }
 
+body #topbar {
+  -webkit-box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.1);
+}
+body #topbar #logo, body #topbar #icon {
+  max-width: 120px;
+  max-height: 47px;
+}
 body .open-menu-btn {
   transition: all 0.3s ease-in-out;
 }
@@ -47,6 +55,14 @@ body {
 
 a {
   color: #FDBF50;
+}
+
+.hide {
+  display: none !important;
+}
+
+body.closed-menu #content {
+  width: 100%;
 }
 
 main {
