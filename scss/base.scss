@@ -25,11 +25,25 @@ main {
         color: white;
 
         .topbar__wrapper-account {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+
+            &:before {
+                content: "";
+                position: absolute;
+                left: -3px;
+                height: 100%;
+                border-left: 1px solid white;
+            }
+
             .topbar__wrapper-account__inner-wrapper {
                 display: flex;
                 align-items: center;
                 //justify-content: space-between;
-                width: 100%;
+                //width: 100%;
             }
         }
 
@@ -39,9 +53,6 @@ main {
             min-width: calc(20% - 1rem);
             justify-content: space-between;
 
-            .open-menu-btn {
-                width: 2rem;
-            }
         }
     }
 

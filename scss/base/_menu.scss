@@ -9,8 +9,8 @@ body {
         -webkit-box-shadow: 0 1px 4px 0 rgba(0, 0, 0, .1);
         box-shadow: 0 1px 4px 0 rgba(0, 0, 0, .1);
 
-        #logo, #icon{
-        max-width: 120px;
+        #logo, #icon {
+            max-width: 120px;
             max-height: 47px;
         }
 
@@ -19,10 +19,38 @@ body {
 
     .open-menu-btn {
         transition: all 0.3s ease-in-out;
+        display: flex;
+        flex-flow: column;
+        gap: 5px;
+        margin-left: 1rem;
 
-        img {
-            transition: all 0.3s ease-in-out;
+        span {
+            width: 27px;
+            height: 3px;
+            border-radius: 2px;
+            display: inline-block;
+            background-color: white;
         }
+
+        &:after, &:before {
+            content: '';
+            width: 20px;
+            height: 3px;
+            border-radius: 3px;
+            display: inline-block;
+            background-color: white;
+            transition: all 0.3s ease-in-out;
+
+        }
+
+        &:before {
+            transform: rotate(-33deg) translateX(-2px) translateY(1px)
+        }
+
+        &:after {
+            transform: rotate(33deg) translateX(-2px) translateY(-1px);
+        }
+
     }
 
     &.closed-menu {
@@ -31,18 +59,35 @@ body {
         }
 
         .open-menu-btn {
-            transform: translate3d(-200%, 0px, 0px);
+            //transform: translate3d(-200%, 0px, 0px);
+            display: flex;
+            flex-flow: column;
+            gap: 5px;
 
-            img {
-                transform: rotate(180deg);
+            span {
+                width: 30px;
+                height: 3px;
+                border-radius: 2px;
+                display: inline-block;
+                background-color: white;
+            }
+
+            &:after, &:before {
+                content: '';
+                width: 30px;
+                height: 3px;
+                border-radius: 2px;
+                display: inline-block;
+                background-color: white;
+                transform: rotate(0deg) translateX(0px) translateY(0px);
             }
         }
-
-        main {
-            grid-template:
-            "topbar topbar topbar topbar topbar"
-            "content content content content content"
-            "content content content content content" / 1fr 1fr 1fr 1fr 1fr !important;
-        }
+        //
+        //main {
+        //    grid-template:
+        //    "topbar topbar topbar topbar topbar"
+        //    "content content content content content"
+        //    "content content content content content" / 1fr 1fr 1fr 1fr 1fr !important;
+        //}
     }
 }

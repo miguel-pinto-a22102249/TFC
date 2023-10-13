@@ -5,6 +5,9 @@ $(document).ready(function() {
             $('body').removeClass('closed-menu');
             $('#logo').removeClass('hide');
             $('#icon').addClass('hide');
+            setTimeout(function() {
+                
+            }, 1000);
         } else {
             $('body').addClass('closed-menu');
             $('#logo').addClass('hide');

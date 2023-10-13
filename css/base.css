@@ -12,21 +12,56 @@ body #topbar #logo, body #topbar #icon {
 }
 body .open-menu-btn {
   transition: all 0.3s ease-in-out;
+  display: flex;
+  flex-flow: column;
+  gap: 5px;
+  margin-left: 1rem;
 }
-body .open-menu-btn img {
+body .open-menu-btn span {
+  width: 27px;
+  height: 3px;
+  border-radius: 2px;
+  display: inline-block;
+  background-color: white;
+}
+body .open-menu-btn:after, body .open-menu-btn:before {
+  content: "";
+  width: 20px;
+  height: 3px;
+  border-radius: 3px;
+  display: inline-block;
+  background-color: white;
   transition: all 0.3s ease-in-out;
+}
+body .open-menu-btn:before {
+  transform: rotate(-33deg) translateX(-2px) translateY(1px);
+}
+body .open-menu-btn:after {
+  transform: rotate(33deg) translateX(-2px) translateY(-1px);
 }
 body.closed-menu #sidebar {
   transform: translate3d(-100%, 0px, 0px);
 }
 body.closed-menu .open-menu-btn {
-  transform: translate3d(-200%, 0px, 0px);
+  display: flex;
+  flex-flow: column;
+  gap: 5px;
 }
-body.closed-menu .open-menu-btn img {
-  transform: rotate(180deg);
+body.closed-menu .open-menu-btn span {
+  width: 30px;
+  height: 3px;
+  border-radius: 2px;
+  display: inline-block;
+  background-color: white;
 }
-body.closed-menu main {
-  grid-template: "topbar topbar topbar topbar topbar" "content content content content content" "content content content content content"/1fr 1fr 1fr 1fr 1fr !important;
+body.closed-menu .open-menu-btn:after, body.closed-menu .open-menu-btn:before {
+  content: "";
+  width: 30px;
+  height: 3px;
+  border-radius: 2px;
+  display: inline-block;
+  background-color: white;
+  transform: rotate(0deg) translateX(0px) translateY(0px);
 }
 
 .dropdown {
@@ -81,19 +116,29 @@ main #topbar {
   padding: 1rem 2rem;
   color: white;
 }
+main #topbar .topbar__wrapper-account {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+main #topbar .topbar__wrapper-account:before {
+  content: "";
+  position: absolute;
+  left: -3px;
+  height: 100%;
+  border-left: 1px solid white;
+}
 main #topbar .topbar__wrapper-account .topbar__wrapper-account__inner-wrapper {
   display: flex;
   align-items: center;
-  width: 100%;
 }
 main #topbar .topbar__wrapper-logo {
   display: flex;
   align-items: center;
   min-width: calc(20% - 1rem);
   justify-content: space-between;
-}
-main #topbar .topbar__wrapper-logo .open-menu-btn {
-  width: 2rem;
 }
 main #sidebar {
   background-color: white;
@@ -120,3 +165,4 @@ footer {
   background-color: #2A2C41;
   min-height: 55px;
 }
+/*# sourceMappingURL=base.css.map */

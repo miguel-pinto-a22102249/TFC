@@ -20,9 +20,10 @@
                 <div class="topbar__wrapper-logo">
                     <img src="src/CEBI_branco.svg" id="logo">
                     <img class="hide" src="src/icon_branco.svg" id="icon">
-                    <span class="open-menu-btn"><img loading="lazy" src="src/icons/arrow_back_FILL0_wght400_GRAD0_opsz24.svg"></span>
+<!--                    <span class="open-menu-btn"><span></span></span>-->
                 </div>
                 <div class="topbar__wrapper-account">
+                    <span class="open-menu-btn"><span></span></span>
                     <div class="topbar__wrapper-account__inner-wrapper">
                         <div class="topbar__wrapper-account__inner-wrapper__foto">
                             <span style="font-size: 3rem;">😉</span>
