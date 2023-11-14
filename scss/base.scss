@@ -60,7 +60,7 @@ main {
         background-color: white;
         grid-area: sidebar;
         width: 20%;
-
+        box-shadow: rgba(100, 100, 111, 0.08) 0px 7px 29px 0px;
     }
 
     #content {
@@ -86,5 +86,7 @@ main {
 
 footer {
     background-color: $cor-azul-escuro;
-    min-height: $altura-header-large;
+    min-height: $altura-footer-large;
+
+
 }
