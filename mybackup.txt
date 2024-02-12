@@ -1,0 +1,68 @@
+#
+# TABLE STRUCTURE FOR: formacao
+#
+
+CREATE TABLE `formacao` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `DataCriacao` datetime NOT NULL,
+  `Nome` varchar(255) NOT NULL,
+  `Estado` tinyint(4) NOT NULL DEFAULT '1',
+  `Foto` text,
+  `Segmento` text,
+  `Descricao` varchar(255) DEFAULT NULL,
+  `DataInicio` date DEFAULT NULL,
+  `DataInicioDestaque` date DEFAULT NULL,
+  `DataFimDestaque` date DEFAULT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=MyISAM AUTO_INCREMENT=100012 DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: log
+#
+
+CREATE TABLE `log` (
+  `Id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `DataCriacao` datetime NOT NULL,
+  `IdUtilizador` bigint(20) NOT NULL,
+  `Descricao` text NOT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=MyISAM AUTO_INCREMENT=121 DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: registo
+#
+
+CREATE TABLE `registo` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `DataCriacao` datetime DEFAULT NULL,
+  `IdMaquina` int(11) DEFAULT NULL,
+  `HistoricoEntrada` int(11) DEFAULT NULL,
+  `HistoricoSaida` int(11) DEFAULT NULL,
+  `ParcialEntrada` int(11) DEFAULT NULL,
+  `ParcialSaida` int(11) DEFAULT NULL,
+  `Stock` text,
+  `Bloqueada` tinyint(1) DEFAULT NULL,
+  `Abastecida` tinyint(1) DEFAULT NULL,
+  `Suplente` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=MyISAM AUTO_INCREMENT=1537 DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: utilizador
+#
+
+CREATE TABLE `utilizador` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `DataCriacao` date NOT NULL,
+  `Nome` varchar(255) NOT NULL,
+  `Username` varchar(255) NOT NULL,
+  `Password` text NOT NULL,
+  `TipoUtilizador` tinyint(4) NOT NULL,
+  `Estado` tinyint(4) NOT NULL DEFAULT '1',
+  `Foto` text,
+  `Segmento` text,
+  `Email` varchar(400) NOT NULL,
+  PRIMARY KEY (`Id`),
+  UNIQUE KEY `Username` (`Username`)
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+

@@ -1,0 +1,826 @@
+/**
+*   ATENCAO: Funcao não mixin.
+*/
+@function heading-font-size($tipo-heading, $font-scale, $font-size: 1rem){
+
+    @if $tipo-heading == 'h1' {
+        @return ($font-scale * $font-scale * $font-scale * $font-scale * $font-scale) * $font-size;
+    }
+
+    @if $tipo-heading == 'h2' {
+        @return ($font-scale * $font-scale * $font-scale * $font-scale) * $font-size;
+    }
+
+    @if $tipo-heading == 'h3' {
+        @return ($font-scale * $font-scale * $font-scale) * $font-size;
+    }
+
+    @if $tipo-heading == 'h4' {
+        @return ($font-scale * $font-scale) * $font-size;
+    }
+
+    @if $tipo-heading == 'h5' {
+        @return ($font-scale) * $font-size;
+    }
+
+    @return 1rem;
+}
+
+
+
+
+/***********************************************
+*         Placeholder pseudo-elements          *
+************************************************/
+@mixin placeholders {
+    &::-webkit-input-placeholder { @content; }
+    &:-moz-placeholder { @content; }
+    &:-ms-input-placeholder { @content; }
+    &::placeholder { @content; }
+}
+/***********************************************
+*               Background RGBA                *
+************************************************/
+@mixin background-rgba($red: 0, $green: 0, $blue: 0, $alpha: 0.5, $legacy-support-for-ie-aux: $legacy-support-for-ie){
+    background-color: rgb($red, $green, $blue);
+    background-color: rgba($red, $green, $blue, $alpha);
+    @if ($legacy-support-for-ie-aux) {
+        @include has-layout;
+        background-color: transparent\9;
+        $color: rgba($red, $green, $blue, $alpha);
+        @include filter-gradient($color, $color);
+    }
+}
+
+
+
+/**
+* Para ellipsize de texto
+*/
+@mixin truncate($max-width) {
+    max-width: $max-width;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/**
+* Para ajudar a criar os estilos base de um pseudo elemento
+*/
+@mixin pseudo($display: block, $pos: absolute, $content: ''){
+    content: $content;
+    display: $display;
+    position: $pos;
+}
+
+/**
+* Para ajudar a gerar um elemento com racio responsive.
+*
+*   EXEMPLO:
+*
+*    div {
+*       @include responsive-ratio(16,9);
+*    }
+*/
+@mixin responsive-ratio($x,$y, $pseudo: false) {
+    $padding: unquote( ( $y / $x ) * 100 + '%' );
+    @if $pseudo {
+        &:before {
+            @include pseudo($pos: relative);
+            width: 100%;
+            padding-top: $padding;
+        }
+    } @else {
+        padding-top: $padding;
+    }
+}
+
+
+@mixin generate-spacings($spaceamounts : (0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 150, 200, 300)) {
+
+    @each $space in $spaceamounts {
+
+        .margin-top-#{$space} {
+            margin-top: #{$space}px;
+        }
+
+        .margin-bottom-#{$space} {
+            margin-bottom: #{$space}px;
+        }
+
+        .margin-right-#{$space} {
+            margin-right: #{$space}px;
+        }
+
+        .margin-left-#{$space} {
+            margin-left: #{$space}px;
+        }
+
+        .padding-top-#{$space} {
+            padding-top: #{$space}px;
+        }
+
+        .padding-bottom-#{$space} {
+            padding-bottom: #{$space}px;
+        }
+
+        .padding-right-#{$space} {
+            padding-right: #{$space}px;
+        }
+
+        .padding-left-#{$space} {
+            padding-left: #{$space}px;
+        }
+
+    }
+
+
+
+}
+
+
+
+@mixin alertas{
+
+
+    $alerta-grey-color: #383d41!default;
+    $alerta-grey-bg-color: #e2e3e5!default;
+    $alerta-grey-border-color: #d6d8db!default;
+
+    $alerta-success-color: #155724!default;
+    $alerta-success-bg-color: #d4edda!default;
+    $alerta-success-border-color: #c3e6cb!default;
+
+    $alerta-error-color: #721c24!default;
+    $alerta-error-bg-color: #f8d7da!default;
+    $alerta-error-border-color: #f5c6cb!default;
+
+    $alerta-warning-color: #856404!default;
+    $alerta-warning-bg-color: #fff3cd!default;
+    $alerta-warning-border-color: #ffeeba!default;
+
+
+    .alerta {
+
+        position: relative;
+        padding: 5px 15px;
+        border: 1px solid transparent;
+        border-radius: 5px;
+        // display: inline-block;
+        // font-size: 0.5em;
+        vertical-align: middle;
+
+        &.padding-large{
+            padding: 15px 15px;
+        }
+
+        &.alerta-grey {
+            color: $alerta-grey-color;
+            background-color: $alerta-grey-bg-color;
+            border-color: $alerta-grey-border-color;
+        }
+
+        &.alerta-success {
+            color: $alerta-success-color;
+            background-color: $alerta-success-bg-color;
+            border-color: $alerta-success-border-color;
+        }
+
+        &.alerta-error {    
+            color: $alerta-error-color;
+            background-color: $alerta-error-bg-color;
+            border-color: $alerta-error-border-color;
+        }
+
+        &.alerta-warning {
+            color: $alerta-warning-color;
+            background-color: $alerta-warning-bg-color;
+            border-color: $alerta-warning-border-color;
+        }
+
+    }
+
+    span.alerta {
+        display: inline-block;
+
+    }
+
+
+
+    @content;
+}
+
+
+@mixin pagination-base{
+
+
+    .pagination {
+        @include flexbox;
+        @include align-items(center);
+        vertical-align: middle;
+
+        >a {
+            display: inline-block;
+            line-height: 1em;
+            min-width: 1em;
+            text-decoration: none;
+            text-align: center;
+            vertical-align: middle;
+            @include flexbox;
+            @include align-items(center);
+            @include justify-content(center);
+
+            >span {
+                &.icon {
+                    width: 0.7em;
+                    height: 0.7em;
+                    vertical-align: middle;
+                    display: inline-block;
+                }
+            }
+        }
+
+        >span {
+            display: inline-block;
+            line-height: 1em;
+            min-width: 1em;
+            text-align: center;
+            vertical-align: middle;
+
+            &.current {
+                color: $cor-1;
+            }
+
+        }
+    }
+
+    @content;
+
+}
+
+
+@mixin animation($anim){
+    -webkit-animation:$anim;
+    -moz-animation:$anim;
+    -ms-animation:$anim;
+    -o-animation:$anim;
+    animation:$anim;
+}
+
+@mixin animation-delay($anim){
+    -webkit-animation-delay:$anim;
+    -moz-animation-delay:$anim;
+    -ms-animation-delay:$anim;
+    -o-animation-delay:$anim;
+    animation-delay:$anim;
+}
+
+
+@mixin store-item-bg() {
+    background: rgba($cor-principal, 0.7);
+}
+
+@mixin store-item-bgapproach() {
+    background-size: 135% auto;
+}
+
+@mixin store-item-title() {
+    @include transform(translate3d(0px, 0px, 0px));
+}
+
+@mixin store-item-info() {
+    @include transform(translate3d(0px, 0px, 0px));
+    opacity:1;
+}
+
+// keyframes mixin
+@mixin keyframes($name) {
+    @-webkit-keyframes #{$name} {
+        @content;
+    }
+    @-moz-keyframes #{$name} {
+        @content;
+    }
+    @-ms-keyframes #{$name} {
+        @content;
+    }
+    @keyframes #{$name} {
+        @content;
+    }
+}
+
+
+//----------------------------------------------------------------------
+
+// Flexbox Containers
+//
+// The 'flex' value causes an element to generate a block-level flex
+// container box.
+//
+// The 'inline-flex' value causes an element to generate a inline-level
+// flex container box.
+//
+// display: flex | inline-flex
+//
+// http://w3.org/tr/css3-flexbox/#flex-containers
+//
+// (Placeholder selectors for each type, for those who rather @extend)
+
+$flex-browser-prefixes : true!default;
+
+@mixin flexbox {
+    @if $flex-browser-prefixes{
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -moz-flex;
+        display: -ms-flexbox;
+    }
+    display: flex;
+}
+
+%flexbox { @include flexbox; }
+
+//----------------------------------
+
+@mixin inline-flex {
+    @if $flex-browser-prefixes{
+        display: -webkit-inline-box;
+        display: -webkit-inline-flex;
+        display: -moz-inline-flex;
+        display: -ms-inline-flexbox;
+    }
+    display: inline-flex;
+}
+
+%inline-flex { @include inline-flex; }
+
+//----------------------------------------------------------------------
+
+// Flexbox Direction
+//
+// The 'flex-direction' property specifies how flex items are placed in
+// the flex container, by setting the direction of the flex container's
+// main axis. This determines the direction that flex items are laid out in.
+//
+// Values: row | row-reverse | column | column-reverse
+// Default: row
+//
+// http://w3.org/tr/css3-flexbox/#flex-direction-property
+
+@mixin flex-direction($value: row) {
+    @if $flex-browser-prefixes{
+        @if $value == row-reverse {
+            -webkit-box-direction: reverse;
+            -webkit-box-orient: horizontal;
+        } @else if $value == column {
+            -webkit-box-direction: normal;
+            -webkit-box-orient: vertical;
+        } @else if $value == column-reverse {
+            -webkit-box-direction: reverse;
+            -webkit-box-orient: vertical;
+        } @else {
+            -webkit-box-direction: normal;
+            -webkit-box-orient: horizontal;
+        }
+        -webkit-flex-direction: $value;
+        -moz-flex-direction: $value;
+        -ms-flex-direction: $value;
+    }
+    flex-direction: $value;
+}
+// Shorter version:
+@mixin flex-dir($args...) { @include flex-direction($args...); }
+
+//----------------------------------------------------------------------
+
+// Flexbox Wrap
+//
+// The 'flex-wrap' property controls whether the flex container is single-line
+// or multi-line, and the direction of the cross-axis, which determines
+// the direction new lines are stacked in.
+//
+// Values: nowrap | wrap | wrap-reverse
+// Default: nowrap
+//
+// http://w3.org/tr/css3-flexbox/#flex-wrap-property
+
+@mixin flex-wrap($value: nowrap) {
+    @if $flex-browser-prefixes{
+        // No Webkit Box fallback.
+        -webkit-flex-wrap: $value;
+        -moz-flex-wrap: $value;
+        @if $value == nowrap {
+            -ms-flex-wrap: none;
+        } @else {
+            -ms-flex-wrap: $value;
+        }
+    }
+    flex-wrap: $value;
+}
+
+//----------------------------------------------------------------------
+
+// Flexbox Flow (shorthand)
+//
+// The 'flex-flow' property is a shorthand for setting the 'flex-direction'
+// and 'flex-wrap' properties, which together define the flex container's
+// main and cross axes.
+//
+// Values: <flex-direction> | <flex-wrap>
+// Default: row nowrap
+//
+// http://w3.org/tr/css3-flexbox/#flex-flow-property
+
+@mixin flex-flow($values: (row nowrap)) {
+    @if $flex-browser-prefixes{
+        // No Webkit Box fallback.
+        -webkit-flex-flow: $values;
+        -moz-flex-flow: $values;
+        -ms-flex-flow: $values;
+    }
+    flex-flow: $values;
+}
+
+//----------------------------------------------------------------------
+
+// Flexbox Order
+//
+// The 'order' property controls the order in which flex items appear within
+// their flex container, by assigning them to ordinal groups.
+//
+// Default: 0
+//
+// http://w3.org/tr/css3-flexbox/#order-property
+
+@mixin order($int: 0) {
+    @if $flex-browser-prefixes{
+        -webkit-box-ordinal-group: $int + 1;
+        -webkit-order: $int;
+        -moz-order: $int;
+        -ms-flex-order: $int;
+    }
+    order: $int;
+}
+
+//----------------------------------------------------------------------
+
+// Flexbox Grow
+//
+// The 'flex-grow' property sets the flex grow factor. Negative numbers
+// are invalid.
+//
+// Default: 0
+//
+// http://w3.org/tr/css3-flexbox/#flex-grow-property
+
+@mixin flex-grow($int: 0) {
+    @if $flex-browser-prefixes{
+        -webkit-box-flex: $int;
+        -webkit-flex-grow: $int;
+        -moz-flex-grow: $int;
+        -ms-flex-positive: $int;
+    }
+    flex-grow: $int;
+}
+
+//----------------------------------------------------------------------
+
+// Flexbox Shrink
+//
+// The 'flex-shrink' property sets the flex shrink factor. Negative numbers
+// are invalid.
+//
+// Default: 1
+//
+// http://w3.org/tr/css3-flexbox/#flex-shrink-property
+
+@mixin flex-shrink($int: 1) {
+    @if $flex-browser-prefixes{
+        -webkit-flex-shrink: $int;
+        -moz-flex-shrink: $int;
+        -ms-flex-negative: $int;
+    }
+    flex-shrink: $int;
+}
+
+//----------------------------------------------------------------------
+
+// Flexbox Basis
+//
+// The 'flex-basis' property sets the flex basis. Negative lengths are invalid.
+//
+// Values: Like "width"
+// Default: auto
+//
+// http://www.w3.org/TR/css3-flexbox/#flex-basis-property
+
+@mixin flex-basis($value: auto) {
+    @if $flex-browser-prefixes{
+        -webkit-flex-basis: $value;
+        -moz-flex-basis: $value;
+        -ms-flex-preferred-size: $value;
+    }
+    flex-basis: $value;
+}
+
+//----------------------------------------------------------------------
+
+// Flexbox "Flex" (shorthand)
+//
+// The 'flex' property specifies the components of a flexible length: the
+// flex grow factor and flex shrink factor, and the flex basis. When an
+// element is a flex item, 'flex' is consulted instead of the main size
+// property to determine the main size of the element. If an element is
+// not a flex item, 'flex' has no effect.
+//
+// Values: none | <flex-grow> <flex-shrink> || <flex-basis>
+// Default: See individual properties (1 1 0).
+//
+// http://w3.org/tr/css3-flexbox/#flex-property
+
+@mixin flex($fg: 1, $fs: null, $fb: null) {
+
+    // Set a variable to be used by box-flex properties
+    $fg-boxflex: $fg;
+
+    // Box-Flex only supports a flex-grow value so let's grab the
+    // first item in the list and just return that.
+    @if type-of($fg) == 'list' {
+        $fg-boxflex: nth($fg, 1);
+    }
+
+    @if $flex-browser-prefixes{
+        -webkit-box-flex: $fg-boxflex;
+        -webkit-flex: $fg $fs $fb;
+        -moz-box-flex: $fg-boxflex;
+        -moz-flex: $fg $fs $fb;
+        -ms-flex: $fg $fs $fb;
+    }
+    flex: $fg $fs $fb;
+}
+
+//----------------------------------------------------------------------
+
+// Flexbox Justify Content
+//
+// The 'justify-content' property aligns flex items along the main axis
+// of the current line of the flex container. This is done after any flexible
+// lengths and any auto margins have been resolved. Typically it helps distribute
+// extra free space leftover when either all the flex items on a line are
+// inflexible, or are flexible but have reached their maximum size. It also
+// exerts some control over the alignment of items when they overflow the line.
+//
+// Note: 'space-*' values not supported in older syntaxes.
+//
+// Values: flex-start | flex-end | center | space-between | space-around
+// Default: flex-start
+//
+// http://w3.org/tr/css3-flexbox/#justify-content-property
+
+@mixin justify-content($value: flex-start) {
+    @if $flex-browser-prefixes{
+        @if $value == flex-start {
+            -webkit-box-pack: start;
+            -ms-flex-pack: start;
+        } @else if $value == flex-end {
+            -webkit-box-pack: end;
+            -ms-flex-pack: end;
+        } @else if $value == space-between {
+            -webkit-box-pack: justify;
+            -ms-flex-pack: justify;
+        } @else if $value == space-around {
+            -ms-flex-pack: distribute;
+        } @else {
+            -webkit-box-pack: $value;
+            -ms-flex-pack: $value;
+        }
+        -webkit-justify-content: $value;
+        -moz-justify-content: $value;
+    }
+    justify-content: $value;
+}
+// Shorter version:
+@mixin flex-just($args...) { @include justify-content($args...); }
+
+//----------------------------------------------------------------------
+
+// Flexbox Align Items
+//
+// Flex items can be aligned in the cross axis of the current line of the
+// flex container, similar to 'justify-content' but in the perpendicular
+// direction. 'align-items' sets the default alignment for all of the flex
+// container's items, including anonymous flex items. 'align-self' allows
+// this default alignment to be overridden for individual flex items. (For
+// anonymous flex items, 'align-self' always matches the value of 'align-items'
+// on their associated flex container.)
+//
+// Values: flex-start | flex-end | center | baseline | stretch
+// Default: stretch
+//
+// http://w3.org/tr/css3-flexbox/#align-items-property
+
+@mixin align-items($value: stretch) {
+    @if $flex-browser-prefixes{
+        @if $value == flex-start {
+            -webkit-box-align: start;
+            -ms-flex-align: start;
+        } @else if $value == flex-end {
+            -webkit-box-align: end;
+            -ms-flex-align: end;
+        } @else {
+            -webkit-box-align: $value;
+            -ms-flex-align: $value;
+        }
+        -webkit-align-items: $value;
+        -moz-align-items: $value;
+    }
+    align-items: $value;
+}
+
+//----------------------------------
+
+// Flexbox Align Self
+//
+// Values: auto | flex-start | flex-end | center | baseline | stretch
+// Default: auto
+
+@mixin align-self($value: auto) {
+    @if $flex-browser-prefixes{
+        // No Webkit Box Fallback.
+        -webkit-align-self: $value;
+        -moz-align-self: $value;
+        @if $value == flex-start {
+            -ms-flex-item-align: start;
+        } @else if $value == flex-end {
+            -ms-flex-item-align: end;
+        } @else {
+            -ms-flex-item-align: $value;
+        }
+    }
+    align-self: $value;
+}
+
+//----------------------------------------------------------------------
+
+// Flexbox Align Content
+//
+// The 'align-content' property aligns a flex container's lines within the
+// flex container when there is extra space in the cross-axis, similar to
+// how 'justify-content' aligns individual items within the main-axis. Note,
+// this property has no effect when the flexbox has only a single line.
+//
+// Values: flex-start | flex-end | center | space-between | space-around | stretch
+// Default: stretch
+//
+// http://w3.org/tr/css3-flexbox/#align-content-property
+
+@mixin align-content($value: stretch) {
+    @if $flex-browser-prefixes{
+        // No Webkit Box Fallback.
+        -webkit-align-content: $value;
+        -moz-align-content: $value;
+        @if $value == flex-start {
+            -ms-flex-line-pack: start;
+        } @else if $value == flex-end {
+            -ms-flex-line-pack: end;
+        } @else {
+            -ms-flex-line-pack: $value;
+        }
+    }
+    align-content: $value;
+}
+
+
+//-------------------- MATERIAL SHADOW ----------------------------
+
+
+$shadow-key-umbra-opacity:      0.2;
+$shadow-key-penumbra-opacity:   0.14;
+$shadow-ambient-shadow-opacity: 0.12;
+
+
+@mixin material-shadow($depth:1) {
+
+    @if $depth == 1{
+        box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, $shadow-key-umbra-opacity),
+            0px 1px 1px 0px rgba(0, 0, 0, $shadow-key-penumbra-opacity),
+            0px 2px 1px -1px rgba(0, 0, 0, $shadow-ambient-shadow-opacity);
+
+    } @else if $depth == 2{
+        box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, $shadow-key-umbra-opacity),
+            0px 2px 2px 0px rgba(0, 0, 0, $shadow-key-penumbra-opacity),
+            0px 3px 1px -2px rgba(0, 0, 0, $shadow-ambient-shadow-opacity);
+
+    } @else if $depth == 3{
+        box-shadow: 0px 1px 8px 0px rgba(0, 0, 0, $shadow-key-umbra-opacity),
+            0px 3px 4px 0px rgba(0, 0, 0, $shadow-key-penumbra-opacity),
+            0px 3px 3px -2px rgba(0, 0, 0, $shadow-ambient-shadow-opacity);
+
+    } @else if $depth == 4{
+        box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, $shadow-key-umbra-opacity),
+            0px 4px 5px 0px rgba(0, 0, 0, $shadow-key-penumbra-opacity),
+            0px 1px 10px 0px rgba(0, 0, 0, $shadow-ambient-shadow-opacity);
+
+    } @else if $depth == 5{
+        box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, $shadow-key-umbra-opacity),
+            0px 5px 8px 0px rgba(0, 0, 0, $shadow-key-penumbra-opacity),
+            0px 1px 14px 0px rgba(0, 0, 0, $shadow-ambient-shadow-opacity);
+
+    } @else if $depth == 6{
+        box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, $shadow-key-umbra-opacity),
+            0px 6px 10px 0px rgba(0, 0, 0, $shadow-key-penumbra-opacity),
+            0px 1px 18px 0px rgba(0, 0, 0, $shadow-ambient-shadow-opacity);
+
+    } @else if $depth == 7{
+        box-shadow: 0px 4px 5px -2px rgba(0, 0, 0, $shadow-key-umbra-opacity),
+            0px 7px 10px 1px rgba(0, 0, 0, $shadow-key-penumbra-opacity),
+            0px 2px 16px 1px rgba(0, 0, 0, $shadow-ambient-shadow-opacity);
+
+    } @else if $depth == 8{
+        box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, $shadow-key-umbra-opacity),
+            0px 8px 10px 1px rgba(0, 0, 0, $shadow-key-penumbra-opacity),
+            0px 3px 14px 2px rgba(0, 0, 0, $shadow-ambient-shadow-opacity);
+
+    } @else if $depth == 9{
+        box-shadow: 0px 5px 6px -3px rgba(0, 0, 0, $shadow-key-umbra-opacity),
+            0px 9px 12px 1px rgba(0, 0, 0, $shadow-key-penumbra-opacity),
+            0px 3px 16px 2px rgba(0, 0, 0, $shadow-ambient-shadow-opacity);
+
+    } @else if $depth == 10{
+        box-shadow: 0px 6px 6px -3px rgba(0, 0, 0, $shadow-key-umbra-opacity),
+            0px 10px 14px 1px rgba(0, 0, 0, $shadow-key-penumbra-opacity),
+            0px 4px 18px 3px rgba(0, 0, 0, $shadow-ambient-shadow-opacity);
+
+    } @else if $depth == 11{
+        box-shadow: 0px 6px 7px -4px rgba(0, 0, 0, $shadow-key-umbra-opacity),
+            0px 11px 15px 1px rgba(0, 0, 0, $shadow-key-penumbra-opacity),
+            0px 4px 20px 3px rgba(0, 0, 0, $shadow-ambient-shadow-opacity);
+
+    } @else if $depth == 12{
+        box-shadow: 0px 7px 8px -4px rgba(0, 0, 0, $shadow-key-umbra-opacity),
+            0px 12px 17px 2px rgba(0, 0, 0, $shadow-key-penumbra-opacity),
+            0px 5px 22px 4px rgba(0, 0, 0, $shadow-ambient-shadow-opacity);
+
+    } @else if $depth == 13{
+        box-shadow: 0px 7px 8px -4px rgba(0, 0, 0, $shadow-key-umbra-opacity),
+            0px 13px 19px 2px rgba(0, 0, 0, $shadow-key-penumbra-opacity),
+            0px 5px 24px 4px rgba(0, 0, 0, $shadow-ambient-shadow-opacity);
+
+    } @else if $depth == 14{
+        box-shadow: 0px 7px 9px -4px rgba(0, 0, 0, $shadow-key-umbra-opacity),
+            0px 14px 21px 2px rgba(0, 0, 0, $shadow-key-penumbra-opacity),
+            0px 5px 26px 4px rgba(0, 0, 0, $shadow-ambient-shadow-opacity);
+
+    } @else if $depth == 15{
+        box-shadow: 0px 8px 9px -5px rgba(0, 0, 0, $shadow-key-umbra-opacity),
+            0px 15px 22px 2px rgba(0, 0, 0, $shadow-key-penumbra-opacity),
+            0px 6px 28px 5px rgba(0, 0, 0, $shadow-ambient-shadow-opacity);
+
+    } @else if $depth == 16{
+        box-shadow: 0px 8px 10px -5px rgba(0, 0, 0, $shadow-key-umbra-opacity),
+            0px 16px 24px 2px rgba(0, 0, 0, $shadow-key-penumbra-opacity),
+            0px 6px 30px 5px rgba(0, 0, 0, $shadow-ambient-shadow-opacity);
+
+    } @else if $depth == 17{
+        box-shadow: 0px 8px 11px -5px rgba(0, 0, 0, $shadow-key-umbra-opacity),
+            0px 17px 26px 2px rgba(0, 0, 0, $shadow-key-penumbra-opacity),
+            0px 6px 32px 5px rgba(0, 0, 0, $shadow-ambient-shadow-opacity);
+
+    } @else if $depth == 18{
+        box-shadow: 0px 9px 11px -5px rgba(0, 0, 0, $shadow-key-umbra-opacity),
+            0px 18px 28px 2px rgba(0, 0, 0, $shadow-key-penumbra-opacity),
+            0px 7px 34px 6px rgba(0, 0, 0, $shadow-ambient-shadow-opacity);
+
+    } @else if $depth == 19{
+        box-shadow: 0px 9px 12px -6px rgba(0, 0, 0, $shadow-key-umbra-opacity),
+            0px 19px 29px 2px rgba(0, 0, 0, $shadow-key-penumbra-opacity),
+            0px 7px 36px 6px rgba(0, 0, 0, $shadow-ambient-shadow-opacity);
+
+    } @else if $depth == 20{
+        box-shadow: 0px 10px 13px -6px rgba(0, 0, 0, $shadow-key-umbra-opacity),
+            0px 20px 31px 3px rgba(0, 0, 0, $shadow-key-penumbra-opacity),
+            0px 8px 38px 7px rgba(0, 0, 0, $shadow-ambient-shadow-opacity);
+
+    } @else if $depth == 21{
+        box-shadow: 0px 10px 13px -6px rgba(0, 0, 0, $shadow-key-umbra-opacity),
+            0px 21px 33px 3px rgba(0, 0, 0, $shadow-key-penumbra-opacity),
+            0px 8px 40px 7px rgba(0, 0, 0, $shadow-ambient-shadow-opacity);
+
+    } @else if $depth == 22{
+        box-shadow: 0px 10px 14px -6px rgba(0, 0, 0, $shadow-key-umbra-opacity),
+            0px 22px 35px 3px rgba(0, 0, 0, $shadow-key-penumbra-opacity),
+            0px 8px 42px 7px rgba(0, 0, 0, $shadow-ambient-shadow-opacity);
+
+    } @else if $depth == 23{
+        box-shadow: 0px 11px 14px -7px rgba(0, 0, 0, $shadow-key-umbra-opacity),
+            0px 23px 36px 3px rgba(0, 0, 0, $shadow-key-penumbra-opacity),
+            0px 9px 44px 8px rgba(0, 0, 0, $shadow-ambient-shadow-opacity);
+
+    } @else if $depth == 24{
+        box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, $shadow-key-umbra-opacity),
+            0px 24px 38px 3px rgba(0, 0, 0, $shadow-key-penumbra-opacity),
+            0px 9px 46px 8px rgba(0, 0, 0, $shadow-ambient-shadow-opacity);
+    }
+
+
+}

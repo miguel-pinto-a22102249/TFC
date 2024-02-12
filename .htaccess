@@ -1,0 +1,143 @@
+# ----------------------
+# Para verificar se o .htaccess é usado pelo apache
+# ----------------------
+SetEnv HTACCESS on
+
+
+# ----------------------------------------------------------------------
+# Permissions
+# ----------------------------------------------------------------------
+# allow access from all domains for webfonts
+# alternatively you could only whitelist
+# your subdomains like "sub.domain.com"
+#
+<FilesMatch "\.(ttf|otf|eot|woff|woff2|font.css)$">
+ <IfModule mod_headers.c>
+   Header set Access-Control-Allow-Origin "*"
+ </IfModule>
+</FilesMatch>
+# Block access to "hidden" directories whose names begin with a period. This
+# includes directories used by version control systems such as Subversion or Git.
+<IfModule mod_rewrite.c>
+  RewriteRule "(^|/)\." - [F]
+</IfModule>
+# ----------------------------------------------------------------------
+# Charset
+# ----------------------------------------------------------------------
+AddDefaultCharset UTF-8
+
+# ----------------------------------------------------------------------
+# Proper MIME type for all files
+# ----------------------------------------------------------------------
+
+# audio
+AddType audio/ogg                      oga ogg
+
+# video
+AddType video/ogg                      ogv
+AddType video/mp4                      mp4
+AddType video/webm                     webm
+
+# Proper svg serving. Required for svg webfonts on iPad
+#   twitter.com/FontSquirrel/status/14855840545
+AddType     image/svg+xml              svg svgz
+AddEncoding gzip                       svgz
+
+# webfonts
+AddType application/vnd.ms-fontobject  eot
+AddType font/truetype                  ttf
+AddType font/opentype                  otf
+AddType application/x-font-woff        woff
+
+# assorted types
+AddType image/x-icon                   ico
+AddType image/webp                     webp
+AddType text/cache-manifest            appcache manifest
+AddType text/x-component               htc
+AddType application/x-chrome-extension crx
+AddType application/x-xpinstall        xpi
+AddType application/octet-stream       safariextz
+
+# ----------------------------------------------------------------------
+# Compression
+# ----------------------------------------------------------------------
+AddOutputFilterByType DEFLATE text/css text/html application/x-javascript application/javascript
+<IfModule mod_deflate.c>
+        SetOutputFilter DEFLATE
+        SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip dont-vary
+        SetEnvIfNoCase Request_URI \.(?:exe|t?gz|zip|bz2|sit|rar)$ no-gzip dont-vary
+        SetEnvIfNoCase Request_URI \.pdf$ no-gzip dont-vary
+        BrowserMatch ^Mozilla/4 gzip-only-text/html
+        BrowserMatch ^Mozilla/4\.0[678] no-gzip
+        BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+</IfModule>
+
+# ----------------------------------------------------------------------
+# Caching
+# ----------------------------------------------------------------------
+<IfModule mod_expires.c>
+# Turn on Expires and set default to 0
+ExpiresActive On
+ExpiresDefault A0
+
+#Remove os Etags que sao desnecessarios face ao tipo de cache utilizada
+Header unset ETag
+FileETag None
+
+# Set up caching on media files for 6 months
+<FilesMatch "\.(flv|ico|pdf|avi|mov|ppt|doc|mp3|wmv|wav)$">
+ExpiresDefault A14515200
+Header append Cache-Control "public"
+</FilesMatch>
+
+# Set up caching on media files for 1 month
+<FilesMatch "\.(gif|jpg|jpeg|png|swf)$">
+ExpiresDefault A2419200
+Header append Cache-Control "public"
+</FilesMatch>
+
+# Set up 1 year caching on js and css
+<FilesMatch "\.(js|css)$">
+ExpiresDefault A29030400
+Header append Cache-Control "public"
+</FilesMatch>
+
+# Set up 3 day caching on commonly updated files
+<FilesMatch "\.(xml|txt|html)$">
+ExpiresDefault A259200
+Header append Cache-Control "proxy-revalidate"
+</FilesMatch>
+
+# Force no caching for dynamic files
+<FilesMatch "\.(php|cgi|pl|htm)$">
+ExpiresActive Off
+Header set Cache-Control "private, no-cache, no-store, proxy-revalidate, no-transform"
+Header set Pragma "no-cache"
+</FilesMatch>
+</IfModule>
+
+# ----------------------------------------------------------------------
+# Rewrite
+# ----------------------------------------------------------------------
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+    #RewriteCond %{HTTPS} !on [NC,OR]
+    #RewriteCond %{HTTP_HOST} !^www.XXXXXX.XX$ [NC]
+    #RewriteCond %{HTTP_HOST} !^sub.XXXXXX.XX$
+    #RewriteRule ^(.*)$ http://www.XXXXXX.XX/$1 [L,R=301]
+ </IfModule>
+<IfModule mod_rewrite.c>
+#Enables access to specific folders, and the robots.txt file
+RewriteCond $1 !^(index\.php|ficheiros|sitemaps|bd_teste\.php|robots\.txt|sitemap\.xml|verificaRequisitosServer\.php|site\.webmanifest|design|img_emails)
+RewriteRule ^(.*)$ index.php/$1 [L]
+</IfModule>
+<IfModule !mod_rewrite.c>
+    # If we don't have mod_rewrite installed, all 404's
+    # can be sent to index.php, and everything works as normal.
+    ErrorDocument 404 /index.php
+</IfModule>
+
+<Files 403.shtml>
+order allow,deny
+allow from all
+</Files>

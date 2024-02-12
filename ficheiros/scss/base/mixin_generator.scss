@@ -1,0 +1,45 @@
+@mixin generate-spacings($spaceamounts : (0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 110, 120, 130, 140, 150, 200, 300, 305, 310, 315, 320, 130, 140, 150)) {
+
+    @each $space in $spaceamounts {
+
+        .margin-top-#{$space} {
+            margin-top: #{$space}px;
+        }
+
+        .margin-bottom-#{$space} {
+            margin-bottom: #{$space}px;
+        }
+
+        .margin-right-#{$space} {
+            margin-right: #{$space}px;
+        }
+
+        .margin-left-#{$space} {
+            margin-left: #{$space}px;
+        }
+
+        .padding-top-#{$space} {
+            padding-top: #{$space}px;
+        }
+
+        .padding-bottom-#{$space} {
+            padding-bottom: #{$space}px;
+        }
+
+        .padding-right-#{$space} {
+            padding-right: #{$space}px;
+        }
+
+        .padding-left-#{$space} {
+            padding-left: #{$space}px;
+        }
+        
+        .padding-#{$space} {
+            padding-left: #{$space}px;
+            padding-right:#{$space}px;
+            padding-bottom:#{$space}px;
+            padding-top: #{$space}px;
+        }
+
+    }
+}
