@@ -23,7 +23,7 @@
         <link rel="icon" type="image/png" sizes="96x96" href="<?= base_url() . '/ficheiros/imagens/base/favicon' ?>/favicon-96x96.png">
         <link rel="icon" type="image/png" sizes="16x16" href="<?= base_url() . '/ficheiros/imagens/base/favicon' ?>/favicon-16x16.png">
 
-        <link rel="stylesheet" href="<?= base_url() . '/ficheiros/css/foundation.min.css' . "?" . CACHE ?>">
+        <!--        <link rel="stylesheet" href="--><?php //= base_url() . '/ficheiros/css/foundation.min.css' . "?" . CACHE ?><!--">-->
         <link rel="stylesheet" href="<?= base_url() . '/ficheiros/css/app.css' . "?" . CACHE ?>">
         <link rel="stylesheet" href="<?= base_url() . '/ficheiros/plugins/fontawesome/css/all.css' . "?" . CACHE ?>">
         <link rel="stylesheet" href="<?= base_url() . '/ficheiros/plugins/fontawesome/css/fontawesome.min.css' . "?" . CACHE ?>">
@@ -31,7 +31,6 @@
         <link rel="stylesheet" type="text/css" href="<?= base_url() . '/ficheiros/plugins/DataTables/datatables.min.css' . "?" . CACHE ?>"/>
         <link rel="stylesheet" href="<?= base_url() . '/ficheiros/css/admin/notie.min.css' . "?" . CACHE ?>">
         <link rel="stylesheet" href="<?= base_url() . '/ficheiros/css/base_admin.css' . "?" . CACHE ?>">
-        <link rel="stylesheet" href="<?= base_url() . '/ficheiros/css/base_partilhado.css' . "?" . CACHE ?>">
 
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -81,17 +80,18 @@
 
                         </a>
                     </div>
-                    <div class="topbar__wrapper-account__inner-wrapper__nome">
-                        <ul class="vertical medium-horizontal dropdown menu" data-responsive-menu="accordion medium-dropdown">
-                            <li>
-                                <a href="<?= base_url() . "admin/utilizadores" ?>"><?= $this->session->userdata('Nome') ?></a>
-                                <ul class="menu vertical">
-                                    <li><a href="<?= base_url() . "admin/editar-utilizador/" . $this->session->userdata('Id') ?>">Editar Conta</a></li>
-                                    <li><a href="<?= base_url() . "admin/logout" ?>"><i class="fa fa-power-off"></i> Logout</a></li>
-                                </ul>
-                            </li>
-                        </ul>
+
+
+                    <div class="dropdown-container">
+                        <input class="dropdown" type="checkbox" id="dropdown" name="dropdown"/>
+                        <label class="for-dropdown" for="dropdown">Dropdown Menu <i class="uil uil-arrow-down"></i></label>
+                        <div class="section-dropdown">
+                            <label class="for-dropdown-sub" for="dropdown-sub"><?= $this->session->userdata('Nome') ?></label>
+                            <div><a href="<?= base_url() . "admin/editar-utilizador/" . $this->session->userdata('Id') ?>">Editar Conta</a></div>
+                            <div><a href="<?= base_url() . "admin/logout" ?>"><i class="fa fa-power-off"></i> Logout</a></div>
+                        </div>
                     </div>
+
                 </div>
             </div>
         </header>

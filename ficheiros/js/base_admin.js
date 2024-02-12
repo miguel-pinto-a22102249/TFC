@@ -16,12 +16,14 @@ $(document).ready(function() {
             }
         },
     });
+
     tinymce.init({
         selector: '.textareaMCE',
         plugin: 'a_tinymce_plugin',
         a_plugin_option: true,
         a_configuration_option: 400
     });
+
     // Submete pedido de reset de password por AJAX
     $("#btn-reset-password").click(function(event) {
 
@@ -108,7 +110,6 @@ $(document).ready(function() {
     });
     // </editor-fold>
 
-
     // <editor-fold defaultstate="collapsed" desc="DATA TABLE ">
     $('.dataTable').DataTable({
         "order": [[$('th.defaultSort').index(), 'desc']],
@@ -162,5 +163,47 @@ $(document).ready(function() {
     // </editor-fold>
 
     $('.select-multiple').select2();
-});
+
+
+// <editor-fold defaultstate="collapsed" desc="Código para submissão de formulários via AJAX">
+    $(".form-ajax").submit(function(e) {
+        e.preventDefault(); // Impede o envio padrão do formulário
+
+        var form = $(this);
+        var formData = new FormData(form[0]);
+
+        $.ajax({
+            type: form.attr('method'),
+            url: form.attr('action'),
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                console.log(response.errors);
+                if (response.success === false) {
+                    let errors = response.errors;
+                    $.each(errors, function(key, value) {
+                        let fieldName = value.field;
+                        let errorMessage = value.message;
+                        let targetElement = form.find('[name="' + fieldName + '"]').next('.error');
+
+                        if (targetElement.length === 0) {
+                            // Se a div de erro não existir, crie-a
+                            form.find('[name="' + fieldName + '"]').after("<small class='error'>" + errorMessage + "</small>");
+                        } else {
+                            // Se a div de erro já existe, apenas atualize o conteúdo
+                            targetElement.html(errorMessage);
+                        }
+                    });
+                } else {
+                    console.log("Utilizador criado com sucesso!");
+                }
+            }
+        });
+    });
+// </editor-fold>
+
+
+})
+;
 

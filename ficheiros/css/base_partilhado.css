@@ -1,1 +1,59 @@
-.white-popup{position:relative;background:#fff;padding:20px;width:auto;max-width:500px;margin:20px auto}.justify-content-center{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center}::-webkit-scrollbar{width:17px}::-webkit-scrollbar-track{background:#f1f1f1}::-webkit-scrollbar-thumb{background:#212121}::-webkit-scrollbar-thumb:hover{background:#e1c405}header .logo-menu{top:5px}body #main-container{min-height:100vh}body #Page-Not-Found{height:100%}
+@charset "UTF-8";
+/***********************************************
+*                  Variáveis                   *
+***********************************************/
+/*Magnific PopUp*/
+.white-popup {
+  position: relative;
+  background: #FFF;
+  padding: 20px;
+  width: auto;
+  max-width: 500px;
+  margin: 20px auto;
+}
+
+.justify-content-center {
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+/*Scroll Barr*/
+/* width */
+::-webkit-scrollbar {
+  width: 17px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #3b3b3b;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #e1c405;
+}
+
+header .logo-menu {
+  /*width: 150px;#Area-Servicos*/
+  top: 5px;
+}
+
+body #main-container {
+  min-height: 100vh;
+}
+body #Page-Not-Found {
+  height: 100%;
+}
+
+/* Small only */
+/* Medium only */
+/* Medium and up */
+/* Large and up */
+/* Large and up */
+/* Large only */

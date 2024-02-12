@@ -17,55 +17,6 @@ h1, h2, h3, h4, a, p, li, input, button {
     margin: 20px auto;
 }
 
-form {
-    /*font-family: 'Pacifico', cursive;*/
-    font-family: 'Roboto Condensed', sans-serif;
-
-    input[type=text], input[type=password], select {
-        border: 1px solid $cor-1;
-        border-radius: 10px;
-        margin-bottom: 20px;
-    }
-
-    .input-group {
-        border: none;
-
-        .input-group-label {
-            margin-bottom: 20px;
-            border-radius: 10px 0px 0px 10px;
-            background: white;
-            border: 1px solid $cor-1;
-            border-right: 0px;
-
-            i, span, label {
-                color: #002B3F;
-                margin: 0px;
-                border: none;
-            }
-        }
-
-        .input-icon {
-            border-radius: 0px 10px 10px 0px;
-        }
-    }
-
-    .error {
-        text-align: left;
-        color: red;
-        font-size: 12px;
-        margin-top: -15px;
-        margin-bottom: 10px;
-    }
-
-    .column {
-        padding: 10px;
-    }
-
-    label {
-        text-align: left;
-    }
-}
-
 //Loader
 .loading-active {
     display: flex;

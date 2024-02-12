@@ -1,13 +1,14 @@
 <?
 
-if (!defined('BASEPATH'))
+if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
+}
 
 /**
  * Logins
- * 
+ *
  * @version 1.0
- * 
+ *
  */
 class Logins extends CI_Controller {
 
@@ -26,7 +27,6 @@ class Logins extends CI_Controller {
     }
 
     public function consultar($id) {
-
 //consultar utilizador por password e id
         $Data['utilizador'] = $this->Login->carregaPorIdPass($id);
 
@@ -41,7 +41,7 @@ class Logins extends CI_Controller {
     }
 
     public function login() {
-        $this->load->helper(array('form', 'url'));
+        $this->load->helper(['form', 'url']);
         $this->load->helper('form');
         $this->load->library('form_validation');
 
@@ -58,12 +58,12 @@ class Logins extends CI_Controller {
         $this->form_validation->set_message('required', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
 //        var_dump($this->form_validation);
 
-        if ($this->form_validation->run() === FALSE) {
+        if ($this->form_validation->run() === false) {
             $this->load->view('admin/login/area_login');
         } else {
             if (!$utilizador->carregaPorLogin($username, $password)) {
-                $erro = TRUE;
-                $this->load->view('admin/login/area_login', array('erro' => $erro));
+                $erro = true;
+                $this->load->view('admin/login/area_login', ['erro' => $erro]);
                 return;
             }
             if (is_null($utilizador->Foto)) {
@@ -72,8 +72,8 @@ class Logins extends CI_Controller {
                 $foto = $utilizador->Foto;
             }
 
-            $userData = array(
-                'login_efetuado' => TRUE,
+            $userData = [
+                'login_efetuado' => true,
                 'Id' => $utilizador->Id,
                 'Estado' => $utilizador->Estado,
                 'DataCriacao' => $utilizador->DataCriacao,
@@ -82,35 +82,33 @@ class Logins extends CI_Controller {
                 'Password' => $utilizador->Password,
                 'Foto' => $foto,
                 'TipoUtilizador' => $utilizador->TipoUtilizador,
-            );
+            ];
             $this->session->set_userData($userData);
-            $erro = FALSE;
-            $this->load->view('admin/login/area_login', array('erro' => $erro));
+            $erro = false;
+            $this->load->view('admin/login/area_login', ['erro' => $erro]);
         }
     }
 
     /**
      * Função par enviar email com a nova password
-     * 
+     *
      * @author André Carvalho
      */
     public function resetPassword() {
-        $this->load->helper(array('form', 'url'));
+        $this->load->helper(['form', 'url']);
         $this->load->helper('form');
         $Utilizador = new Login;
 
         $Username = $this->input->post('username');
 
         if ($Username == "") {
-            $data = array(
-                "Sucesso" => FALSE,
+            $data = [
+                "Sucesso" => false,
                 "Mensagem" => "Username incorreto!"
-            );
+            ];
             echo json_encode($data);
         } else {
-
             if ($Utilizador->carregaUserName($Username)) {
-
                 //Gera password
                 $NovaPassword = generatePassword();
 
@@ -118,43 +116,41 @@ class Logins extends CI_Controller {
                 $Utilizador->setPassword(criaPasswordHash($NovaPassword));
 
                 if ($Utilizador->edita($Utilizador->getId())) {
-
-                    $config = array(
+                    $config = [
                         'from' => "ecpp@ecpp.com",
                         'nome' => "ECPP - Escola de Condução de Pero Pinheiro",
                         'to' => $Utilizador->Email,
                         'subject' => "Reset Password",
-                        'mensagem' => $this->load->view('admin/email/template_email', array("Username" => $Username, "NovaPassword" => $NovaPassword), true),
+                        'mensagem' => $this->load->view('admin/email/template_email', ["Username" => $Username, "NovaPassword" => $NovaPassword], true),
                         'debugger_mode' => false
-                    );
+                    ];
 
                     if (enviaEmail($config)) {
-                        $data = array(
-                            "Sucesso" => TRUE,
+                        $data = [
+                            "Sucesso" => true,
                             "Mensagem" => '<div><i class="fas fa-check-circle" style="color:#b5d56d;"></i> Foi enviado um email com a nova password 
                         para o email associado a este username.</div>'
-                        );
+                        ];
                         echo json_encode($data);
                     }
                 } else {
-                    $data = array(
-                        "Sucesso" => FALSE,
+                    $data = [
+                        "Sucesso" => false,
                         "Mensagem" => '<div><i class="fas fa-exclamation-circle" style="color:#e13300;"></i> Algo de inesperado aconteceu por favor recarregue a página e tente novamente, caso o problema persista, por favor contacte o suporte.</div>'
-                    );
+                    ];
                     echo json_encode($data);
                 }
             } else {
-                $data = array(
-                    "Sucesso" => FALSE,
+                $data = [
+                    "Sucesso" => false,
                     "Mensagem" => 'O Username inserido não foi encontrado no nosso sistema.'
-                );
+                ];
                 echo json_encode($data);
             }
         }
     }
 
     public function logout() {
-
         if ($this->session->userData('login_efetuado')) {
             $this->session->unset_userData('login_efetuado');
             $this->session->unset_userData('Id');
@@ -174,8 +170,7 @@ class Logins extends CI_Controller {
     }
 
     public function eliminar($id) {
-
-        if ($this->session->userdata('login_efetuado') == FALSE) {
+        if ($this->session->userdata('login_efetuado') == false) {
             redirect(base_url('admin/login'));
         }
 
@@ -183,44 +178,24 @@ class Logins extends CI_Controller {
         $utilizadorNaoAlterada->carregaPorId($id);
 
         if ($utilizadorNaoAlterada->Foto != "") {
-
             $eliminar = 'assets/fotos_utilizadores/' . $utilizadorNaoAlterada->Foto;
             unlink($eliminar);
         }
         $resultado = $utilizadorNaoAlterada->eliminar($id);
 
         if ($resultado === true) {
-            $data = array(
-                "Sucesso" => TRUE,
+            $data = [
+                "Sucesso" => true,
                 "Mensagem" => 'Utilizador eliminado com sucesso'
-            );
+            ];
             echo json_encode($data);
         } else {
-            $data = array(
-                "Sucesso" => FALSE,
+            $data = [
+                "Sucesso" => false,
                 "Mensagem" => 'Não foi possivel eliminar o Utilizador solicitado.'
-            );
+            ];
             echo json_encode($data);
         }
-    }
-
-    /**
-     * Abre a view de edicao
-     * 
-     * @param int $id
-     */
-    public function viewEditar($id) {
-//        $this->firephp->log("** View EDITAR **");
-
-        /* Verifica se o login atual é de um ADMIN */
-        $Utilizador = new Login;
-        $Utilizador->eAdmin() != TRUE ? redirect(base_url('admin/login')) : '';
-
-        $Utilizador->carregaPorId($id);
-
-        $this->load->view('admin/template/header');
-        $this->load->view('admin/login/editar_utilizador', array('Utilizador' => $Utilizador));
-        $this->load->view('admin/template/footer');
     }
 
     public function editar($id) {
@@ -228,7 +203,7 @@ class Logins extends CI_Controller {
 //        exit();
         /* Verifica se o login atual é de um ADMIN */
         $Utilizador = new Login;
-        $Utilizador->eAdmin() != TRUE ? redirect(base_url('admin/login')) : '';
+        $Utilizador->eAdmin() != true ? redirect(base_url('admin/login')) : '';
 
         $log = new Log();
 
@@ -250,9 +225,9 @@ class Logins extends CI_Controller {
         $this->form_validation->set_message('is_unique', '<i class="fas fa-exclamation-triangle"></i> Username já existe.');
         $this->form_validation->set_message('matches', '<i class="fas fa-exclamation-triangle"></i> Passwords não coincidem.');
 
-        if ($this->form_validation->run() === FALSE) {
+        if ($this->form_validation->run() === false) {
             $this->load->view('admin/template/header');
-            $this->load->view('admin/login/editar_utilizador', array('Utilizador' => $Utilizador));
+            $this->load->view('admin/login/editar_utilizador', ['Utilizador' => $Utilizador]);
             $this->load->view('admin/template/footer');
         } else {
 //
@@ -269,25 +244,25 @@ class Logins extends CI_Controller {
             $Utilizador->setTipoUtilizador($TipoUtilizador);
 
             if ($Utilizador->edita($id) == true) {
-                $log->define(array(
+                $log->define([
                     'Descricao' => "Utilizador: " . $this->session->userdata('Id') . " editou a Categoria: Id= " . $Utilizador->getId() . " Nome = " . $Utilizador->getNome()
-                ));
+                ]);
                 $log->grava();
                 $this->load->view('admin/template/header');
-                $this->load->view('admin/login/editar_utilizador', array('Utilizador' => $Utilizador));
-                $this->load->view('admin/base/popup_sucesso', array("menssagem" => "Utilizador editado com sucesso"));
+                $this->load->view('admin/login/editar_utilizador', ['Utilizador' => $Utilizador]);
+                $this->load->view('admin/base/popup_sucesso', ["menssagem" => "Utilizador editado com sucesso"]);
                 $this->load->view('admin/template/footer');
             } else {
                 $this->load->view('admin/template/header');
-                $this->load->view('admin/login/editar_utilizador', array('Utilizador' => $Utilizador));
-                $this->load->view('admin/base/popup_sucesso', array("menssagem" => "Ocorreu um erro ao gravar a edição"));
+                $this->load->view('admin/login/editar_utilizador', ['Utilizador' => $Utilizador]);
+                $this->load->view('admin/base/popup_sucesso', ["menssagem" => "Ocorreu um erro ao gravar a edição"]);
                 $this->load->view('admin/template/footer');
             }
         }
     }
 
     public function criar() {
-        if ($this->session->userdata('login_efetuado') == FALSE) {
+        if ($this->session->userdata('login_efetuado') == false) {
             redirect(base_url('admin/login'));
         }
 
@@ -314,13 +289,32 @@ class Logins extends CI_Controller {
         $this->form_validation->set_message('is_unique', '<i class="fas fa-exclamation-triangle"></i> Username já existe.');
         $this->form_validation->set_message('matches', '<i class="fas fa-exclamation-triangle"></i> Passwords não coincidem.');
 //        $this->firephp->log($_FILES);
-        if ($this->form_validation->run() === FALSE) {
-            $this->load->view('admin/template/header');
-            $this->load->view('admin/login/novo_utilizador');
-            $this->load->view('admin/template/footer');
+        if ($this->form_validation->run() === false) {
+            $errors = [];
+
+            // Construa um array de erros associados aos campos
+            $fields = ['Nome', 'Username', 'Password', 'Estado', 'TipoUtilizador', 'Email'];
+
+            foreach ($fields as $field) {
+                $error = form_error($field);
+                if (!empty($error)) {
+                    $errors[] = ['field' => $field, 'message' => $error];
+                }
+            }
+            if ($this->input->is_ajax_request()) {
+                // Se for uma requisição AJAX, envie os erros como resposta JSON
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'errors' => $errors]);
+                return;
+            } else {
+                // Se não for uma requisição AJAX, carregue a view normalmente
+                $this->load->view('admin/template/header');
+                $this->load->view('admin/login/novo_utilizador');
+                $this->load->view('admin/template/footer');
+            }
         } else {
             if (empty($_FILES["Foto"]["name"])) {
-                $utilizador->define(array(
+                $utilizador->define([
                     'Nome' => $Nome,
                     'DataCriacao' => date('Y-m-d H:i:s'),
                     'Username' => $Username,
@@ -329,13 +323,13 @@ class Logins extends CI_Controller {
                     'Foto' => $Foto = null,
                     'Password' => criaPasswordHash($Password),
                     'TipoUtilizador' => $TipoUtilizador,
-                    'Segmento' => url_title($Username, 'dash', TRUE) . '-' . time(),
-                ));
+                    'Segmento' => url_title($Username, 'dash', true) . '-' . time(),
+                ]);
             } else {
                 $name = mt_rand(0, 99) . "_" . date('Y-m-d_H-i-s') . "_" . $_FILES["Foto"]["name"];
                 $destino = 'ficheiros/fotos_utilizadores/' . $name;
 //                $this->firephp->log(move_uploaded_file($_FILES["Foto"]["tmp_name"], $destino));
-                $utilizador->define(array(
+                $utilizador->define([
                     'Nome' => $Nome,
                     'DataCriacao' => date('Y-m-d H:i:s'),
                     'Username' => $Username,
@@ -344,14 +338,14 @@ class Logins extends CI_Controller {
                     'Foto' => $Foto = $name,
                     'Password' => criaPasswordHash($Password),
                     'TipoUtilizador' => $TipoUtilizador,
-                    'Segmento' => url_title($Username, 'dash', TRUE) . '-' . time(),
-                ));
+                    'Segmento' => url_title($Username, 'dash', true) . '-' . time(),
+                ]);
             }
 
 
-            $Log->define(array(
+            $Log->define([
                 'Descricao' => "Utilizador: {$this->session->userdata('Id')} registou um novo utilizador - Username: {$Username}"
-            ));
+            ]);
             $utilizador->grava();
 
             $this->listarUtilizadores();
@@ -362,27 +356,26 @@ class Logins extends CI_Controller {
     }
 
     public function ConfirmPassword($Password, $ConfirmPassword) {
-        if ($this->session->userdata('login_efetuado') == FALSE) {
+        if ($this->session->userdata('login_efetuado') == false) {
             redirect(base_url('admin/login'));
         }
         $this->firephp->log("ConfirmPassword", $ConfirmPassword);
         $this->firephp->log("--------------");
         $this->firephp->log("Password", $Password);
         if ($Password != $ConfirmPassword) {
-            return FALSE;
+            return false;
         }
-        return TRUE;
+        return true;
     }
 
     public function listarUtilizadores($campoOrdenacao = null, $sentidoOrdenacao = null, $pagina = 1) {
-
         $this->load->library('pagination');
 
 //        listar todos os utilizadores
-        $filtragem = array(
+        $filtragem = [
             'Nome' => $this->input->get('search'),
             'Username' => $this->input->get('search')
-        );
+        ];
 
         //optimizar: criar metodo/ou usar mesmo metodo mas com parametro para contar as maquinas,
         // em vez de as obter da BD e construir objectos.
@@ -406,7 +399,6 @@ class Logins extends CI_Controller {
         }
 
 
-
         //numero de registos por pagina
         $porPagina = 4;
 
@@ -422,14 +414,14 @@ class Logins extends CI_Controller {
 
         $config['base_url'] = $base_url;
         $Data['pesquisaAtual'] = $pesquisaAtual;
-        $limites = array();
+        $limites = [];
 
         $limites['limite'] = $porPagina;
         $limites['offset'] = $pagina * $porPagina - $porPagina;
         if ($campoOrdenacao && $campoOrdenacao) {
-            $ordenacao = array(
+            $ordenacao = [
                 $campoOrdenacao => $sentidoOrdenacao
-            );
+            ];
         } else {
             $ordenacao = "";
         }

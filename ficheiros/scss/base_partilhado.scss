@@ -1,4 +1,4 @@
-@import "site/_variaveis.scss";
+@import "admin/_variaveis.scss";
 /*Magnific PopUp*/
 .white-popup {
     position: relative;
@@ -9,10 +9,10 @@
     margin: 20px auto;
 }
 
-.justify-content-center{
+.justify-content-center {
     -webkit-box-pack: center;
     -ms-flex-pack: center;
-    justify-content: center; 
+    justify-content: center;
 }
 
 /*Scroll Barr*/
@@ -23,39 +23,40 @@
 
 /* Track */
 ::-webkit-scrollbar-track {
-    background: #f1f1f1; 
+    background: #f1f1f1;
 
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: $cor-preto; 
+    background: $cor-preto;
 
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-    background: $cor-2-escuro; 
+    background: $cor-2-escuro;
 }
 
-header{
-    .logo-menu{
+header {
+    .logo-menu {
         /*width: 150px;#Area-Servicos*/
         top: 5px;
     }
 }
 
 
-body{
-    #main-container{
+body {
+    #main-container {
         min-height: 100vh;
     }
-    #Page-Not-Found{
+
+    #Page-Not-Found {
         height: 100%;
     }
 }
 
-footer{
+footer {
 }
 
 
@@ -70,10 +71,12 @@ footer{
 
 /* Medium and up */
 @media screen and (min-width: 640px) {
-    header{
+    header {
     }
-    body{}
-    footer{}
+    body {
+    }
+    footer {
+    }
 }
 
 /* Large and up */
@@ -88,8 +91,11 @@ footer{
 
 /* Large only */
 @media screen and (min-width: 1024px) and (max-width: 1199px) {
-    header{}
-    body{}
-    footer{}
+    header {
+    }
+    body {
+    }
+    footer {
+    }
 }
 
