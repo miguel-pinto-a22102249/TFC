@@ -179,7 +179,6 @@ $(document).ready(function() {
             processData: false,
             contentType: false,
             success: function(response) {
-                console.log(response.errors);
                 if (response.success === false) {
                     let errors = response.errors;
                     $.each(errors, function(key, value) {
@@ -194,9 +193,10 @@ $(document).ready(function() {
                             // Se a div de erro já existe, apenas atualize o conteúdo
                             targetElement.html(errorMessage);
                         }
+                        notie.alert({type: 3, text: "Algo de errado aconteceu", stay: true});
                     });
                 } else {
-                    console.log("Utilizador criado com sucesso!");
+                    notie.alert({type: 1, text: response.message, stay: true});
                 }
             }
         });

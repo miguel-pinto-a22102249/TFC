@@ -1,7 +1,8 @@
 <?php
 
-if (!defined('BASEPATH'))
+if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
+}
 /*
   | -------------------------------------------------------------------------
   | URI ROUTING
@@ -48,6 +49,7 @@ $route['404_override'] = 'error404';
 $route['admin/home_admin'] = 'admin/home';
 $route['home_admin'] = 'admin/home';
 $route['admin'] = 'admin/home';
+$route[''] = 'admin/home';
 $route['default-style'] = 'site/testes';
 
 // <editor-fold defaultstate="collapsed" desc="Routes ADMIN">
@@ -78,7 +80,9 @@ $route['admin/gravar-alteracoes/(:any)'] = 'admin/logins/editarPost/$1';
 
 /* * ****************** Escalão ********************* */
 $route['admin/escaloes'] = 'admin/escaloes/listarEscaloes';
-
+$route['admin/escaloes/adicionar'] = 'admin/escaloes/adicionar';
+$route['admin/escaloes/editar'] = 'admin/escaloes/editar';
+$route['admin/escaloes/eliminar/(:num)'] = 'admin/escaloes/eliminar/$1';
 
 
 /* * ********************** GENERICO ************************** */

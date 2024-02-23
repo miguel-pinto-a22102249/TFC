@@ -97,34 +97,6 @@ table.table-accordion {
     }
 }
 
-//Popup lista de marcacoes horario
-.wrapper-lista-marcacoes-horario {
-    list-style: none;
-    margin-left: 0px;
-
-    li {
-        padding-top: 10px;
-        padding-bottom: 10px;
-
-        &:first-child {
-            border-top: 1px solid #cacaca;
-        }
-
-        border-bottom: 1px solid #cacaca;
-
-        .dados-marcacao {
-            display: inline-block;
-            width: 80%;
-        }
-
-        .opcoes {
-            text-align: right;
-            display: inline-block;
-            width: 18%;
-        }
-    }
-}
-
 header {
     .top-bar {
         ul:first-child {
@@ -269,15 +241,29 @@ body {
     }
 
 
-    #Area-lista-Utilizadores {
-        .th-opcoes {
-            text-align: right;
-            padding-right: 10px;
+    .area-listagem {
+
+        .area-listagem__header {
+            margin-bottom: 1.5rem;
         }
 
-        .td-opcoes {
-            color: black;
-            font-size: 20px;
+        .dataTables_length {
+            margin-bottom: 1rem;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 1rem;
+
+            .th-opcoes {
+                text-align: right;
+                padding-right: 10px;
+            }
+
+            .td-opcoes {
+                color: black;
+                font-size: 20px;
+            }
         }
     }
 
@@ -367,6 +353,48 @@ body {
 
     //Novos estilos
 
+    #content {
+        //background-color: $cor-cinza-claro;
+        grid-area: content;
+        min-height: calc(100vh - $altura-header-large - $altura-footer-large);
+        width: 80%;
+        transition: all 0.3s ease-in-out;
+
+        .content-wrapper {
+            padding: 1.5rem;
+
+            .content__inner-wrapper {
+
+            }
+        }
+
+
+        .content__inner-wrapper {
+            background-color: white;
+            padding: 2rem 1.5rem 4rem;
+            border: 1px solid #C5C5C5FF;
+            border-radius: 5px;
+
+            .content__inner-wrapper__header {
+                margin-bottom: 3rem;
+
+                .content__inner-wrapper__header__wrapper {
+                    border-bottom: 1px solid $cor-cinzento-escuro;
+                    padding-bottom: 1.5rem;
+
+                    &__titulo {
+                        font-size: $h3-font-size;
+                        font-weight: 500;
+                    }
+
+                    &__subtitulo {
+                        font-size: $h4-font-size;
+                        color: $cor-texto-2;
+                    }
+                }
+            }
+        }
+    }
 
 }
 

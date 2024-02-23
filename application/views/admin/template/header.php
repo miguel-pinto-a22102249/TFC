@@ -5,7 +5,7 @@
         <title><?= lang('partilhado.seo.title') ?></title>
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="author" content="Andre Carvalho - andre_98carvalho@hotmail.com"/>
+        <meta name="author" content="André Carvalho e Miguel Pinto"/>
         <meta name="robots" content="noindex">
 
         <? //FAVICON?>
@@ -49,11 +49,11 @@
 
     <body>
 
-        <div class="loading loading-active">
-            <div class="loading-wrapper">
-                <img class="logo" src="<?= base_url() ?>/ficheiros/imagens/base/logo-redondo.png">
-            </div>
-        </div>
+        <!--        <div class="loading loading-active">-->
+        <!--            <div class="loading-wrapper">-->
+        <!--                <img class="logo" src="--><?php //= base_url() ?><!--/ficheiros/imagens/base/logo-redondo.png">-->
+        <!--            </div>-->
+        <!--        </div>-->
         <?
         if (!isset($menu) != false) {
         //if($menu != FALSE){
@@ -70,27 +70,31 @@
             <div class="topbar__wrapper-account">
                 <span class="open-menu-btn"><span></span></span>
                 <div class="topbar__wrapper-account__inner-wrapper">
-                    <div class="topbar__wrapper-account__inner-wrapper__foto">
-                        <a href="javascript:;">
-                            <? if (empty($this->session->userdata('Foto'))) { ?>
-                                <img width="50" class="menu-img-user" src="<?= base_url() . $this->session->userdata('Foto') ?>" alt=""><? } else {
-                                ?>
-                                <img width="50" class="menu-img-user" src="<?= base_url() ?>/ficheiros/imagens/base/default-user.png" alt="">
-                            <? } ?>
-
-                        </a>
-                    </div>
-
-
-                    <div class="dropdown-container">
-                        <input class="dropdown" type="checkbox" id="dropdown" name="dropdown"/>
-                        <label class="for-dropdown" for="dropdown">Dropdown Menu <i class="uil uil-arrow-down"></i></label>
-                        <div class="section-dropdown">
-                            <label class="for-dropdown-sub" for="dropdown-sub"><?= $this->session->userdata('Nome') ?></label>
-                            <div><a href="<?= base_url() . "admin/editar-utilizador/" . $this->session->userdata('Id') ?>">Editar Conta</a></div>
-                            <div><a href="<?= base_url() . "admin/logout" ?>"><i class="fa fa-power-off"></i> Logout</a></div>
-                        </div>
-                    </div>
+                    <ul class="dropdown menu" data-dropdown-menu>
+                        <li>
+                            <a class="text-right" href="javascript:;">
+                                <div class="topbar__wrapper-account__inner-wrapper__foto">
+                                    <?
+                                    if (!empty($this->session->userdata('Foto'))) { ?>
+                                        <img width="50" class="menu-img-user" src="<?= base_url(CAMINHO_IMAGENS_DINAMICAS . 'fotos_utilizadores') ."/". $this->session->userdata('Foto') ?>" alt="">
+                                        <?
+                                    } else {
+                                        ?>
+                                        <img width="50" class="menu-img-user" src="<?= base_url() ?>/ficheiros/imagens/base/default-user.png" alt="">
+                                    <? } ?>
+                                    <label class="for-dropdown-sub" for="dropdown-sub"><?= $this->session->userdata('Nome') ?></label>
+                                </div>
+                            </a>
+                            <ul class="menu text-left">
+                                <li>
+                                    <a href="<?= base_url() . "admin/editar-utilizador/" . $this->session->userdata('Id') ?>">Editar Conta</a>
+                                </li>
+                                <li>
+                                    <a href="<?= base_url() . "admin/logout" ?>"><i class="fa fa-power-off"></i> Logout</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
 
                 </div>
             </div>
@@ -98,44 +102,81 @@
         <div class="wrapper-main">
             <div id="sidebar">
                 <ul class="vertical medium-horizontal dropdown menu" data-responsive-menu="accordion medium-dropdown">
+
                     <li>
-                        <a href="<?= base_url() . "admin/utilizadores" ?>">Utilizadores</a>
-                        <ul class="menu vertical">
-                            <?
-                            $this->load->model('login');
-                            if ($this->session->userdata('login_efetuado') == true && $this->session->userdata('TipoUtilizador') == Login::ADMIN) {
-                            }
-                            ?>
-                            <li><a href="<?= base_url() . "admin/utilizadores/adicionar" ?>">Novo Utilizador</a></li>
-                            <li><a href="<?= base_url() . "admin/utilizadores" ?>">Listar Utilizadores</a></li>
-                        </ul>
+                        <a class="dropdown-btn">Utilizadores</a>
+                        <div class="dropdown-container">
+                            <ul class="menu vertical">
+                                <?
+                                $this->load->model('login');
+                                if ($this->session->userdata('login_efetuado') == true && $this->session->userdata('TipoUtilizador') == Login::ADMIN) {
+                                }
+                                ?>
+                                <li><a href="<?= base_url() . "admin/utilizadores/adicionar" ?>">Novo Utilizador</a></li>
+                                <li><a href="<?= base_url() . "admin/utilizadores" ?>">Listar Utilizadores</a></li>
+                            </ul>
+                        </div>
                     </li>
+
                     <li>
-                        <a href="<?= base_url() . "admin/projetos" ?>">Projetos</a>
-                        <ul class="menu vertical">
-                            <li><a href="<?= base_url() . "admin/adiciona-projeto" ?>">Adicionar</a></li>
-                            <li><a href="<?= base_url() . "admin/projetos" ?>">Listar</a></li>
-                        </ul>
+                        <a class="dropdown-btn">Escalões
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                        <div class="dropdown-container">
+                            <ul class="menu vertical">
+                                <?
+                                $this->load->model('login');
+                                if ($this->session->userdata('login_efetuado') == true && $this->session->userdata('TipoUtilizador') == Login::ADMIN) {
+                                }
+                                ?>
+                                <li><a href="<?= base_url() . "admin/escaloes/adicionar" ?>">Adicionar</a></li>
+                                <li><a href="<?= base_url() . "admin/escaloes" ?>">Listar</a></li>
+                            </ul>
+                        </div>
                     </li>
-                    <li>
-                        <a href="<?= base_url() . "admin/projetos-categorias" ?>">Projetos > Categorias</a>
-                        <ul class="menu vertical">
-                            <li><a href="<?= base_url() . "admin/adiciona-projeto-categoria" ?>">Adicionar</a></li>
-                            <li><a href="<?= base_url() . "admin/projetos-categorias" ?>">Listar</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:;">Gestão</a>
-                        <ul class="menu vertical">
-                            <li><a id="backup-bd" href="<?= base_url() . "admin/backup-bd" ?>">Backup BD</a></li>
-                            <li><a id="gera-sitemap" href="<?= base_url() . "admin/gera-sitemap" ?>">Gera SiteMap</a></li>
-                            <li><a href="<?= base_url() . "admin/logs" ?>">Logs</a></li>
-                        </ul>
-                    </li>
+
+                    <!--                    <li>-->
+                    <!--                        <a href="--><?php //= base_url() . "admin/utilizadores" ?><!--">Utilizadores</a>-->
+                    <!--                        <ul class="menu vertical">-->
+                    <!--                            --><? //
+                    //                            $this->load->model('login');
+                    //                            if ($this->session->userdata('login_efetuado') == true && $this->session->userdata('TipoUtilizador') == Login::ADMIN) {
+                    //                            }
+                    //                            ?>
+                    <!--                            <li><a href="--><?php //= base_url() . "admin/utilizadores/adicionar" ?><!--">Novo Utilizador</a></li>-->
+                    <!--                            <li><a href="--><?php //= base_url() . "admin/utilizadores" ?><!--">Listar Utilizadores</a></li>-->
+                    <!--                        </ul>-->
+                    <!--                    </li>-->
+                    <!--                    <li>-->
+                    <!--                        <a href="--><?php //= base_url() . "admin/projetos" ?><!--">Escalões</a>-->
+                    <!--                        <ul class="menu vertical">-->
+                    <!--                                                <li><a href="--><?php //= base_url() . "admin/escaloes/adicionar" ?><!--">Adicionar</a></li>-->
+                    <!--                                                <li><a href="--><?php //= base_url() . "admin/escaloes" ?><!--">Listar</a></li>-->
+                    <!--                        </ul>-->
+                    <!--                    </li>-->
+                    <!--                    <li>-->
+                    <!--                        <a href="javascript:;">Gestão</a>-->
+                    <!--                        <ul class="menu vertical">-->
+                    <!--                            <li><a id="backup-bd" href="--><?php //= base_url() . "admin/backup-bd" ?><!--">Backup BD</a></li>-->
+                    <!--                            <li><a id="gera-sitemap" href="--><?php //= base_url() . "admin/gera-sitemap" ?><!--">Gera SiteMap</a></li>-->
+                    <!--                            <li><a href="--><?php //= base_url() . "admin/logs" ?><!--">Logs</a></li>-->
+                    <!--                        </ul>-->
+                    <!--                    </li>-->
                 </ul>
             </div>
             <div id="content">
                 <div class="content-wrapper">
                     <div class="content__inner-wrapper">
+                        <div class="content__inner-wrapper__header">
+                            <div class="row">
+                                <div class="column large-12">
+                                    <div class="content__inner-wrapper__header__wrapper">
+                                        <h1 class="content__inner-wrapper__header__wrapper__titulo"><?= isset($tituloArea) ? $tituloArea : 'Titulo Área Por definir' ?></h1>
+                                        <h2 class="content__inner-wrapper__header__wrapper__subtitulo"><?= isset($subtituloArea) ? $subtituloArea : 'Subtitulo Área Por definir' ?></h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <? } ?>
 

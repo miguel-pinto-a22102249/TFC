@@ -45,5 +45,7 @@ const ESTADO_INATIVO = 2;
 const ESTADO_ATIVO = 1;
 const ESTADO_ELIMINADO = 3;
 
+const CAMINHO_IMAGENS_DINAMICAS = "ficheiros/dinamicos/";
+
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

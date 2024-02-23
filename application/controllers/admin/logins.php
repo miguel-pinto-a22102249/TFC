@@ -9,6 +9,7 @@ if (!defined('BASEPATH')) {
  *
  * @version 1.0
  *
+ * @property $input
  */
 class Logins extends CI_Controller {
 
@@ -35,7 +36,7 @@ class Logins extends CI_Controller {
         }
         $Data['Nome'] = $Data['utilizador']['Nome'];
 
-        $this->load->view('admin/templates/header');
+        $this->load->view('admin/templates/header', ["tituloArea" => "Utilizadores", "subtituloArea" => "Consultar"]);
         $this->load->view('admin/utilizadores/utilizador', $Data);
         $this->load->view('admin/templates/footer');
     }
@@ -66,10 +67,10 @@ class Logins extends CI_Controller {
                 $this->load->view('admin/login/area_login', ['erro' => $erro]);
                 return;
             }
-            if (is_null($utilizador->Foto)) {
+            if (is_null($utilizador->getFoto())) {
                 $foto = "default-user.png";
             } else {
-                $foto = $utilizador->Foto;
+                $foto = $utilizador->getFoto();
             }
 
             $userData = [
@@ -178,8 +179,10 @@ class Logins extends CI_Controller {
         $utilizadorNaoAlterada->carregaPorId($id);
 
         if ($utilizadorNaoAlterada->Foto != "") {
-            $eliminar = 'assets/fotos_utilizadores/' . $utilizadorNaoAlterada->Foto;
-            unlink($eliminar);
+            $eliminar = $utilizadorNaoAlterada->getCaminhoFoto();
+            if (file_exists($eliminar)) {
+                unlink($eliminar);
+            }
         }
         $resultado = $utilizadorNaoAlterada->eliminar($id);
 
@@ -199,64 +202,126 @@ class Logins extends CI_Controller {
     }
 
     public function editar($id) {
-//        $this->firephp->log("** EDITAR **");
-//        exit();
         /* Verifica se o login atual é de um ADMIN */
         $Utilizador = new Login;
         $Utilizador->eAdmin() != true ? redirect(base_url('admin/login')) : '';
 
         $log = new Log();
-
         $Utilizador->carregaPorId($id);
 
-        $Nome = $this->input->post('Nome');
-        $Username = $this->input->post('Username');
-//        $Password = $this->input->post('Password');
-        $Estado = $this->input->post('Estado');
-        $TipoUtilizador = $this->input->post('TipoUtilizador');
 
+        if (!$this->input->is_ajax_request()) {
+            // Se não for uma requisição AJAX, carregue a view normalmente
+            $this->load->view('admin/template/header', ["tituloArea" => "Utilizadores", "subtituloArea" => "Editar"]);
+            $this->load->view('admin/login/editar_utilizador', ['Utilizador' => $Utilizador]);
+            $this->load->view('admin/template/footer');
+            return;
+        }
+
+
+        if ($this->session->userdata('login_efetuado') == false) {
+            redirect(base_url('admin/login'));
+        }
+
+        $Log = new Log();
+        $this->load->helper('form');
+        $this->load->library('form_validation');
+
+
+        // <editor-fold defaultstate="collapsed" desc="Validação do campo nome">
+        $Nome = $this->input->post('Nome');
+        $Utilizador->setNome($Nome);
         $this->form_validation->set_rules('Nome', 'Nome', 'required');
-//        $this->form_validation->set_rules('Username', 'Username', 'required|is_unique[utilizador.Username]');
-//        $this->form_validation->set_rules('Password', 'Password', 'required|matches[ConfirmPassword]');
+        // </editor-fold>
+
+        // <editor-fold defaultstate="collapsed" desc="Validação do campo username">
+        $Username = $this->input->post('Username');
+        if ($Utilizador->getUsername() != $Username) {
+            $this->form_validation->set_rules('Username', 'Username', 'required|is_unique[utilizador.Username]');
+            $Utilizador->setUsername($Username);
+        }
+        // </editor-fold>
+
+        // <editor-fold defaultstate="collapsed" desc="Validação do campo email">
+        $Email = $this->input->post('Email');
+        $this->form_validation->set_rules('Email', 'Email', 'required');
+        $Utilizador->setEmail($Email);
+        // </editor-fold>
+
+        // <editor-fold defaultstate="collapsed" desc="Validação do campo estado">
+        $Estado = $this->input->post('Estado');
         $this->form_validation->set_rules('Estado', 'Estado', 'required');
+        $Utilizador->setEstado($Estado);
+        // </editor-fold>
+
+        // <editor-fold defaultstate="collapsed" desc="Validação do campo tipo de utilizador">
+        $TipoUtilizador = $this->input->post('TipoUtilizador');
         $this->form_validation->set_rules('TipoUtilizador', 'TipoUtilizador', 'required');
+        $Utilizador->setTipoUtilizador($TipoUtilizador);
+        // </editor-fold>
+
+        // <editor-fold defaultstate="collapsed" desc="Validação do campo password">
+        if ($this->input->post('NovaPassword') != false) {
+            $Password = $this->input->post('Password');
+            $this->form_validation->set_rules('Password', 'Password', 'required|matches[ConfirmPassword]');
+            $Utilizador->setPassword(criaPasswordHash($Password));
+        }
+        // </editor-fold>
 
         $this->form_validation->set_message('required', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
         $this->form_validation->set_message('is_unique', '<i class="fas fa-exclamation-triangle"></i> Username já existe.');
         $this->form_validation->set_message('matches', '<i class="fas fa-exclamation-triangle"></i> Passwords não coincidem.');
 
         if ($this->form_validation->run() === false) {
-            $this->load->view('admin/template/header');
-            $this->load->view('admin/login/editar_utilizador', ['Utilizador' => $Utilizador]);
-            $this->load->view('admin/template/footer');
-        } else {
-//
-//            $Utilizador->define(array(
-//                'Nome' => $Nome,
-//                'Username' => $Username,
-//                'Estado' => $Estado,
-//                'TipoUtilizador' => $TipoUtilizador
-//            ));
-//            $this->firephp->log($TipoUtilizador);
-            $Utilizador->setNome($Nome);
-            $Utilizador->setUsername($Username);
-            $Utilizador->setEstado($Estado);
-            $Utilizador->setTipoUtilizador($TipoUtilizador);
+            $errors = [];
 
-            if ($Utilizador->edita($id) == true) {
-                $log->define([
-                    'Descricao' => "Utilizador: " . $this->session->userdata('Id') . " editou a Categoria: Id= " . $Utilizador->getId() . " Nome = " . $Utilizador->getNome()
-                ]);
-                $log->grava();
-                $this->load->view('admin/template/header');
-                $this->load->view('admin/login/editar_utilizador', ['Utilizador' => $Utilizador]);
-                $this->load->view('admin/base/popup_sucesso', ["menssagem" => "Utilizador editado com sucesso"]);
-                $this->load->view('admin/template/footer');
+            // Construa um array de erros associados aos campos
+            $fields = ['Nome', 'Username', 'Password', 'Estado', 'TipoUtilizador', 'Email'];
+
+            foreach ($fields as $field) {
+                $error = form_error($field);
+                if (!empty($error)) {
+                    $errors[] = ['field' => $field, 'message' => $error];
+                }
+            }
+            if ($this->input->is_ajax_request()) {
+                // Se for uma requisição AJAX, envie os erros como resposta JSON
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'errors' => $errors, 'message' => 'Erro ao editar utilizador']);
+                return;
             } else {
-                $this->load->view('admin/template/header');
+                // Se não for uma requisição AJAX, carregue a view normalmente
+                $this->load->view('admin/template/header', ["tituloArea" => "Utilizadores", "subtituloArea" => "Editar"]);
                 $this->load->view('admin/login/editar_utilizador', ['Utilizador' => $Utilizador]);
-                $this->load->view('admin/base/popup_sucesso', ["menssagem" => "Ocorreu um erro ao gravar a edição"]);
                 $this->load->view('admin/template/footer');
+            }
+        } else {
+            if (empty($_FILES["Foto"]["name"])) {
+                $Utilizador->setFoto(null);
+                $Utilizador->setUsername($Username);
+            } else {
+                $name = mt_rand(0, 99) . "_" . date('Y-m-d_H-i-s') . "_" . $_FILES["Foto"]["name"];
+                if ($name != $Utilizador->getFoto()) {
+                    $destino = CAMINHO_IMAGENS_DINAMICAS . 'fotos_utilizadores/' . $name;
+                    move_uploaded_file($_FILES["Foto"]["tmp_name"], $destino);
+                    $Utilizador->setFoto($name);
+                }
+                $Utilizador->setUsername($Username);
+            }
+
+
+            $Log->define([
+                'Descricao' => "Utilizador: {$this->session->userdata('Id')} editou as informações do utilizador - Username: {$Username}"
+            ]);
+
+            if ($Utilizador->edita($id)) {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => true, 'message' => 'Utilizador adicionado com sucesso']);
+                return;
+            } else {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'message' => 'Ocorreu um erro ao gravar o utilizador']);
+                return;
             }
         }
     }
@@ -288,7 +353,7 @@ class Logins extends CI_Controller {
         $this->form_validation->set_message('required', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
         $this->form_validation->set_message('is_unique', '<i class="fas fa-exclamation-triangle"></i> Username já existe.');
         $this->form_validation->set_message('matches', '<i class="fas fa-exclamation-triangle"></i> Passwords não coincidem.');
-//        $this->firephp->log($_FILES);
+
         if ($this->form_validation->run() === false) {
             $errors = [];
 
@@ -304,11 +369,11 @@ class Logins extends CI_Controller {
             if ($this->input->is_ajax_request()) {
                 // Se for uma requisição AJAX, envie os erros como resposta JSON
                 header('Content-Type: application/json');
-                echo json_encode(['success' => false, 'errors' => $errors]);
+                echo json_encode(['success' => false, 'errors' => $errors, 'message' => 'Erro ao criar utilizador']);
                 return;
             } else {
                 // Se não for uma requisição AJAX, carregue a view normalmente
-                $this->load->view('admin/template/header');
+                $this->load->view('admin/template/header', ["tituloArea" => "Utilizadores", "subtituloArea" => "Adicionar"]);
                 $this->load->view('admin/login/novo_utilizador');
                 $this->load->view('admin/template/footer');
             }
@@ -327,15 +392,15 @@ class Logins extends CI_Controller {
                 ]);
             } else {
                 $name = mt_rand(0, 99) . "_" . date('Y-m-d_H-i-s') . "_" . $_FILES["Foto"]["name"];
-                $destino = 'ficheiros/fotos_utilizadores/' . $name;
-//                $this->firephp->log(move_uploaded_file($_FILES["Foto"]["tmp_name"], $destino));
+                $destino = CAMINHO_IMAGENS_DINAMICAS . 'fotos_utilizadores/' . $name;
+                move_uploaded_file($_FILES["Foto"]["tmp_name"], $destino);
                 $utilizador->define([
                     'Nome' => $Nome,
                     'DataCriacao' => date('Y-m-d H:i:s'),
                     'Username' => $Username,
                     'Email' => $Email,
                     'Estado' => $Estado,
-                    'Foto' => $Foto = $name,
+                    'Foto' => $name,
                     'Password' => criaPasswordHash($Password),
                     'TipoUtilizador' => $TipoUtilizador,
                     'Segmento' => url_title($Username, 'dash', true) . '-' . time(),
@@ -346,12 +411,15 @@ class Logins extends CI_Controller {
             $Log->define([
                 'Descricao' => "Utilizador: {$this->session->userdata('Id')} registou um novo utilizador - Username: {$Username}"
             ]);
-            $utilizador->grava();
-
-            $this->listarUtilizadores();
-//            $this->load->view('admin/template/header');
-//            $this->load->view('admin/home');
-//            $this->load->view('admin/template/footer');
+            if ($utilizador->grava()) {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => true, 'message' => 'Utilizador adicionado com sucesso']);
+                return;
+            } else {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'message' => 'Ocorreu um erro ao gravar o utilizador']);
+                return;
+            }
         }
     }
 
@@ -369,72 +437,9 @@ class Logins extends CI_Controller {
     }
 
     public function listarUtilizadores($campoOrdenacao = null, $sentidoOrdenacao = null, $pagina = 1) {
-        $this->load->library('pagination');
+        $Data['utilizadores'] = (new Login)->obtemUtilizadores(null, null);
 
-//        listar todos os utilizadores
-        $filtragem = [
-            'Nome' => $this->input->get('search'),
-            'Username' => $this->input->get('search')
-        ];
-
-        //optimizar: criar metodo/ou usar mesmo metodo mas com parametro para contar as maquinas,
-        // em vez de as obter da BD e construir objectos.
-        $num_rows = (new Login)->obtemUtilizadores(null, $filtragem, null, true);
-
-        if (strtolower($sentidoOrdenacao) == 'asc') {
-            $sentidoOrdenacao = 'asc';
-        } else {
-            $sentidoOrdenacao = 'desc';
-        }
-
-        //TODO: adicionar os segmentos de ordenacao, caso eles existam.
-        if (!is_null($campoOrdenacao)) {
-            $base_url = base_url('utilizadores/listar/ordenar/' . $campoOrdenacao . '/' . $sentidoOrdenacao . '/');
-            $uri_segment = 6;
-        } else {
-            //Campo default para ordenação
-            $campoOrdenacao = 'DataCriacao';
-            $base_url = base_url('utilizadores/listar/');
-            $uri_segment = 3;
-        }
-
-
-        //numero de registos por pagina
-        $porPagina = 4;
-
-        if (count($_GET) > 0) {
-            $config['suffix'] = '?' . http_build_query($_GET, '', "&");
-            $pesquisaAtual = http_build_query($_GET, '', "&");
-            $testeExistePesquisa = Str_replace("search=", "", $pesquisaAtual);
-            $base_url = "pesquisar?" . $pesquisaAtual;
-            $porPagina = 9999; //porque não tem paginação quando à pesquisa
-        } else {
-            $pesquisaAtual = '';
-        }
-
-        $config['base_url'] = $base_url;
-        $Data['pesquisaAtual'] = $pesquisaAtual;
-        $limites = [];
-
-        $limites['limite'] = $porPagina;
-        $limites['offset'] = $pagina * $porPagina - $porPagina;
-        if ($campoOrdenacao && $campoOrdenacao) {
-            $ordenacao = [
-                $campoOrdenacao => $sentidoOrdenacao
-            ];
-        } else {
-            $ordenacao = "";
-        }
-
-        $Data['utilizadores'] = (new Login)->obtemUtilizadores($ordenacao, $filtragem, $limites, false);
-
-        $config = getConfigPaginacao($base_url, $num_rows, $porPagina, $uri_segment, 3, $pagina);
-
-        $this->pagination->initialize($config);
-
-        $Data['links'] = $this->pagination->create_links();
-        $Data['slider'] = true;
-        $this->load->view('admin/template/header', $Data);
+        $this->load->view('admin/template/header', ["tituloArea" => "Utilizadores", "subtituloArea" => "Listar"]);
         $this->load->view('admin/login/listar_utilizadores', $Data);
         $this->load->view('admin/template/footer');
     }

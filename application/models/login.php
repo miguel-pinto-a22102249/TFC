@@ -329,6 +329,13 @@ class Login extends AC_Model_Base {
     }
 
     /**
+     * @return mixed
+     */
+    public function getCaminhoFoto() {
+        return CAMINHO_IMAGENS_DINAMICAS."fotos_utilizadores/".$this->Foto;
+    }
+
+    /**
      * @param mixed $Foto
      */
     public function setFoto($Foto): void {
@@ -362,6 +369,8 @@ class Login extends AC_Model_Base {
     public function setEmail($Email): void {
         $this->Email = $Email;
     }
+
+
 
 
 }

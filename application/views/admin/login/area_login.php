@@ -44,7 +44,7 @@
         ?>
         <div id="Area-Login" style="background-image: url(<?= $the_image ?>)">
             <div class="grid-x align-center text-cente">
-                <div class="large-3 medium-8 small-10 cell titulo-wrapper">
+                <div class="xlarge-3 large-4 medium-8 small-10 cell titulo-wrapper">
                     <div class="titulo-border">
                         <h1>FomeZer0</h1>
                         <h3><?= lang("admin.titulo.login"); ?></h3>
@@ -58,7 +58,7 @@
                 <meta http-equiv="refresh" content="0.1; <?= base_url() ?>home_admin">
             <? } ?>
             <div class="grid-x align-center text-center align-self-middle">
-                <div class="large-3 medium-8 small-10 cell form-login-wrapper">
+                <div class="large-4 medium-8 small-10 cell form-login-wrapper">
                     <div class="titulo-login">
                         <h3><i class="fas fa-sign-in-alt"></i> Login</h3></div>
                     <form class="form-login" action="<?= base_url() ?>admin/login" method="POST">
