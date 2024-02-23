@@ -1,7 +1,8 @@
 <?php
 
-if (!defined('BASEPATH'))
+if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
+}
 /*
   | -------------------------------------------------------------------
   | DATABASE CONNECTIVITY SETTINGS
@@ -49,41 +50,41 @@ if (!defined('BASEPATH'))
  */
 
 $active_group = 'default';
-$active_record = TRUE;
-$USA_BD_PRODUTIVO = FALSE;
+$active_record = true;
+$USA_BD_PRODUTIVO = false;
 
 if ($USA_BD_PRODUTIVO) {
     $db['default']['hostname'] = 'dockerbd-mysql-1';
     $db['default']['username'] = 'root';
     $db['default']['password'] = 'sk78dshi93jh:hs!';
-    $db['default']['database'] = 'FomeZer0';
+    $db['default']['database'] = 'FomeZer0'; // The database name you specified in MYSQL_DATABASE
+    $db['default']['dbdriver'] = 'mysqli';   // Keep using 'mysqli' for MariaDB
+    $db['default']['dbprefix'] = '';
+    $db['default']['pconnect'] = true; // Consider setting this to FALSE if not needed
+    $db['default']['db_debug'] = true;
+    $db['default']['cache_on'] = false;
+    $db['default']['cachedir'] = '';
+    $db['default']['char_set'] = 'utf8mb4';            // Use 'utf8mb4' for better Unicode support
+    $db['default']['dbcollat'] = 'utf8mb4_general_ci'; // Use 'utf8mb4_general_ci'
+    $db['default']['swap_pre'] = '';
+    $db['default']['autoinit'] = true;
+    $db['default']['stricton'] = false;
+} else {
+    $db['default']['hostname'] = '89.26.251.16';
+    $db['default']['username'] = 'amcc_tfc';
+    $db['default']['password'] = 'p;Eq)_CoHwGmv@PgRA';
+    $db['default']['database'] = 'amcc_tfc';
     $db['default']['dbdriver'] = 'mysqli';
     $db['default']['dbprefix'] = '';
-    $db['default']['pconnect'] = TRUE;
-    $db['default']['db_debug'] = TRUE;
-    $db['default']['cache_on'] = FALSE;
+    $db['default']['pconnect'] = true;
+    $db['default']['db_debug'] = true;
+    $db['default']['cache_on'] = false;
     $db['default']['cachedir'] = '';
     $db['default']['char_set'] = 'utf8';
     $db['default']['dbcollat'] = 'utf8_general_ci';
     $db['default']['swap_pre'] = '';
-    $db['default']['autoinit'] = TRUE;
-    $db['default']['stricton'] = FALSE;
-} else {
-    $db['default']['hostname'] = 'dockerbd-mysql-1';
-    $db['default']['username'] = 'root';
-    $db['default']['password'] = 'sk78dshi93jh:hs!';
-    $db['default']['database'] = 'FomeZer0'; // The database name you specified in MYSQL_DATABASE
-    $db['default']['dbdriver'] = 'mysqli'; // Keep using 'mysqli' for MariaDB
-    $db['default']['dbprefix'] = '';
-    $db['default']['pconnect'] = TRUE; // Consider setting this to FALSE if not needed
-    $db['default']['db_debug'] = TRUE;
-    $db['default']['cache_on'] = FALSE;
-    $db['default']['cachedir'] = '';
-    $db['default']['char_set'] = 'utf8mb4'; // Use 'utf8mb4' for better Unicode support
-    $db['default']['dbcollat'] = 'utf8mb4_general_ci'; // Use 'utf8mb4_general_ci'
-    $db['default']['swap_pre'] = '';
-    $db['default']['autoinit'] = TRUE;
-    $db['default']['stricton'] = FALSE;
+    $db['default']['autoinit'] = true;
+    $db['default']['stricton'] = false;
 }
 
 /* End of file database.php */
