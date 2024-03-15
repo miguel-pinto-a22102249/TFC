@@ -55,6 +55,7 @@
         <!--            </div>-->
         <!--        </div>-->
         <?
+        $this->load->model('login');
         if (!isset($menu) != false) {
         //if($menu != FALSE){
         ?>
@@ -76,7 +77,7 @@
                                 <div class="topbar__wrapper-account__inner-wrapper__foto">
                                     <?
                                     if (!empty($this->session->userdata('Foto'))) { ?>
-                                        <img width="50" class="menu-img-user" src="<?= base_url(CAMINHO_IMAGENS_DINAMICAS . 'fotos_utilizadores') ."/". $this->session->userdata('Foto') ?>" alt="">
+                                        <img width="50" class="menu-img-user" src="<?= base_url(CAMINHO_IMAGENS_DINAMICAS . 'fotos_utilizadores') . "/" . $this->session->userdata('Foto') ?>" alt="">
                                         <?
                                     } else {
                                         ?>
@@ -87,7 +88,7 @@
                             </a>
                             <ul class="menu text-left">
                                 <li>
-                                    <a href="<?= base_url() . "admin/editar-utilizador/" . $this->session->userdata('Id') ?>">Editar Conta</a>
+                                    <a href="<?= base_url() . 'admin/utilizadores/editar/' . $this->session->userdata('Id') ?>">Editar Conta</a>
                                 </li>
                                 <li>
                                     <a href="<?= base_url() . "admin/logout" ?>"><i class="fa fa-power-off"></i> Logout</a>
@@ -108,12 +109,13 @@
                         <div class="dropdown-container">
                             <ul class="menu vertical">
                                 <?
-                                $this->load->model('login');
+
                                 if ($this->session->userdata('login_efetuado') == true && $this->session->userdata('TipoUtilizador') == Login::ADMIN) {
-                                }
+                                    ?>
+                                    <li><a href="<?= base_url() . "admin/utilizadores/adicionar" ?>">Novo Utilizador</a></li>
+                                    <li><a href="<?= base_url() . "admin/utilizadores" ?>">Listar Utilizadores</a></li>
+                                <? }
                                 ?>
-                                <li><a href="<?= base_url() . "admin/utilizadores/adicionar" ?>">Novo Utilizador</a></li>
-                                <li><a href="<?= base_url() . "admin/utilizadores" ?>">Listar Utilizadores</a></li>
                             </ul>
                         </div>
                     </li>
@@ -125,7 +127,7 @@
                         <div class="dropdown-container">
                             <ul class="menu vertical">
                                 <?
-                                $this->load->model('login');
+
                                 if ($this->session->userdata('login_efetuado') == true && $this->session->userdata('TipoUtilizador') == Login::ADMIN) {
                                 }
                                 ?>
@@ -135,33 +137,39 @@
                         </div>
                     </li>
 
-                    <!--                    <li>-->
-                    <!--                        <a href="--><?php //= base_url() . "admin/utilizadores" ?><!--">Utilizadores</a>-->
-                    <!--                        <ul class="menu vertical">-->
-                    <!--                            --><? //
-                    //                            $this->load->model('login');
-                    //                            if ($this->session->userdata('login_efetuado') == true && $this->session->userdata('TipoUtilizador') == Login::ADMIN) {
-                    //                            }
-                    //                            ?>
-                    <!--                            <li><a href="--><?php //= base_url() . "admin/utilizadores/adicionar" ?><!--">Novo Utilizador</a></li>-->
-                    <!--                            <li><a href="--><?php //= base_url() . "admin/utilizadores" ?><!--">Listar Utilizadores</a></li>-->
-                    <!--                        </ul>-->
-                    <!--                    </li>-->
-                    <!--                    <li>-->
-                    <!--                        <a href="--><?php //= base_url() . "admin/projetos" ?><!--">Escalões</a>-->
-                    <!--                        <ul class="menu vertical">-->
-                    <!--                                                <li><a href="--><?php //= base_url() . "admin/escaloes/adicionar" ?><!--">Adicionar</a></li>-->
-                    <!--                                                <li><a href="--><?php //= base_url() . "admin/escaloes" ?><!--">Listar</a></li>-->
-                    <!--                        </ul>-->
-                    <!--                    </li>-->
-                    <!--                    <li>-->
-                    <!--                        <a href="javascript:;">Gestão</a>-->
-                    <!--                        <ul class="menu vertical">-->
-                    <!--                            <li><a id="backup-bd" href="--><?php //= base_url() . "admin/backup-bd" ?><!--">Backup BD</a></li>-->
-                    <!--                            <li><a id="gera-sitemap" href="--><?php //= base_url() . "admin/gera-sitemap" ?><!--">Gera SiteMap</a></li>-->
-                    <!--                            <li><a href="--><?php //= base_url() . "admin/logs" ?><!--">Logs</a></li>-->
-                    <!--                        </ul>-->
-                    <!--                    </li>-->
+                    <li>
+                        <a class="dropdown-btn">Agregados
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                        <div class="dropdown-container">
+                            <ul class="menu vertical">
+                                <?
+
+                                if ($this->session->userdata('login_efetuado') == true && $this->session->userdata('TipoUtilizador') == Login::ADMIN) {
+                                }
+                                ?>
+                                <li><a href="<?= base_url() . "admin/agregados/adicionar" ?>">Adicionar</a></li>
+                                <li><a href="<?= base_url() . "admin/agregados" ?>">Listar</a></li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li>
+                        <a class="dropdown-btn">Produtos
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                        <div class="dropdown-container">
+                            <ul class="menu vertical">
+                                <?
+
+                                if ($this->session->userdata('login_efetuado') == true && $this->session->userdata('TipoUtilizador') == Login::ADMIN) {
+                                }
+                                ?>
+                                <li><a href="<?= base_url() . "admin/produtos/adicionar" ?>">Adicionar</a></li>
+                                <li><a href="<?= base_url() . "admin/produtos" ?>">Listar</a></li>
+                            </ul>
+                        </div>
+                    </li>
                 </ul>
             </div>
             <div id="content">

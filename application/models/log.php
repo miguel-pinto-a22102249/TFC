@@ -2,13 +2,12 @@
 
 /**
  * Serve para guardar qualquer alteracao feita na plataforma por qualquer utilizador
- * 
+ *
  * Model Log
  */
 class Log extends CI_Model {
-    
-    const TABELA = "log";
-    
+
+
     /*
      * @var int
      */
@@ -21,10 +20,23 @@ class Log extends CI_Model {
      * var int
      */
     public $IdUtilizador;
+
+    /*
+     * var String
+     */
+    public $Objeto;
+
+    /*
+     * var String
+     */
+    public $Acao;
+
     /*
      * @var string
      */
     public $Descricao;
+
+    const TABELA = 'log';
 
     public function __construct() {
         parent::__construct();
@@ -33,46 +45,50 @@ class Log extends CI_Model {
     /**
      * Caso no Array de dados enviado não seja definido a DataCriacao e o IdUtilizador, são definidos automaticamente
      * exemplo: $log->define(array('Descricao' => "Cria Máquina"));
-     * 
+     *
      * @param type $dados
      */
     public function define($dados) {
         if (empty($dados['Id'])) {
-            !empty($dados['DataCriacao']) ? $this->DataCriacao = $dados['DataCriacao'] : $this->DataCriacao = date('Y-m-d H:i:s');
             !empty($dados['IdUtilizador']) ? $this->IdUtilizador = $dados['IdUtilizador'] : $this->IdUtilizador = $this->session->userdata('Id');
+            $this->Acao = $dados['Acao'];
+            $this->Objeto = $dados['Objeto'];
             $this->Descricao = $dados['Descricao'];
+            !empty($dados['DataCriacao']) ? $this->DataCriacao = $dados['DataCriacao'] : $this->DataCriacao = date('Y-m-d H:i:s');
         } else {
             $this->Id = $dados['Id'];
-            !empty($dados['DataCriacao']) ? $this->DataCriacao = $dados['DataCriacao'] : $this->DataCriacao = date('Y-m-d H:i:s');
             !empty($dados['IdUtilizador']) ? $this->IdUtilizador = $dados['IdUtilizador'] : $this->IdUtilizador = $this->session->userdata('Id');
+            $this->Acao = $dados['Acao'];
+            $this->Objeto = $dados['Objeto'];
             $this->Descricao = $dados['Descricao'];
+            !empty($dados['DataCriacao']) ? $this->DataCriacao = $dados['DataCriacao'] : $this->DataCriacao = date('Y-m-d H:i:s');
         }
     }
 
     /**
      * Obtem Logs
-     * 
+     *
      * @param array $ordenacao
      * @param array $filtragem
      * @param array $limites
      * @param type $contar
+     *
      * @return \Log
      */
     public function obtemLogs($ordenacao = null, $filtragem = null, $limites = null, $contar = false) {
-
         // <editor-fold defaultstate="collapsed" desc="Oredenação">
         if (!is_array($ordenacao)) {
-            $ordenacao = array();
+            $ordenacao = [];
         }
 // </editor-fold>
         // <editor-fold defaultstate="collapsed" desc="Filtragem">
         if (!is_array($filtragem)) {
-            $filtragem = array();
+            $filtragem = [];
         }
         // </editor-fold>
         // <editor-fold defaultstate="collapsed" desc="Limites">
         if (!is_array($limites)) {
-            $limites = array();
+            $limites = [];
         }
         // </editor-fold>
 
@@ -98,7 +114,7 @@ class Log extends CI_Model {
         }
         //Fim de pesquisa
 
-        $array_log = array();
+        $array_log = [];
         if ($contar == true && empty($filtragem)) {
             return $this->db->count_all_results(Log::TABELA);
         } elseif ($contar == true) {
@@ -115,8 +131,6 @@ class Log extends CI_Model {
         $array_dados_log = $query->result_array();
 
 
-
-
         //transformar o array de arrays em array de objectos do tipo log
         foreach ($array_dados_log as $dados_log) {
             $log = new log;
@@ -127,18 +141,17 @@ class Log extends CI_Model {
         return $array_log;
     }
 
-    public function carregaPorId($Id = FALSE) {
+    public function carregaPorId($Id = false) {
         //carregar uma noticia por id
         if (is_null($Id)) {
             return false;
         }
 
         //obter noticias (- falta obter noticias com base na ordenacao e filtragens, caso definidas)
-        $query = $this->db->get_where('utilizador', array('Id' => $Id));
+        $query = $this->db->get_where(self::TABELA, ['Id' => $Id]);
         $dados_utilizador = $query->row_array();
 
         if (!empty($dados_utilizador)) {
-
             //definir os seus valores
             $this->define($dados_utilizador);
 
@@ -150,8 +163,6 @@ class Log extends CI_Model {
     }
 
     public function alterar($Id) {
-
-
 //      $this->db->get_where('noticias', array('id' => $id))->$this->db->update('noticias');
 
         $this->db->where('Id', $Id);
@@ -163,27 +174,27 @@ class Log extends CI_Model {
     }
 
     public function eliminar($Id) {
-
-        $resultado = $this->db->delete(Log::TABELA, array('Id' => $Id));
+        $resultado = $this->db->delete(Log::TABELA, ['Id' => $Id]);
 
         if ($this->db->affected_rows() == '1') {
-            return TRUE;
+            return true;
         } else {
-            return FALSE;
+            return false;
         }
     }
-    
+
     /**
      * Recebendo o Id do utilizador devolve o Nome do mesmo
-     * 
+     *
      * @param type $Id
+     *
      * @return boolean
      */
-     public function getNomeUtilizador($Id = FALSE) {
+    public function getNomeUtilizador($Id = false) {
         if (is_null($Id)) {
             return false;
         }
-        $query = $this->db->get_where('utilizador', array('Id' => $Id));
+        $query = $this->db->get_where('utilizador', ['Id' => $Id]);
         $dados_utilizador = $query->row_array();
         if (!empty($dados_utilizador)) {
             return $dados_utilizador['Nome'];

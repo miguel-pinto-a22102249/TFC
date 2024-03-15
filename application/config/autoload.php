@@ -1,7 +1,8 @@
 <?php
 
-if (!defined('BASEPATH'))
+if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
+}
 /*
   | -------------------------------------------------------------------
   | AUTO-LOADER
@@ -40,7 +41,7 @@ if (!defined('BASEPATH'))
   |
  */
 
-$autoload['packages'] = array();
+$autoload['packages'] = [];
 
 
 /*
@@ -55,7 +56,7 @@ $autoload['packages'] = array();
   |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
  */
 
-$autoload['libraries'] = array('email');
+$autoload['libraries'] = ['email'];
 
 
 /*
@@ -66,7 +67,9 @@ $autoload['libraries'] = array('email');
   |
   |	$autoload['helper'] = array('url', 'file');
  */
-$autoload['helper'] = /** «helper» * */ array() /** «/helper» * */;
+$autoload['helper'] = /** «helper» * */
+    []/** «/helper» * */
+;
 $autoload['helper'][] = 'url';
 $autoload['helper'][] = 'paginacao';
 $autoload['helper'][] = 'datetime';
@@ -91,7 +94,7 @@ $autoload['helper'][] = 'language';
   |
  */
 
-$autoload['config'] = array('config_base');
+$autoload['config'] = ['config_base'];
 
 
 /*
@@ -107,7 +110,7 @@ $autoload['config'] = array('config_base');
   |
  */
 
-$autoload['language'] = array("admin", "partilhado", "publico");
+$autoload['language'] = ["admin", "partilhado", "publico"];
 
 
 /*
@@ -120,12 +123,13 @@ $autoload['language'] = array("admin", "partilhado", "publico");
   |
  */
 
-$autoload['model'] = array('log');
+$autoload['model'] = ['log'];
+$autoload['model'] = ['Model_Base'];
 
-$autoload['libraries'] = array('form_validation');
+$autoload['libraries'] = ['form_validation'];
 
 /* FIRE PHP */
-$autoload['libraries'] = array('database', 'ChromePhpWSE');
+$autoload['libraries'] = ['database', 'ChromePhpWSE'];
 
 date_default_timezone_set('Europe/Lisbon');
 

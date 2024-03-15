@@ -10,11 +10,11 @@ if (!defined('BASEPATH')) {
  * @version 1.0
  *
  */
-class Escaloes extends CI_Controller {
+class Agregados extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('escalao');
+        $this->load->model('agregado_familiar');
         $this->load->model('log');
         $this->load->helper('form');
         $this->load->library('form_validation');
@@ -23,14 +23,14 @@ class Escaloes extends CI_Controller {
     }
 
     public function index() {
-        $this->load->view('admin/escaloes/area_escaloes');
+        self::listar();
     }
 
     public function listar() {
-        $Escaloes = (new Escalao)->obtemElementos();
+        $Agregados = (new Agregado_Familiar())->obtemElementos();
 
-        $this->load->view('admin/template/header', ["tituloArea" => "Escalões", "subtituloArea" => "Listar"]);
-        $this->load->view('admin/escaloes/listar', ['Escaloes' => $Escaloes]);
+        $this->load->view('admin/template/header', ["tituloArea" => "Agregados", "subtituloArea" => "Listar"]);
+        $this->load->view('admin/agregados/listar', ['Agregados' => $Agregados]);
         $this->load->view('admin/template/footer');
     }
 
@@ -43,6 +43,7 @@ class Escaloes extends CI_Controller {
         $this->load->library('form_validation');
 
         $escalao = new Escalao();
+
 
         $Designacao = $this->input->post('Designacao');
         $IdadeInicial = $this->input->post('IdadeInicial');

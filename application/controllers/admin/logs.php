@@ -1,14 +1,14 @@
-
 <?
 
-if (!defined('BASEPATH'))
+if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
+}
 
 /**
  * Logins
- * 
+ *
  * @version 1.0
- * 
+ *
  */
 class Logs extends CI_Controller {
 
@@ -18,7 +18,7 @@ class Logs extends CI_Controller {
         $this->load->model('log');
         $this->load->model('login');
         $login = new Login;
-        if ($this->session->userdata('login_efetuado') == FALSE || $login->eAdmin() == FALSE) {
+        if ($this->session->userdata('login_efetuado') == false || $login->eAdmin() == false) {
             redirect(base_url('admin/login'));
         }
     }
@@ -28,14 +28,14 @@ class Logs extends CI_Controller {
     }
 
     public function listaLogs() {
-        $limites = array();
+        $limites = [];
 //        $limites['limite'] = 3;
-        
+
         $logs = $this->log->obtemLogs(false, false, false);
 //        $this->firephp->log($logs);
-        
+
         $this->load->view('admin/template/header');
-        $this->load->view('admin/logs/area_logs', array('logs' => $logs));
+        $this->load->view('admin/logs/area_logs', ['logs' => $logs]);
         $this->load->view('admin/template/footer');
     }
 

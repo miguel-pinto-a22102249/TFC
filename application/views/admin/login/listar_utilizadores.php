@@ -14,30 +14,35 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <? foreach ($utilizadores as $utilizadore) { ?>
+                    <?
+
+                    $utilizador = new Login();
+
+                    foreach ($Utilizadores as $utilizador) {
+                        ?>
                         <tr class="tr-accordion">
                             <td class="trigger">
-                                <a style="text-decoration:none" href="admin/utilizador/consultar/<?= $utilizadore->Segmento ?>">
-                                    <?= $utilizadore->getNome(); ?>
+                                <a style="text-decoration:none" href="admin/utilizador/consultar/<?= $utilizador->getSegmento() ?>">
+                                    <?= $utilizador->getNome(); ?>
                                 </a>
                             </td>
                             <td>
-                                <?= $utilizadore->getUsername(); ?>
+                                <?= $utilizador->getUsername(); ?>
                             </td>
                             <td class="text-center">
                                 <?
-                                if ($utilizadore->getTipoUtilizador() == Login::ADMIN) {
+                                if ($utilizador->getTipoUtilizador() == Login::ADMIN) {
                                     echo "<label class='label primary'>Administrador</label>";
-                                } else if ($utilizadore->getTipoUtilizador() == Login::UTILIZADOR) {
+                                } else if ($utilizador->getTipoUtilizador() == Login::UTILIZADOR) {
                                     echo "<label class='label secondary'>Utilizador</label>";
                                 }
                                 ?>
                             </td>
                             <td class="text-center">
                                 <?
-                                if ($utilizadore->getEstado() == Login::ESTADO_ATIVO) {
+                                if ($utilizador->getEstado() == Login::ESTADO_ATIVO) {
                                     echo "<label class='label success'>Ativo</label>";
-                                } else if ($utilizadore->getEstado() == Login::ESTADO_INATIVO) {
+                                } else if ($utilizador->getEstado() == Login::ESTADO_INATIVO) {
                                     echo "<label class='label aler'>Inativo</label>";
                                 }
                                 ?>
@@ -45,10 +50,10 @@
 
                             <td class="text-center">
 
-                                <? if (empty($utilizadore->getFoto())) { ?>
+                                <? if (empty($utilizador->getFoto())) { ?>
                                     <img  height="50" width="50" class="blog-home-img" src="<?= base_url() ?>ficheiros/imagens/base/default-user.png" alt=""><? } else {
                                     ?>
-                                    <img height="50" width="50"  class="blog-home-img" src="<?= base_url() ?><?php echo $utilizadore->getCaminhoFoto() ?>" alt=""><? }
+                                    <img height="50" width="50"  class="blog-home-img" src="<?= base_url() ?><?php echo $utilizador->getCaminhoFoto() ?>" alt=""><? }
                                 ?>
                             </td>
                             <td class="td-opcoes">
@@ -57,17 +62,17 @@
                                         <a class="text-right" href="javascript:;"><i class="fas fa-2x fa-cog"></i></a>
                                         <ul class="menu text-left">
                                             <li>
-                                                <a style="text-decoration:none" href="<?= base_url() . 'admin/utilizadores/consultar/' . $utilizadore->Segmento ?>">
+                                                <a style="text-decoration:none" href="<?= base_url() . 'admin/utilizadores/consultar/' . $utilizador->Segmento ?>">
                                                     <i class="fas fa-search-plus fa-1x"></i> Consultar
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="Editar" href="<?= base_url() . 'admin/utilizadores/editar/' . $utilizadore->getId() ?>">
+                                                <a class="Editar" href="<?= base_url() . 'admin/utilizadores/editar/' . $utilizador->getId() ?>">
                                                     <i class="fas fa-edit fa-1x"></i> Ediar
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="Eliminar" href="<?= base_url() . 'admin/utilizadores/eliminar/' . $utilizadore->getId() ?>">
+                                                <a class="Eliminar" href="<?= base_url() . 'admin/utilizadores/eliminar/' . $utilizador->getId() ?>">
                                                     <i class="fas fa-trash-alt fa-1x"></i> Eliminar
                                                 </a>
                                             </li>

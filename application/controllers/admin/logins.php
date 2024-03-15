@@ -223,7 +223,6 @@ class Logins extends CI_Controller {
             redirect(base_url('admin/login'));
         }
 
-        $Log = new Log();
         $this->load->helper('form');
         $this->load->library('form_validation');
 
@@ -310,10 +309,6 @@ class Logins extends CI_Controller {
             }
 
 
-            $Log->define([
-                'Descricao' => "Utilizador: {$this->session->userdata('Id')} editou as informações do utilizador - Username: {$Username}"
-            ]);
-
             if ($Utilizador->edita($id)) {
                 header('Content-Type: application/json');
                 echo json_encode(['success' => true, 'message' => 'Utilizador adicionado com sucesso']);
@@ -332,7 +327,6 @@ class Logins extends CI_Controller {
         }
 
         $utilizador = new Login();
-        $Log = new Log();
         $this->load->helper('form');
         $this->load->library('form_validation');
 
@@ -408,9 +402,6 @@ class Logins extends CI_Controller {
             }
 
 
-            $Log->define([
-                'Descricao' => "Utilizador: {$this->session->userdata('Id')} registou um novo utilizador - Username: {$Username}"
-            ]);
             if ($utilizador->grava()) {
                 header('Content-Type: application/json');
                 echo json_encode(['success' => true, 'message' => 'Utilizador adicionado com sucesso']);
@@ -427,9 +418,7 @@ class Logins extends CI_Controller {
         if ($this->session->userdata('login_efetuado') == false) {
             redirect(base_url('admin/login'));
         }
-        $this->firephp->log("ConfirmPassword", $ConfirmPassword);
-        $this->firephp->log("--------------");
-        $this->firephp->log("Password", $Password);
+
         if ($Password != $ConfirmPassword) {
             return false;
         }
@@ -437,10 +426,10 @@ class Logins extends CI_Controller {
     }
 
     public function listarUtilizadores($campoOrdenacao = null, $sentidoOrdenacao = null, $pagina = 1) {
-        $Data['utilizadores'] = (new Login)->obtemUtilizadores(null, null);
+        $Utilizadores = (new Login)->obtemElementos(null, null);
 
         $this->load->view('admin/template/header', ["tituloArea" => "Utilizadores", "subtituloArea" => "Listar"]);
-        $this->load->view('admin/login/listar_utilizadores', $Data);
+        $this->load->view('admin/login/listar_utilizadores', ["Utilizadores" => $Utilizadores]);
         $this->load->view('admin/template/footer');
     }
 

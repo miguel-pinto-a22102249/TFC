@@ -5033,12 +5033,15 @@ th.hide-for-touch {
   margin: 0;
 }
 #sidebar > .menu > li .dropdown-container ul li {
-  padding: 1rem 1rem;
   transition: all 0.3s ease-in-out;
 }
 #sidebar > .menu > li .dropdown-container ul li:hover {
   background-color: rgba(246, 246, 246, 0.4);
   box-shadow: 0px 2px 2px -1px rgba(0, 0, 0, 0.08);
+}
+#sidebar > .menu > li .dropdown-container ul li a {
+  padding: 1rem 1rem;
+  display: block;
 }
 #sidebar a.dropdown-btn {
   padding: 10px 0;

@@ -1,11 +1,7 @@
 <?
 
-/**
- * Model Login
- */
-require APPPATH . '/models/ac_model_base.php'; //just add this line and keep rest 
 
-class Login extends AC_Model_Base {
+class Login extends Model_Base {
     /*
      * var string
      */
@@ -22,6 +18,7 @@ class Login extends AC_Model_Base {
     const SUPER_ADMIN = 5;
     const ADMIN = 4;
     const UTILIZADOR = 3;
+    const TABELA = 'utilizador';
 
     public function __construct() {
         parent::__construct();
@@ -89,70 +86,6 @@ class Login extends AC_Model_Base {
         return false;
     }
 
-    public function obtemUtilizadores($ordenacao = null, $filtragem = null, $limites = null, $contar = false) {
-        if (!is_array($ordenacao)) {
-            $ordenacao = [];
-        }
-        if (!is_array($filtragem)) {
-            $filtragem = [];
-        }
-
-        if (!is_array($limites)) {
-            $limites = [];
-        }
-
-        $limite = null;
-        if (key_exists('limite', $limites)) {
-            $limite = $limites['limite'];
-        }
-
-        $offset = null;
-        if (key_exists('offset', $limites)) {
-            $offset = $limites['offset'];
-        }
-
-
-        // FAZER FILTRAGEM AQUI
-        foreach ($ordenacao as $campo_ordenar => $sentido_ordenar) {
-            $this->db->order_by($campo_ordenar, $sentido_ordenar);
-        }
-
-        /// FIM FILTRAGEM
-        //Pesquisa 
-
-        foreach ($filtragem as $campo_filtragem => $filtro) {
-            $this->db->like($campo_filtragem, $filtro);
-            $this->db->or_like($campo_filtragem, $filtro);
-        }
-
-        //Fim de pesquisa
-
-        $array_utilizador = [];
-        if ($contar == true && empty($filtragem)) {
-            return $this->db->count_all_results('utilizador');
-        } elseif ($contar == true) {
-            foreach ($filtragem as $campo_filtragem => $filtro) {
-                $this->db->like($campo_filtragem, $filtro);
-                $this->db->or_like($campo_filtragem, $filtro);
-            }
-            return $this->db->count_all_results('utilizador');
-        }
-
-
-        // obter as noticias da BD 
-        $query = $this->db->get('utilizador', $limite, $offset);
-        $array_dados_utilizador = $query->result_array();
-
-
-        //transformar o array de arrays em array de objectos do tipo noticia
-        foreach ($array_dados_utilizador as $dados_utilizador) {
-            $utilizador = new Login;
-            $utilizador->define($dados_utilizador);
-            $array_utilizador[] = $utilizador;
-        }
-
-        return $array_utilizador;
-    }
 
     /**
      * Carrega um utilizador através do seu username
@@ -181,49 +114,6 @@ class Login extends AC_Model_Base {
         return false;
     }
 
-    public function carregaPorId($Id = false) {
-        //carregar uma noticia por id
-        if (is_null($Id)) {
-            return false;
-        }
-
-        //obter noticias (- falta obter noticias com base na ordenacao e filtragens, caso definidas)
-        $query = $this->db->get_where('utilizador', ['Id' => $Id]);
-        $dados_utilizador = $query->row_array();
-
-        if (!empty($dados_utilizador)) {
-            //definir os seus valores
-            $this->define($dados_utilizador);
-
-            return true;
-        }
-
-
-        return false;
-    }
-
-    public function edita($id) {
-        $this->db->where('Id', $id);
-        return $this->db->update('utilizador', $this);
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function grava() {
-        return $this->db->insert('utilizador', $this);
-    }
-
-    public function eliminar($Id) {
-        $resultado = $this->db->delete('utilizador', ['Id' => $Id]);
-
-        if ($this->db->affected_rows() == '1') {
-            return true;
-        } else {
-            return false;
-        }
-    }
 
     /**
      * Se o login atual for um admin a função devolve TRUE, caso contrário devolve FALSE
@@ -251,19 +141,7 @@ class Login extends AC_Model_Base {
         return false;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getId() {
-        return $this->Id;
-    }
-
-    /**
-     * @param mixed $Id
-     */
-    public function setId($Id): void {
-        $this->Id = $Id;
-    }
+    //<editor-fold defaultstate="collapsed" desc="Getters e Setters">
 
     /**
      * @return mixed
@@ -332,7 +210,7 @@ class Login extends AC_Model_Base {
      * @return mixed
      */
     public function getCaminhoFoto() {
-        return CAMINHO_IMAGENS_DINAMICAS."fotos_utilizadores/".$this->Foto;
+        return CAMINHO_IMAGENS_DINAMICAS . "fotos_utilizadores/" . $this->Foto;
     }
 
     /**
@@ -370,7 +248,7 @@ class Login extends AC_Model_Base {
         $this->Email = $Email;
     }
 
-
+    //</editor-fold>
 
 
 }

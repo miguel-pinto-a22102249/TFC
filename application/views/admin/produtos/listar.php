@@ -1,6 +1,6 @@
 <?php
 
-if (count($Escaloes) > 0) {
+if (count($Produtos) > 0) {
     ?>
     <div id="Area-Lista-Escaloes" class="area-listagem">
         <div class="row">
@@ -9,27 +9,30 @@ if (count($Escaloes) > 0) {
                 <table class="dataTable display responsive">
                     <thead>
                     <tr>
-                        <th class="text-center">Designação</th>
-                        <th class="text-center defaultSort">Idade Inicial</th>
-                        <th class="text-center">Idade Limite</th>
+                        <th class="text-center">Nome</th>
+                        <th class="text-center">Detalhes</th>
+                        <th class="text-center defaultSort">Stock Atual</th>
+                        <th class="text-center">Estado</th>
                         <th class="th-opcoes"><i class="fas fa-cog fa-2x"></i></th>
                     </tr>
                     </thead>
                     <tbody>
                     <?
 
-                    foreach ($Escaloes as $escalao) { ?>
+                    foreach ($Produtos as $produto) {
+                        ?>
                         <tr class="tr-accordion">
-                            <td class="trigger">
-                                <a style="text-decoration:none" href="admin/escaloes/consultar/<?= $escalao->getSegmento() ?>">
-                                    <?= $escalao->getDesignacao(); ?>
-                                </a>
+                            <td class="text-center">
+                                <?= $produto->getNome(); ?>
                             </td>
                             <td class="text-center">
-                                <?= $escalao->getIdadeInicial(); ?>
+                                <?= $produto->getDetalhes(); ?>
                             </td>
                             <td class="text-center">
-                                <?= $escalao->getIdadeFinal(); ?>
+                                <?= $produto->getStockAtual(); ?>
+                            </td>
+                            <td class="text-center">
+                                <?= $produto->getDesignacaoEstado(); ?>
                             </td>
                             <td class="td-opcoes">
                                 <ul class="dropdown menu" data-dropdown-menu>
@@ -37,17 +40,17 @@ if (count($Escaloes) > 0) {
                                         <a class="text-right" href="javascript:;"><i class="fas fa-2x fa-cog"></i></a>
                                         <ul class="menu text-left">
                                             <li>
-                                                <a style="text-decoration:none" href="<?= base_url() . 'admin/escaloes/consultar/' . $escalao->Segmento ?>">
+                                                <a style="text-decoration:none" href="<?= base_url() . 'admin/produtos/consultar/' . $produto->Segmento ?>">
                                                     <i class="fas fa-search-plus fa-1x"></i> Consultar
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="Editar" href="<?= base_url() . 'admin/escaloes/editar/' . $escalao->getId() ?>">
+                                                <a class="Editar" href="<?= base_url() . 'admin/produtos/editar/' . $produto->Id ?>">
                                                     <i class="fas fa-edit fa-1x"></i> Ediar
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="Eliminar" href="<?= base_url() . 'admin/escaloes/eliminar/' . $escalao->getId() ?>">
+                                                <a class="Eliminar" href="<?= base_url() . 'admin/produtos/eliminar/' . $produto->Id ?>">
                                                     <i class="fas fa-trash-alt fa-1x"></i> Eliminar
                                                 </a>
                                             </li>

@@ -79,10 +79,25 @@ $route['admin/gravar-alteracoes/(:any)'] = 'admin/logins/editarPost/$1';
 /* * ********************************************* */
 
 /* * ****************** Escalão ********************* */
-$route['admin/escaloes'] = 'admin/escaloes/listarEscaloes';
+$route['admin/escaloes'] = 'admin/escaloes/listar';
 $route['admin/escaloes/adicionar'] = 'admin/escaloes/adicionar';
-$route['admin/escaloes/editar'] = 'admin/escaloes/editar';
+$route['admin/escaloes/editar/(:num)'] = 'admin/escaloes/editar/$1';
 $route['admin/escaloes/eliminar/(:num)'] = 'admin/escaloes/eliminar/$1';
+/* * ********************************************************** */
+
+/* * ****************** Produtos ********************* */
+$route['admin/produtos'] = 'admin/produtos/listar';
+$route['admin/produtos/adicionar'] = 'admin/produtos/adicionar';
+$route['admin/produtos/editar/(:num)'] = 'admin/produtos/editar/$1';
+$route['admin/produtos/eliminar/(:num)'] = 'admin/produtos/eliminar/$1';
+/* * ********************************************************** */
+
+/* * ****************** Agregados ********************* */
+$route['admin/agregados'] = 'admin/agregados/listar';
+$route['admin/agregados/adicionar'] = 'admin/agregados/adicionar';
+$route['admin/agregados/editar/(:num)'] = 'admin/agregados/editar/$1';
+$route['admin/agregados/eliminar/(:num)'] = 'admin/agregados/eliminar/$1';
+/* * ********************************************************** */
 
 
 /* * ********************** GENERICO ************************** */

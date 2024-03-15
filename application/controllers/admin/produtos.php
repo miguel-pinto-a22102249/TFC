@@ -5,16 +5,16 @@ if (!defined('BASEPATH')) {
 }
 
 /**
- * Escalões
+ * Produtos
  *
  * @version 1.0
  *
  */
-class Escaloes extends CI_Controller {
+class Produtos extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('escalao');
+        $this->load->model('produto');
         $this->load->model('log');
         $this->load->helper('form');
         $this->load->library('form_validation');
@@ -27,10 +27,10 @@ class Escaloes extends CI_Controller {
     }
 
     public function listar() {
-        $Escaloes = (new Escalao)->obtemElementos();
+        $Produtos = (new Produto)->obtemElementos();
 
-        $this->load->view('admin/template/header', ["tituloArea" => "Escalões", "subtituloArea" => "Listar"]);
-        $this->load->view('admin/escaloes/listar', ['Escaloes' => $Escaloes]);
+        $this->load->view('admin/template/header', ["tituloArea" => "Produtos", "subtituloArea" => "Listar"]);
+        $this->load->view('admin/produtos/listar', ['Produtos' => $Produtos]);
         $this->load->view('admin/template/footer');
     }
 
@@ -42,15 +42,14 @@ class Escaloes extends CI_Controller {
         $this->load->helper('form');
         $this->load->library('form_validation');
 
-        $escalao = new Escalao();
+        $produto = new Produto();
 
-        $Designacao = $this->input->post('Designacao');
-        $IdadeInicial = $this->input->post('IdadeInicial');
-        $IdadeFinal = $this->input->post('IdadeFinal');
+        $Nome = $this->input->post('Nome');
+        $Detalhes = $this->input->post('Detalhes');
+        $StockAtual = $this->input->post('StockAtual');
 
-        $this->form_validation->set_rules('Designacao', 'Designacao', 'required');
-        $this->form_validation->set_rules('IdadeInicial', 'IdadeInicial', 'required|numeric');
-        $this->form_validation->set_rules('IdadeFinal', 'IdadeFinal', 'required|numeric');
+        $this->form_validation->set_rules('Nome', 'Nome', 'required');
+        $this->form_validation->set_rules('StockAtual', 'StockAtual', 'required|numeric');
 
         $this->form_validation->set_message('required', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
         $this->form_validation->set_message('numeric', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
@@ -59,7 +58,7 @@ class Escaloes extends CI_Controller {
             $errors = [];
 
             // Construa um array de erros associados aos campos
-            $fields = ['Designacao', 'IdadeInicial', 'IdadeFinal'];
+            $fields = ['Nome', 'Detalhes', 'StockAtual'];
 
             foreach ($fields as $field) {
                 $error = form_error($field);
@@ -70,30 +69,31 @@ class Escaloes extends CI_Controller {
             if ($this->input->is_ajax_request()) {
                 // Se for uma requisição AJAX, envie os erros como resposta JSON
                 header('Content-Type: application/json');
-                echo json_encode(['success' => false, 'errors' => $errors, 'message' => 'Erro ao criar escalão']);
+                echo json_encode(['success' => false, 'errors' => $errors, 'message' => 'Erro ao criar produto']);
                 return;
             } else {
                 // Se não for uma requisição AJAX, carregue a view normalmente
-                $this->load->view('admin/template/header', ["tituloArea" => "Escalões", "subtituloArea" => "Adicionar"]);
-                $this->load->view('admin/escaloes/adicionar');
+                $this->load->view('admin/template/header', ["tituloArea" => "Produtos", "subtituloArea" => "Adicionar"]);
+                $this->load->view('admin/produtos/adicionar');
                 $this->load->view('admin/template/footer');
             }
         } else {
-            $escalao->define([
-                'Designacao' => $Designacao,
-                'IdadeInicial' => $IdadeInicial,
-                'IdadeFinal' => $IdadeFinal,
-                'Segmento' => url_title($Designacao, 'dash', true) . '-' . time() . '-' . rand(0, 1000),
+            $produto->define([
+                'Nome' => $Nome,
+                'StockInicial' => $StockAtual,
+                'StockAtual' => $StockAtual,
+                'Detalhes' => $Detalhes,
+                'Segmento' => url_title($Nome, 'dash', true) . '-' . time() . '-' . rand(0, 1000),
             ]);
 
 
-            if ($escalao->grava()) {
+            if ($produto->grava()) {
                 header('Content-Type: application/json');
-                echo json_encode(['success' => true, 'message' => 'Escalão adicionado com sucesso']);
+                echo json_encode(['success' => true, 'message' => 'Produto adicionado com sucesso']);
                 return;
             } else {
                 header('Content-Type: application/json');
-                echo json_encode(['success' => false, 'message' => 'Ocorreu um erro ao adicionar o escalão']);
+                echo json_encode(['success' => false, 'message' => 'Ocorreu um erro ao adicionar o produto']);
                 return;
             }
         }
@@ -107,26 +107,24 @@ class Escaloes extends CI_Controller {
         $this->load->helper('form');
         $this->load->library('form_validation');
 
-        $Escalao = new Escalao();
-
-        $Escalao->carregaPorId($id);
+        $Produto = new Produto();
+        $Produto->carregaPorId($id);
 
         if (!$this->input->is_ajax_request()) {
             // Se não for uma requisição AJAX, carregue a view normalmente
-            $this->load->view('admin/template/header', ["tituloArea" => "Escalões", "subtituloArea" => "Editar"]);
-            $this->load->view('admin/escaloes/editar', ['Escalao' => $Escalao]);
+            $this->load->view('admin/template/header', ["tituloArea" => "Produtos", "subtituloArea" => "Editar"]);
+            $this->load->view('admin/produtos/editar', ['Produto' => $Produto]);
             $this->load->view('admin/template/footer');
             return;
         }
 
+        $Nome = $this->input->post('Nome');
+        $Detalhes = $this->input->post('Detalhes');
+        $StockAtual = $this->input->post('StockAtual');
 
-        $Designacao = $this->input->post('Designacao');
-        $IdadeInicial = $this->input->post('IdadeInicial');
-        $IdadeFinal = $this->input->post('IdadeFinal');
-
-        $this->form_validation->set_rules('Designacao', 'Designacao', 'required');
-        $this->form_validation->set_rules('IdadeInicial', 'IdadeInicial', 'required|numeric');
-        $this->form_validation->set_rules('IdadeFinal', 'IdadeFinal', 'required|numeric');
+        $this->form_validation->set_rules('Nome', 'Nome', 'required');
+        $this->form_validation->set_rules('Detalhes', 'Detalhes', 'required');
+        $this->form_validation->set_rules('StockAtual', 'StockAtual', 'required|numeric');
 
         $this->form_validation->set_message('required', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
         $this->form_validation->set_message('numeric', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
@@ -135,7 +133,7 @@ class Escaloes extends CI_Controller {
             $errors = [];
 
             // Construa um array de erros associados aos campos
-            $fields = ['Designacao', 'IdadeInicial', 'IdadeFinal'];
+            $fields = ['Nome', 'Detalhes', 'StockAtual'];
 
             foreach ($fields as $field) {
                 $error = form_error($field);
@@ -146,30 +144,31 @@ class Escaloes extends CI_Controller {
             if ($this->input->is_ajax_request()) {
                 // Se for uma requisição AJAX, envie os erros como resposta JSON
                 header('Content-Type: application/json');
-                echo json_encode(['success' => false, 'errors' => $errors, 'message' => 'Erro ao editar escalão']);
+                echo json_encode(['success' => false, 'errors' => $errors, 'message' => 'Erro ao editar produto']);
                 return;
             } else {
                 // Se não for uma requisição AJAX, carregue a view normalmente
-                $this->load->view('admin/template/header', ["tituloArea" => "Escalões", "subtituloArea" => "Editar"]);
-                $this->load->view('admin/escaloes/editar');
+                $this->load->view('admin/template/header', ["tituloArea" => "Produtos", "subtituloArea" => "Editar"]);
+                $this->load->view('admin/produtos/editar',["Produto" => $Produto]);
                 $this->load->view('admin/template/footer');
             }
         } else {
-            if ($Escalao->getDesignacao() != $Designacao) {
-                $Escalao->setDesignacao($Designacao);
-                $Escalao->setSegmento(url_title($Designacao, 'dash', true) . '-' . time() . '-' . rand(0, 1000));
+            if ($Produto->getNome() != $Nome) {
+                $Produto->setNome($Nome);
+                $Produto->setSegmento(url_title($Nome, 'dash', true) . '-' . time() . '-' . rand(0, 1000));
             }
-            $Escalao->setIdadeInicial($IdadeInicial);
-            $Escalao->setIdadeFinal($IdadeFinal);
+            $Produto->setDetalhes($Detalhes);
+            $Produto->setStockAtual($StockAtual);
+            $Produto->setStockInicial($StockAtual);
 
 
-            if ($Escalao->edita($id)) {
+            if ($Produto->edita($id)) {
                 header('Content-Type: application/json');
-                echo json_encode(['success' => true, 'message' => 'Escalão editado com sucesso']);
+                echo json_encode(['success' => true, 'message' => 'Produto editado com sucesso']);
                 return;
             } else {
                 header('Content-Type: application/json');
-                echo json_encode(['success' => false, 'message' => 'Ocorreu um erro ao editar o escalão']);
+                echo json_encode(['success' => false, 'message' => 'Ocorreu um erro ao editar o produto']);
                 return;
             }
         }
@@ -180,21 +179,21 @@ class Escaloes extends CI_Controller {
             redirect(base_url('admin/login'));
         }
 
-        $Escalao = new Escalao();
-        $Escalao->carregaPorId($id);
+        $Produto = new Produto();
+        $Produto->carregaPorId($id);
 
-        $resultado = $Escalao->eliminar($id);
+        $resultado = $Produto->eliminar($id);
 
         if ($resultado === true) {
             $data = [
                 "Sucesso" => true,
-                "Mensagem" => 'Escalão eliminado com sucesso'
+                "Mensagem" => 'Produto eliminado com sucesso'
             ];
             echo json_encode($data);
         } else {
             $data = [
                 "Sucesso" => false,
-                "Mensagem" => 'Não foi possivel eliminar o Escalão solicitado.'
+                "Mensagem" => 'Não foi possivel eliminar o Produto solicitado.'
             ];
             echo json_encode($data);
         }
