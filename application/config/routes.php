@@ -97,6 +97,9 @@ $route['admin/agregados'] = 'admin/agregados/listar';
 $route['admin/agregados/adicionar'] = 'admin/agregados/adicionar';
 $route['admin/agregados/editar/(:num)'] = 'admin/agregados/editar/$1';
 $route['admin/agregados/eliminar/(:num)'] = 'admin/agregados/eliminar/$1';
+
+$route['admin/agregados/constituintes/listar'] = 'admin/agregados/listarConstituintes';
+$route['admin/agregados/constituintes/adicionar'] = 'admin/agregados/adicionarConstituinte';
 /* * ********************************************************** */
 
 

@@ -5,17 +5,22 @@
                 <div class="row">
                     <div class="column large-6 medium-6 small-12">
                         <div class="input-group">
-                            <label for="NissConstituintePrincipal">Niss Constituinte Principal</label>
-                            <input type="text" name="NissConstituintePrincipal" placeholder="NissConstituintePrincipal"/>
+                            <label for="NissConstituintePrincipal">Niss</label>
+                            <input type="text" name="NissConstituintePrincipal" placeholder="Niss"/>
                         </div>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="column large-6 medium-6 small-12">
                         <div class="input-group">
-                            <label for="Grupo">Grupo</label>
-                            <input type="text" name="Grupo" placeholder="Grupo"/>
+                            <label for="IdAgregado">Agregado</label>
+                            <input type="text" name="IdAgregado" placeholder="Agregado"/>
+                        </div>
+                    </div>
+                    <div class="column large-6 medium-6 small-12">
+                        <div class="input-group">
+                            <label for="IdEscalao">Escalão</label>
+                            <input type="text" name="IdEscalao" placeholder="Escalão"/>
                         </div>
                     </div>
                 </div>

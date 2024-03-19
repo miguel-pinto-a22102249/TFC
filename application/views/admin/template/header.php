@@ -148,8 +148,11 @@
                                 if ($this->session->userdata('login_efetuado') == true && $this->session->userdata('TipoUtilizador') == Login::ADMIN) {
                                 }
                                 ?>
-                                <li><a href="<?= base_url() . "admin/agregados/adicionar" ?>">Adicionar</a></li>
-                                <li><a href="<?= base_url() . "admin/agregados" ?>">Listar</a></li>
+                                <li><a href="<?= base_url() . "admin/agregados/importarAgregados" ?>">Importar</a></li>
+                                <li><a href="<?= base_url() . "admin/agregados/adicionar" ?>">Agregado - Adicionar</a></li>
+                                <li><a href="<?= base_url() . "admin/agregados" ?>">Agregado - Listar</a></li>
+                                <li><a href="<?= base_url() . "admin/agregados/constituintes/adicionar" ?>">Constituinte - Adicionar</a></li>
+                                <li><a href="<?= base_url() . "admin/agregados/constituintes/listar" ?>">Constituinte - Listar</a></li>
                             </ul>
                         </div>
                     </li>
@@ -166,6 +169,18 @@
                                 }
                                 ?>
                                 <li><a href="<?= base_url() . "admin/produtos/adicionar" ?>">Adicionar</a></li>
+                                <li><a href="<?= base_url() . "admin/produtos" ?>">Listar</a></li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li>
+                        <a class="dropdown-btn">Distribuições
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                        <div class="dropdown-container">
+                            <ul class="menu vertical">
+                                <li><a href="<?= base_url() . "admin/produtos/adicionar" ?>">Iniciar Distribuição</a></li>
                                 <li><a href="<?= base_url() . "admin/produtos" ?>">Listar</a></li>
                             </ul>
                         </div>

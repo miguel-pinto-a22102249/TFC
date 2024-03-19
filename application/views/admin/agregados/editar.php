@@ -1,12 +1,12 @@
-<div id="Area-Novo-Utilizador">
+<div id="Area-Editar">
     <div class="row">
         <div class="column large-8 medium-10 small-12 form-login-wrapper">
-            <form action="/admin/escaloes/editar/<?= $Escalao->getId() ?>" method="POST" class="form-ajax" enctype="multipart/form-data">
+            <form action="/admin/agregados/editar/<?= $Agregado->getId() ?>" method="POST" class="form-ajax" enctype="multipart/form-data">
                 <div class="row">
                     <div class="column large-6 medium-6 small-12">
                         <div class="input-group">
                             <label for="Designacao">Designação</label>
-                            <input type="text" name="Designacao" placeholder="Designação" value="<?= $Escalao->getDesignacao() ?>"/>
+                            <input type="text" name="Designacao" placeholder="Designação" value="<?= $Agregado->getDesignacao() ?>"/>
                         </div>
                     </div>
 
@@ -16,13 +16,13 @@
                     <div class="column large-6 medium-6 small-12">
                         <div class="input-group">
                             <label for="IdadeInicial">Idade Inícial</label>
-                            <input type="number" step="1" name="IdadeInicial" placeholder="Idade Inícial" value="<?= $Escalao->getIdadeInicial() ?>"/>
+                            <input type="number" step="1" name="IdadeInicial" placeholder="Idade Inícial" value="<?= $Agregado->getIdadeInicial() ?>"/>
                         </div>
                     </div>
                     <div class="column large-6 medium-6 small-12">
                         <div class="input-group">
                             <label for="IdadeFinal">Idade Final</label>
-                            <input type="number" step="1" name="IdadeFinal" placeholder="Idade Final" value="<?= $Escalao->getIdadeFinal() ?>"/>
+                            <input type="number" step="1" name="IdadeFinal" placeholder="Idade Final" value="<?= $Agregado->getIdadeFinal() ?>"/>
                         </div>
                     </div>
                 </div>
