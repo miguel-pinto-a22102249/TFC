@@ -14,13 +14,45 @@
                     <div class="column large-6 medium-6 small-12">
                         <div class="input-group">
                             <label for="IdAgregado">Agregado</label>
-                            <input type="text" name="IdAgregado" placeholder="Agregado"/>
+                            <?
+                            $agregados = (new Agregado_Familiar)->obtemElementos(null, ['Estado' => 1]);
+                            if (count($agregados) > 0) { ?>
+
+                                <select name="IdAgregado">
+                                    <option value="">Selecione um agregado</option>
+                                    <? foreach ($agregados as $agregado) {
+                                        echo '<option value="' . $agregado->getId() . '">' . substr($agregado->getNissConstituintePrincipal(), 0, 3) . ' xxx xxx</option>';
+                                    }
+                                    ?>
+                                </select>
+                            <? } else {
+                                echo 'Não existem agregados';
+                            }
+                            ?>
                         </div>
                     </div>
                     <div class="column large-6 medium-6 small-12">
                         <div class="input-group">
-                            <label for="IdEscalao">Escalão</label>
-                            <input type="text" name="IdEscalao" placeholder="Escalão"/>
+                            <div class="input-group">
+                                <label for="IdEscalao">Escalão</label>
+                                <?
+
+                                $this->load->model('Escalao');
+                                $escaloes = (new Escalao())->obtemElementos(null, ['Estado' => 1]);
+                                if (count($escaloes) > 0) { ?>
+
+                                    <select name="IdEscalao">
+                                        <option value="">Selecione um Escalão</option>
+                                        <? foreach ($escaloes as $escalao) {
+                                            echo '<option value="' . $escalao->getId() . '">' . $escalao->getDesignacao() . '</option > ';
+                                        }
+                                        ?>
+                                    </select>
+                                <? } else {
+                                    echo 'Não existem agregados';
+                                }
+                                ?>
+                            </div>
                         </div>
                     </div>
                 </div>

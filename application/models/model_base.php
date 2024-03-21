@@ -152,7 +152,7 @@ class Model_Base extends CI_Model {
      * Obtem Elementos
      *
      * @param array $ordenacao
-     * @param array $filtragem
+     * @param array $filtragem - [Campo => Valor] - Exemplo: ['Estado' => 1]
      * @param array $limites
      * @param type $contar
      *
@@ -164,6 +164,7 @@ class Model_Base extends CI_Model {
         if (!is_array($ordenacao)) {
             $ordenacao = [];
         }
+
         if (!is_array($filtragem)) {
             $filtragem = [];
         }
