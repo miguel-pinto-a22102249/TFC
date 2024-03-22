@@ -218,7 +218,7 @@ class Model_Base extends CI_Model {
         $dados_obj = [];
         //transformar o array de arrays em array de objectos do tipo noticia
         foreach ($array_dados_obj as $dados_obj) {
-            $this->firephp->log($dados_obj);
+//            $this->firephp->log($dados_obj);
             $obj = new $nome_class;
             $obj->define($dados_obj);
             $array_objs[] = $obj;

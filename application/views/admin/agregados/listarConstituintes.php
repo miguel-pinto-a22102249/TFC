@@ -24,10 +24,10 @@ if (count($Constituintes) > 0) {
                                     <?= substr($Constituinte->getNiss(), 0, 3); ?> xxx xxx
                             </td>
                             <td class="text-center">
-                                <?= $Constituinte->getAgregado(); ?>
+                                <?= $Constituinte->getDesignacaoAgregado(); ?>
                             </td>
                             <td class="text-center">
-                                <?= $Constituinte->getEscalao(); ?>
+                                <?= $Constituinte->getDesignacaoEscalao(); ?>
                             </td>
                             <td class="td-opcoes">
                                 <ul class="dropdown menu" data-dropdown-menu>

@@ -1,12 +1,12 @@
 <div class="area-adicionar">
     <div class="row">
         <div class="column large-8 medium-10 small-12 form-login-wrapper">
-            <form action="/admin/agregados/adicionar" method="POST" class="form-ajax" enctype="multipart/form-data">
+            <form action="/admin/agregados/constituintes/adicionar" method="POST" class="form-ajax" enctype="multipart/form-data">
                 <div class="row">
                     <div class="column large-6 medium-6 small-12">
                         <div class="input-group">
-                            <label for="NissConstituintePrincipal">Niss</label>
-                            <input type="text" name="NissConstituintePrincipal" placeholder="Niss"/>
+                            <label for="Niss">Niss</label>
+                            <input type="text" name="Niss" placeholder="Niss"/>
                         </div>
                     </div>
                 </div>

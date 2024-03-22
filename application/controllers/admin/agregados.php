@@ -270,4 +270,29 @@ class Agregados extends CI_Controller {
         $this->load->view('admin/agregados/listarConstituintes', ['Constituintes' => $Constituintes]);
         $this->load->view('admin/template/footer');
     }
+
+    public function eliminarConstituinte($id) {
+        if ($this->session->userdata('login_efetuado') == false) {
+            redirect(base_url('admin/login'));
+        }
+
+        $Constituinte = new Constituinte();
+        $Constituinte->carregaPorId($id);
+
+        $resultado = $Constituinte->eliminar($id);
+
+        if ($resultado === true) {
+            $data = [
+                "Sucesso" => true,
+                "Mensagem" => 'Constituinte eliminado com sucesso'
+            ];
+            echo json_encode($data);
+        } else {
+            $data = [
+                "Sucesso" => false,
+                "Mensagem" => 'Não foi possivel eliminar o Constituinte.'
+            ];
+            echo json_encode($data);
+        }
+    }
 }
