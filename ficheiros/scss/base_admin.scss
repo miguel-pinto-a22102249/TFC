@@ -240,7 +240,6 @@ body {
 
     }
 
-
     .area-listagem {
 
         .area-listagem__header {
@@ -381,6 +380,22 @@ body {
                 .content__inner-wrapper__header__wrapper {
                     border-bottom: 1px solid $cor-cinzento-escuro;
                     padding-bottom: 1.5rem;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: end;
+
+                    .content__inner-wrapper__header__wrapper__coluna-titulos {
+
+                    }
+
+                    .content__inner-wrapper__header__wrapper__coluna-acoes {
+                        .button {
+                            margin-bottom: 0;
+                            i,svg{
+                                margin-right: 0.5rem;
+                            }
+                        }
+                    }
 
                     &__titulo {
                         font-size: $h3-font-size;

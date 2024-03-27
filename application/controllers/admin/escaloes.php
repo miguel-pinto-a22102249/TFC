@@ -29,7 +29,14 @@ class Escaloes extends CI_Controller {
     public function listar() {
         $Escaloes = (new Escalao)->obtemElementos();
 
-        $this->load->view('admin/template/header', ["tituloArea" => "Escalões", "subtituloArea" => "Listar"]);
+        $this->load->view('admin/template/header', ["tituloArea" => "Escalões", "subtituloArea" => "Listar","acoes" => [
+            [
+                "titulo" => "Adicionar",
+                "link" => base_url('admin/escaloes/adicionar'),
+                "icone" => "fas fa-plus",
+                'class' => 'button--add button--success'
+            ]
+        ]]);
         $this->load->view('admin/escaloes/listar', ['Escaloes' => $Escaloes]);
         $this->load->view('admin/template/footer');
     }

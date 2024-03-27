@@ -48,48 +48,6 @@ class Agregado_Familiar extends Model_Base {
         }
     }
 
-    /**
-     * Carrega objeto
-     *
-     * @param type $segmento
-     *
-     * @return type
-     */
-    public function carregaPorSegmento($segmento = false) {
-        if ($segmento === false) {
-            $query = $this->db->get(Escalao::TABELA);
-            return $query->result_array();
-        }
-
-        $query = $this->db->get_where(Escalao::TABELA, ['Segmento' => $segmento]);
-
-        $obj = $query->row_array();
-
-        if (!empty($obj)) {
-            $this->define($obj);
-            return true;
-        }
-        return false;
-    }
-
-    public function carregaPorLogin($Username, $Password) {
-        $this->firephp->log("carregaPorLogin");
-        if (is_null($Username) || is_null($Password)) {
-            return false;
-        }
-//        exit($Username);
-        $query = $this->db->get_where('utilizador', ['Password' => $Password, 'Username' => $Username]);
-
-        $dados_utilizador = $query->row_array();
-
-        if (!empty($dados_utilizador)) {
-            $this->define($dados_utilizador);
-
-            return true;
-        }
-        return false;
-    }
-
 
     /**
      * @return mixed

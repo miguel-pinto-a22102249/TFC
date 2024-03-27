@@ -1,7 +1,6 @@
 @import "base/mixin_generator.scss";
 @import "base/_mixins_base.scss";
 @import "_variaveis.scss";
-@import "base/estilos_default.scss";
 
 @import "../foundation/settings";
 @import "../foundation/components/global.scss";
@@ -40,6 +39,9 @@
 // @import "../foundation/components/top-bar.scss";
 @import "../foundation/components/type.scss";
 @import "../foundation/components/visibility.scss";
+
+
+@import "base/estilos_default.scss";
 
 @import "base/data_table.scss";
 @import "base/menu.scss";

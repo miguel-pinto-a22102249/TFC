@@ -428,7 +428,14 @@ class Logins extends CI_Controller {
     public function listarUtilizadores($campoOrdenacao = null, $sentidoOrdenacao = null, $pagina = 1) {
         $Utilizadores = (new Login)->obtemElementos(null, null);
 
-        $this->load->view('admin/template/header', ["tituloArea" => "Utilizadores", "subtituloArea" => "Listar"]);
+        $this->load->view('admin/template/header', ["tituloArea" => "Utilizadores", "subtituloArea" => "Listar", "acoes" => [
+            [
+                "titulo" => "Adicionar",
+                "link" => base_url('admin/utilizadores/adicionar'),
+                "icone" => "fas fa-plus",
+                'class' => 'button--add button--success'
+            ]
+        ]]);
         $this->load->view('admin/login/listar_utilizadores', ["Utilizadores" => $Utilizadores]);
         $this->load->view('admin/template/footer');
     }

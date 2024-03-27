@@ -30,7 +30,15 @@ class Agregados extends CI_Controller {
     public function listar() {
         $Agregados = (new Agregado_Familiar())->obtemElementos();
 
-        $this->load->view('admin/template/header', ["tituloArea" => "Agregados", "subtituloArea" => "Listar"]);
+        $this->load->view('admin/template/header', ["tituloArea" => "Agregados", "subtituloArea" => "Listar", "acoes" => [
+            [
+                "titulo" => "Adicionar",
+                "link" => base_url('admin/agregados/adicionar'),
+                "icone" => "fas fa-plus",
+                'class' => 'button--add button--success'
+            ]
+        ]
+        ]);
         $this->load->view('admin/agregados/listar', ['Agregados' => $Agregados]);
         $this->load->view('admin/template/footer');
     }
@@ -111,8 +119,8 @@ class Agregados extends CI_Controller {
 
         if (!$this->input->is_ajax_request()) {
             // Se não for uma requisição AJAX, carregue a view normalmente
-            $this->load->view('admin/template/header', ["tituloArea" => "Escalões", "subtituloArea" => "Editar"]);
-            $this->load->view('admin/escaloes/editar', ['Escalao' => $Agregado_Familiar]);
+            $this->load->view('admin/template/header', ["tituloArea" => "Agregados", "subtituloArea" => "Editar"]);
+            $this->load->view('admin/agregados/editar', ['Agregado' => $Agregado_Familiar]);
             $this->load->view('admin/template/footer');
             return;
         }
@@ -266,7 +274,14 @@ class Agregados extends CI_Controller {
     public function listarConstituintes() {
         $Constituintes = (new Constituinte())->obtemElementos();
 
-        $this->load->view('admin/template/header', ["tituloArea" => "Agregados - Constituintes", "subtituloArea" => "Listar"]);
+        $this->load->view('admin/template/header', ["tituloArea" => "Agregados - Constituintes", "subtituloArea" => "Listar", "acoes" => [
+            [
+                "titulo" => "Adicionar",
+                "link" => base_url('admin/agregados/constituintes/adicionar'),
+                "icone" => "fas fa-plus",
+                'class' => 'button--add button--success'
+            ]
+        ]]);
         $this->load->view('admin/agregados/listarConstituintes', ['Constituintes' => $Constituintes]);
         $this->load->view('admin/template/footer');
     }

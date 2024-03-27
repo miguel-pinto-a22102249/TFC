@@ -105,36 +105,11 @@
                 <ul class="vertical medium-horizontal dropdown menu" data-responsive-menu="accordion medium-dropdown">
 
                     <li>
-                        <a class="dropdown-btn">Utilizadores</a>
-                        <div class="dropdown-container">
-                            <ul class="menu vertical">
-                                <?
-
-                                if ($this->session->userdata('login_efetuado') == true && $this->session->userdata('TipoUtilizador') == Login::ADMIN) {
-                                    ?>
-                                    <li><a href="<?= base_url() . "admin/utilizadores/adicionar" ?>">Novo Utilizador</a></li>
-                                    <li><a href="<?= base_url() . "admin/utilizadores" ?>">Listar Utilizadores</a></li>
-                                <? }
-                                ?>
-                            </ul>
-                        </div>
+                        <a href="<?= base_url() . "admin/utilizadores" ?>">Utilizadores</a>
                     </li>
 
                     <li>
-                        <a class="dropdown-btn">Escalões
-                            <i class="fa fa-caret-down"></i>
-                        </a>
-                        <div class="dropdown-container">
-                            <ul class="menu vertical">
-                                <?
-
-                                if ($this->session->userdata('login_efetuado') == true && $this->session->userdata('TipoUtilizador') == Login::ADMIN) {
-                                }
-                                ?>
-                                <li><a href="<?= base_url() . "admin/escaloes/adicionar" ?>">Adicionar</a></li>
-                                <li><a href="<?= base_url() . "admin/escaloes" ?>">Listar</a></li>
-                            </ul>
-                        </div>
+                        <a href="<?= base_url() . "admin/escaloes" ?>">Escalões</a>
                     </li>
 
                     <li>
@@ -149,10 +124,8 @@
                                 }
                                 ?>
                                 <li><a href="<?= base_url() . "admin/agregados/importarAgregados" ?>">Importar</a></li>
-                                <li><a href="<?= base_url() . "admin/agregados/adicionar" ?>">Agregado - Adicionar</a></li>
-                                <li><a href="<?= base_url() . "admin/agregados" ?>">Agregado - Listar</a></li>
-                                <li><a href="<?= base_url() . "admin/agregados/constituintes/adicionar" ?>">Constituinte - Adicionar</a></li>
-                                <li><a href="<?= base_url() . "admin/agregados/constituintes/listar" ?>">Constituinte - Listar</a></li>
+                                <li><a href="<?= base_url() . "admin/agregados" ?>">Listar Agregados</a></li>
+                                <li><a href="<?= base_url() . "admin/agregados/constituintes/listar" ?>">Listar Constituintes</a></li>
                             </ul>
                         </div>
                     </li>
@@ -194,8 +167,21 @@
                             <div class="row">
                                 <div class="column large-12">
                                     <div class="content__inner-wrapper__header__wrapper">
-                                        <h1 class="content__inner-wrapper__header__wrapper__titulo"><?= isset($tituloArea) ? $tituloArea : 'Titulo Área Por definir' ?></h1>
-                                        <h2 class="content__inner-wrapper__header__wrapper__subtitulo"><?= isset($subtituloArea) ? $subtituloArea : 'Subtitulo Área Por definir' ?></h2>
+                                        <div class="content__inner-wrapper__header__wrapper__coluna-titulos">
+                                            <h1 class="content__inner-wrapper__header__wrapper__titulo"><?= isset($tituloArea) ? $tituloArea : 'Titulo Área Por definir' ?></h1>
+                                            <h2 class="content__inner-wrapper__header__wrapper__subtitulo"><?= isset($subtituloArea) ? $subtituloArea : 'Subtitulo Área Por definir' ?></h2>
+                                        </div>
+                                        <div class="content__inner-wrapper__header__wrapper__coluna-acoes">
+                                            <?
+                                            if (isset($acoes)) {
+                                                foreach ($acoes as $acao) {
+                                                    ?>
+                                                    <a href="<?= $acao['link'] ?>" class="button <?= $acao['class'] ?>"><i class="<?= $acao['icone'] ?>"></i><?= $acao['titulo'] ?></a>
+                                                    <?
+                                                }
+                                            }
+                                            ?>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

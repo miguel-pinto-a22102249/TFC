@@ -2,7 +2,7 @@
 $espacamentos: (0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 150, 200, 300);
 @include generate-spacings($espacamentos);
 
-//tempo para a animaÃƒÂ§ÃƒÂ£o de desaparecer e aparecer o menu
+//tempo para a animação de desaparecer e aparecer o menu
 $scrollhide-nav-transition-speed: 0.6s;
 
 .pagination {
@@ -11,17 +11,27 @@ $scrollhide-nav-transition-speed: 0.6s;
     }
 }
 
-.btn-style {
-    padding: 10px 20px;
-    border-radius: 10px;
-    font-size: 20px;
-    border: 1px solid $cor-1;
-    background-color: white;
-    -webkit-transition: all 0.3s;
-    transition: all 0.3s;
+.btn-style, .button {
+    border-radius: 5px;
+    font-size: 1rem;
+    padding: 0.7rem 1.5rem;
+    border: 1px solid rgba($cor-1, 0.9);
+    background-color: rgba($cor-1, 0.9);
+    -webkit-transition: all 0.2s;
+    transition: all 0.2;
 
     &:hover {
         background-color: $cor-1;
+    }
+
+    &.button--success {
+        color: #fff;
+        background-color: #5cb85c;
+        border-color: #4cae4c;
+
+        &:hover {
+            background-color: darken(#5cb85c, 10%);
+        }
     }
 }
 
@@ -41,26 +51,12 @@ $scrollhide-nav-transition-speed: 0.6s;
     }
 }
 
-
 .button-sem-style {
     border: none;
     cursor: pointer;
 
     &:hover {
 
-    }
-}
-
-.btn-style {
-    border-radius: 10px;
-    border: 2px solid $cor-1;
-    color: black;
-    background-color: white;
-    transition: 0.3s;
-
-    &:hover {
-        background-color: $cor-1;
-        color: white;
     }
 }
 

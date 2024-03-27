@@ -48,7 +48,7 @@ class Model_Base extends CI_Model {
                 }
             }
 
-            if (key_exists('Id', $dados)) {
+            if (isset($dados['Id'])) {
                 $this->Id = $dados['Id'];
             }
 

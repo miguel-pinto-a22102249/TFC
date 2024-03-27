@@ -1,4 +1,4 @@
-<div class="area-adicionar">
+<div class="Area-Adicionar">
     <div class="row">
         <div class="column large-8 medium-10 small-12 form-login-wrapper">
             <form action="/admin/agregados/adicionar" method="POST" class="form-ajax" enctype="multipart/form-data">

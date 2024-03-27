@@ -3,30 +3,43 @@
         <div class="column large-8 medium-10 small-12 form-login-wrapper">
             <form action="/admin/agregados/editar/<?= $Agregado->getId() ?>" method="POST" class="form-ajax" enctype="multipart/form-data">
                 <div class="row">
-                    <div class="column large-6 medium-6 small-12">
-                        <div class="input-group">
-                            <label for="Designacao">Designação</label>
-                            <input type="text" name="Designacao" placeholder="Designação" value="<?= $Agregado->getDesignacao() ?>"/>
+                    <div class="column large-10 medium-9 small-12">
+                        <div class="row">
+                            <div class="column large-6 medium-6 small-12">
+                                <div class="input-group">
+                                    <label for="NissConstituintePrincipal">Niss Constituinte Principal</label>
+                                    <input type="text" name="NissConstituintePrincipal" placeholder="NissConstituintePrincipal" value="<?= $Agregado->getNissConstituintePrincipal() ?>"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="column large-6 medium-6 small-12">
+                                <div class="input-group">
+                                    <label for="Grupo">Grupo</label>
+                                    <input type="text" name="Grupo" placeholder="Grupo" value="<?= $Agregado->getGrupo() ?>"/>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    <div class="column large-2 medium-3 small-12">
+                        Constituintes do Agregado
+                        <ul>
+                            <?
 
+                            $constituintes = (new Constituinte)->obtemElementos(null, ['IdAgregado' => $Agregado->getId()], null, false);
+
+                            foreach ($constituintes as $constituinte) {
+                                ?>
+                                <li><?= $constituinte->getNiss(); ?></li>
+                                <?
+                            }
+                            ?>
+                        </ul>
+                    </div>
                 </div>
 
-                <div class="row">
-                    <div class="column large-6 medium-6 small-12">
-                        <div class="input-group">
-                            <label for="IdadeInicial">Idade Inícial</label>
-                            <input type="number" step="1" name="IdadeInicial" placeholder="Idade Inícial" value="<?= $Agregado->getIdadeInicial() ?>"/>
-                        </div>
-                    </div>
-                    <div class="column large-6 medium-6 small-12">
-                        <div class="input-group">
-                            <label for="IdadeFinal">Idade Final</label>
-                            <input type="number" step="1" name="IdadeFinal" placeholder="Idade Final" value="<?= $Agregado->getIdadeFinal() ?>"/>
-                        </div>
-                    </div>
-                </div>
-                <button class="bottom btn-style" type="submit">Gravar</button>
+                <button class="bottom btn-style" type="submit">Cria</button>
             </form>
         </div>
     </div>
