@@ -18,7 +18,7 @@
 
     <div class="row">
         <div class="column large-12">
-            <h3 class=" margin-top-60">Ùltimos Logs</h3>
+            <h3 class=" margin-top-60">Últimos Logs</h3>
             <table class="text-center responsive">
                 <thead>
                 <tr>

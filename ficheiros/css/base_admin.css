@@ -5219,6 +5219,28 @@ form .input-group .input-group-label i, form .input-group .input-group-label spa
 form .input-group .input-icon {
   border-radius: 0px 10px 10px 0px;
 }
+form .input-group.input-group--produtos-quantidades .product-inputs > div {
+  gap: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+form .input-group.input-group--produtos-quantidades .product-inputs > div:first-child {
+  margin-top: 0;
+}
+form .input-group.input-group--produtos-quantidades .product-inputs > div select {
+  width: auto;
+  min-width: 30px;
+}
+form .input-group.input-group--produtos-quantidades .product-inputs > div input {
+  width: auto;
+}
+form .input-group.input-group--produtos-quantidades .product-inputs > div button {
+  margin-bottom: 0;
+}
+form .input-group.input-group--produtos-quantidades .add-product {
+  margin-top: 1rem;
+}
 form .error {
   text-align: left;
   color: #ff4f4f;

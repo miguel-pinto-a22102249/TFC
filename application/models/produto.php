@@ -26,6 +26,7 @@ class Produto extends Model_Base {
     public $StockAtual;
 
 
+
     const TABELA = 'produto';
 
     const CAMPO_DESIGNACAO_DEFAULT = 'Nome';

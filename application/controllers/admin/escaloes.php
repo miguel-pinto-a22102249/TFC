@@ -54,6 +54,8 @@ class Escaloes extends CI_Controller {
         $Designacao = $this->input->post('Designacao');
         $IdadeInicial = $this->input->post('IdadeInicial');
         $IdadeFinal = $this->input->post('IdadeFinal');
+        $produtos = $this->input->post('produtos');
+        $quantidades = $this->input->post('quantidades');
 
         $this->form_validation->set_rules('Designacao', 'Designacao', 'required|is_unique[escalao.Designacao]');
         $this->form_validation->set_rules('IdadeInicial', 'IdadeInicial', 'required|numeric');
@@ -89,11 +91,21 @@ class Escaloes extends CI_Controller {
                 $this->load->view('admin/template/footer');
             }
         } else {
+            // Constrói um array associativo com ID do produto => quantidade
+            $produtos_quantidades = [];
+            for ($i = 0; $i < count($produtos); $i++) {
+                $produto_id = $produtos[$i];
+                $quantidade = $quantidades[$i];
+                // Adiciona o par ID do produto => quantidade ao array associativo
+                $produtos_quantidades[$produto_id] = $quantidade;
+            }
+
             $escalao->define([
                 'Designacao' => $Designacao,
                 'IdadeInicial' => $IdadeInicial,
                 'IdadeFinal' => $IdadeFinal,
                 'Segmento' => url_title($Designacao, 'dash', true) . '-' . time() . '-' . rand(0, 1000),
+                'Produtos' => json_encode($produtos_quantidades)
             ]);
 
 
@@ -133,8 +145,13 @@ class Escaloes extends CI_Controller {
         $Designacao = $this->input->post('Designacao');
         $IdadeInicial = $this->input->post('IdadeInicial');
         $IdadeFinal = $this->input->post('IdadeFinal');
+        $produtos = $this->input->post('produtos');
+        $quantidades = $this->input->post('quantidades');
 
-        $this->form_validation->set_rules('Designacao', 'Designacao', 'required|is_unique[escalao.Designacao]');
+
+        if ($Designacao != $Escalao->getDesignacao()) {
+            $this->form_validation->set_rules('Designacao', 'Designacao', 'required|is_unique[escalao.Designacao]');
+        }
         $this->form_validation->set_rules('IdadeInicial', 'IdadeInicial', 'required|numeric');
         $this->form_validation->set_rules('IdadeFinal', 'IdadeFinal', 'required|numeric|callback_validar_idades');
 
@@ -173,6 +190,17 @@ class Escaloes extends CI_Controller {
             $Escalao->setIdadeInicial($IdadeInicial);
             $Escalao->setIdadeFinal($IdadeFinal);
 
+
+            // Constrói um array associativo com ID do produto => quantidade
+            $produtos_quantidades = [];
+            for ($i = 0; $i < count($produtos); $i++) {
+                $produto_id = $produtos[$i];
+                $quantidade = $quantidades[$i];
+                // Adiciona o par ID do produto => quantidade ao array associativo
+                $produtos_quantidades[$produto_id] = $quantidade;
+            }
+
+            $Escalao->setProdutos(json_encode($produtos_quantidades));
 
             if ($Escalao->edita($id)) {
                 header('Content-Type: application/json');

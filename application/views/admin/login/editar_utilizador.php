@@ -78,6 +78,7 @@ $Utilizador ??= null;
                     </div>
                     <div class="column large-12 medium-12 small-12 input-group">
                         <div class="input-group">
+                            <label for="Foto">Imagem de Perfil</label>
                             <input type="file" id="Foto" name="Foto" value="<?= $Utilizador->getFoto() ?>">
                         </div>
                     </div>

@@ -19,7 +19,7 @@
                         </div>
                     </div>
                 </div>
-                <button class="bottom btn - style" type="submit">Cria</button>
+                <button class="bottom btn - style" type="submit">Adicionar</button>
             </form>
         </div>
     </div>

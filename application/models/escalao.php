@@ -24,6 +24,11 @@ class Escalao extends Model_Base {
 
     public $Segmento;
 
+    /*
+      * @var JSON
+     */
+    public $Produtos;
+
     /* Estado */
 
     const ESTADO_ACTIVA = 1;
@@ -36,30 +41,6 @@ class Escalao extends Model_Base {
         parent::__construct();
         $this->load->database('default');
     }
-
-    /**
-     * Para Colocar definir os valores passados num objeto
-     *
-     * @param array[] $dados
-     */
-    public function define($dados) {
-        if (empty($dados['Id'])) {
-            $this->Designacao = $dados['Designacao'];
-            $this->IdadeInicial = $dados['IdadeInicial'];
-            $this->IdadeFinal = $dados['IdadeFinal'];
-            $this->Segmento = $dados['Segmento'];
-        } else {
-            $this->Id = $dados['Id'];
-            $this->Designacao = $dados['Designacao'];
-            $this->IdadeInicial = $dados['IdadeInicial'];
-            $this->IdadeFinal = $dados['IdadeFinal'];
-            $this->Segmento = $dados['Segmento'];
-        }
-
-        parent::define($dados);
-    }
-
-
 
 
     /**
@@ -131,6 +112,21 @@ class Escalao extends Model_Base {
     public function setSegmento($Segmento): void {
         $this->Segmento = $Segmento;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getProdutos() {
+        return $this->Produtos;
+    }
+
+    /**
+     * @param mixed $Produtos
+     */
+    public function setProdutos($Produtos): void {
+        $this->Produtos = $Produtos;
+    }
+
 
 
 }

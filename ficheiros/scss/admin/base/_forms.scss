@@ -31,6 +31,37 @@ form {
         .input-icon {
             border-radius: 0px 10px 10px 0px;
         }
+
+        &.input-group--produtos-quantidades {
+            .product-inputs {
+                > div {
+                    gap: 12px;
+                    display: flex;
+                    flex-wrap: wrap;
+                    margin-top: 1rem;
+
+                    &:first-child {
+                        margin-top: 0;
+                    }
+
+                    select {
+                        width: auto;
+                        min-width: 30px;
+                    }
+
+                    input {
+                        width: auto;
+                    }
+
+                    button {
+                        margin-bottom: 0;
+                    }
+                }
+            }
+            .add-product{
+                margin-top: 1rem;
+            }
+        }
     }
 
     .error {
@@ -39,9 +70,10 @@ form {
         font-size: 12px;
         display: inline-block;
 
-        svg{
+        svg {
             margin-right: 5px;
         }
+
         * {
             font-size: 12px;
             margin-bottom: 0;

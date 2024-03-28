@@ -11,7 +11,7 @@
                     </div>
                     <div class="column large-6 medium-6 small-12">
                         <div class="input-group">
-                            <label for="Username">Nome</label>
+                            <label for="Username">Username</label>
                             <input type="text" name="Username" placeholder="Username"/>
                         </div>
                     </div>
@@ -63,12 +63,12 @@
 
                     <div class="column large-12 medium-12 small-12 input-group">
                         <div class="input-group">
-                            <!--                            <label for="FotoUpload" class="button"><i class="far fa-file-image fa-2x"></i>Upload File</label>-->
+                            <label for="Foto">Imagem de Perfil</label>
                             <input type="file" id="FotoUpload" name="Foto" class="show-for-sr">
                         </div>
                     </div>
                 </div>
-                <button class="bottom btn-style" type="submit">Cria</button>
+                <button class="bottom btn-style" type="submit">Adicionar</button>
             </form>
         </div>
     </div>
