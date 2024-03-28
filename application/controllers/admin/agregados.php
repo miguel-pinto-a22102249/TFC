@@ -291,9 +291,12 @@ class Agregados extends CI_Controller {
             redirect(base_url('admin/login'));
         }
 
+        echo $id;
         $Constituinte = new Constituinte();
         $Constituinte->carregaPorId($id);
-
+//        $this->firephp->log($Constituinte);
+//        var_dump($Constituinte);
+        return;
         $resultado = $Constituinte->eliminar($id);
 
         if ($resultado === true) {
