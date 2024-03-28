@@ -5012,6 +5012,7 @@ body {
 }
 #sidebar > .menu > li > a {
   padding: 1rem 0 1rem 1rem;
+  width: 100%;
 }
 #sidebar > .menu > li > a.active {
   background-color: rgba(246, 246, 246, 0.7);
@@ -5220,10 +5221,16 @@ form .input-group .input-icon {
 }
 form .error {
   text-align: left;
-  color: red;
+  color: #ff4f4f;
   font-size: 12px;
-  margin-top: -15px;
-  margin-bottom: 10px;
+  display: inline-block;
+}
+form .error svg {
+  margin-right: 5px;
+}
+form .error * {
+  font-size: 12px;
+  margin-bottom: 0;
 }
 
 textarea, [type=color], [type=date], [type=datetime-local], [type=datetime], [type=email], [type=month], [type=number], [type=password], [type=search], [type=tel], [type=text], [type=time], [type=url], [type=week], textarea {

@@ -1,7 +1,7 @@
 <div id="Area-Editar">
     <div class="row">
         <div class="column large-8 medium-10 small-12 form-login-wrapper">
-            <form action="/admin/agregados/editar/<?= $Agregado->getId() ?>" method="POST" class="form-ajax" enctype="multipart/form-data">
+            <form action="<?= base_url("/admin/agregados/editar/" . $Agregado->getId()) ?>" method="POST" class="form-ajax" enctype="multipart/form-data">
                 <div class="row">
                     <div class="column large-10 medium-9 small-12">
                         <div class="row">

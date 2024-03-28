@@ -29,7 +29,7 @@ class Escaloes extends CI_Controller {
     public function listar() {
         $Escaloes = (new Escalao)->obtemElementos();
 
-        $this->load->view('admin/template/header', ["tituloArea" => "Escalões", "subtituloArea" => "Listar","acoes" => [
+        $this->load->view('admin/template/header', ["tituloArea" => "Escalões", "subtituloArea" => "Listar", "acoes" => [
             [
                 "titulo" => "Adicionar",
                 "link" => base_url('admin/escaloes/adicionar'),
@@ -55,12 +55,15 @@ class Escaloes extends CI_Controller {
         $IdadeInicial = $this->input->post('IdadeInicial');
         $IdadeFinal = $this->input->post('IdadeFinal');
 
-        $this->form_validation->set_rules('Designacao', 'Designacao', 'required');
+        $this->form_validation->set_rules('Designacao', 'Designacao', 'required|is_unique[escalao.Designacao]');
         $this->form_validation->set_rules('IdadeInicial', 'IdadeInicial', 'required|numeric');
-        $this->form_validation->set_rules('IdadeFinal', 'IdadeFinal', 'required|numeric');
+        $this->form_validation->set_rules('IdadeFinal', 'IdadeFinal', 'required|numeric|callback_validar_idades');
+
 
         $this->form_validation->set_message('required', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
         $this->form_validation->set_message('numeric', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
+        $this->form_validation->set_message('is_unique', '<i class="fas fa-exclamation-triangle"></i> Já existe um escalão com esta designação.');
+
 
         if ($this->form_validation->run() === false) {
             $errors = [];
@@ -131,12 +134,13 @@ class Escaloes extends CI_Controller {
         $IdadeInicial = $this->input->post('IdadeInicial');
         $IdadeFinal = $this->input->post('IdadeFinal');
 
-        $this->form_validation->set_rules('Designacao', 'Designacao', 'required');
+        $this->form_validation->set_rules('Designacao', 'Designacao', 'required|is_unique[escalao.Designacao]');
         $this->form_validation->set_rules('IdadeInicial', 'IdadeInicial', 'required|numeric');
-        $this->form_validation->set_rules('IdadeFinal', 'IdadeFinal', 'required|numeric');
+        $this->form_validation->set_rules('IdadeFinal', 'IdadeFinal', 'required|numeric|callback_validar_idades');
 
         $this->form_validation->set_message('required', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
         $this->form_validation->set_message('numeric', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
+        $this->form_validation->set_message('is_unique', '<i class="fas fa-exclamation-triangle"></i> Já existe um escalão com esta designação.');
 
         if ($this->form_validation->run() === false) {
             $errors = [];
@@ -205,5 +209,14 @@ class Escaloes extends CI_Controller {
             ];
             echo json_encode($data);
         }
+    }
+
+    function validar_idades($idade_final) {
+        $idade_inicial = $this->input->post('IdadeInicial');
+        if ($idade_final < $idade_inicial) {
+            $this->form_validation->set_message('validar_idades', 'A idade final não pode ser menor que a idade inicial.');
+            return false;
+        }
+        return true;
     }
 }

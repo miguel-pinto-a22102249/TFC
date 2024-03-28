@@ -35,10 +35,17 @@ form {
 
     .error {
         text-align: left;
-        color: red;
+        color: $cor-vermelho;
         font-size: 12px;
-        margin-top: -15px;
-        margin-bottom: 10px;
+        display: inline-block;
+
+        svg{
+            margin-right: 5px;
+        }
+        * {
+            font-size: 12px;
+            margin-bottom: 0;
+        }
     }
 
 }

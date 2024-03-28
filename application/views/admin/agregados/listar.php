@@ -47,7 +47,7 @@ if (count($Agregados) > 0) {
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="Eliminar" href="<?= base_url() . 'admin/agregados/eliminar/' . $agregado->getId() ?>">
+                                                <a class="confirma-accao" href="<?= base_url() . 'admin/agregados/eliminar/' . $agregado->getId() ?>">
                                                     <i class="fas fa-trash-alt fa-1x"></i> Eliminar
                                                 </a>
                                             </li>
@@ -63,37 +63,6 @@ if (count($Agregados) > 0) {
             </div>
         </div>
     </div>
-
-
-    <script>
-    // <editor-fold defaultstate="collapsed" desc="PopUp Confirmação de eliminação">
-
-    $('.Eliminar').on("click", function(eve) {
-        eve.preventDefault();
-        notie.confirm({
-            text: 'Tem acerteza que quer eliminar este utilizador?<br>Esta acção não pode ser revertida!',
-            submitText: 'Sim',
-            cancelText: 'Não'
-        }, function() {
-            $.ajax({//request ajax
-                url: $('.Eliminar').attr('href'),
-                dataType: "json",
-                success: function(response) {
-                    if (response.Sucesso == true) {
-                        notie.alert({type: 1, text: response.Mensagem})
-                    } else {
-                        notie.alert({type: 3, text: response.Mensagem})
-                    }
-                },
-                error: function() {
-                    notie.alert({type: 3, text: "Erro", stay: true})
-                }
-            });
-        })
-
-    });
-    // </editor-fold>
-</script>
 <? } ?>
 
 

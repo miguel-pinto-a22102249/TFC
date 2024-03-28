@@ -76,7 +76,13 @@ $(document).ready(function() {
     // <editor-fold defaultstate="collapsed" desc="Eliminar - Notie Genérica">
     $('.confirma-accao').off("click.confirma");
     $('.confirma-accao').on("click.confirma", function(eve) {
-        var msg = $(this).data("mensagem-accao");
+
+        if ($(this).data("mensagem-accao") === undefined) {
+            msg = "Tem a certeza que deseja efetuar esta ação?";
+        } else {
+            msg = $(this).data("mensagem-accao");
+        }
+
         var url = $(this).attr('href');
         eve.preventDefault();
 
@@ -91,7 +97,7 @@ $(document).ready(function() {
                 success: function(response) {
                     if (response.Sucesso == true) {
                         if (response.Mensagem == "") {
-                            response.Mensagem = "Elemento eliminado com sucesso";
+                            response.Mensagem = "Ação efetuada com sucesso";
                         }
                         notie.alert({type: 1, text: response.Mensagem})
                     } else {
@@ -181,10 +187,14 @@ $(document).ready(function() {
             success: function(response) {
                 if (response.success === false) {
                     let errors = response.errors;
+
+                    $('.error').remove(); // Remove todos os erros existentes
+
                     $.each(errors, function(key, value) {
                         let fieldName = value.field;
                         let errorMessage = value.message;
                         let targetElement = form.find('[name="' + fieldName + '"]').next('.error');
+
 
                         if (targetElement.length === 0) {
                             // Se a div de erro não existir, crie-a
@@ -197,6 +207,9 @@ $(document).ready(function() {
                     });
                 } else {
                     notie.alert({type: 1, text: response.message, stay: true});
+                    if (!form.hasClass('no-reset')) {
+                        form[0].reset(); // Limpa os campos do formulário
+                    }
                 }
             }
         });
