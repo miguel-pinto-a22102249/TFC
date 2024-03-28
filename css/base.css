@@ -144,6 +144,7 @@ main #sidebar {
   background-color: white;
   grid-area: sidebar;
   width: 20%;
+  box-shadow: rgba(100, 100, 111, 0.08) 0px 7px 29px 0px;
 }
 main #content {
   background-color: #F5F5F5;
@@ -163,6 +164,6 @@ main #content .content-wrapper .content__inner-wrapper {
 
 footer {
   background-color: #2A2C41;
-  min-height: 55px;
+  min-height: 50px;
 }
 /*# sourceMappingURL=base.css.map */
