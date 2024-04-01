@@ -206,6 +206,7 @@ $(document).ready(function() {
                         notie.alert({type: 3, text: "Algo de errado aconteceu", stay: true});
                     });
                 } else {
+                    // console.log(response);
                     notie.alert({type: 1, text: response.message, stay: true});
                     if (!form.hasClass('no-reset')) {
                         form[0].reset(); // Limpa os campos do formulário

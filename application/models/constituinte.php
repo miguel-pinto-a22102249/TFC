@@ -21,6 +21,16 @@ class Constituinte extends Model_Base {
      */
     public $IdEscalao;
 
+    /*
+     * @var date
+     */
+    public $DataNascimento;
+
+    /*
+     * @var varchar
+     */
+    public $Nome;
+
 
     const TABELA = 'constituinte';
 
@@ -101,6 +111,62 @@ class Constituinte extends Model_Base {
             }
         }
         return "-";
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIdAgregado() {
+        return $this->IdAgregado;
+    }
+
+    /**
+     * @param mixed $IdAgregado
+     */
+    public function setIdAgregado($IdAgregado): void {
+        $this->IdAgregado = $IdAgregado;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIdEscalao() {
+        return $this->IdEscalao;
+    }
+
+    /**
+     * @param mixed $IdEscalao
+     */
+    public function setIdEscalao($IdEscalao): void {
+        $this->IdEscalao = $IdEscalao;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDataNascimento() {
+        return $this->DataNascimento;
+    }
+
+    /**
+     * @param mixed $DataNascimento
+     */
+    public function setDataNascimento($DataNascimento): void {
+        $this->DataNascimento = $DataNascimento;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNome() {
+        return $this->Nome;
+    }
+
+    /**
+     * @param mixed $Nome
+     */
+    public function setNome($Nome): void {
+        $this->Nome = $Nome;
     }
 
 

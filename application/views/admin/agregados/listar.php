@@ -5,7 +5,6 @@ if (count($Agregados) > 0) {
     <div id="Area-Lista-Escaloes" class="area-listagem">
         <div class="row">
             <div class="columns large-12">
-
                 <table class="dataTable display responsive">
                     <thead>
                     <tr>
@@ -22,7 +21,7 @@ if (count($Agregados) > 0) {
                         <tr class="tr-accordion">
                             <td class="trigger">
                                 <a style="text-decoration:none" href="admin/agregado/consultar/<?= $agregado->getSegmento() ?>">
-                                    <?= substr($agregado->getNissConstituintePrincipal(),0,3); ?> xxx xxx
+                                    <?= substr($agregado->getNissConstituintePrincipal(), 0, 3); ?> xxx xxx
                                 </a>
                             </td>
                             <td class="text-center">
@@ -59,7 +58,6 @@ if (count($Agregados) > 0) {
                     <? } ?>
                     </tbody>
                 </table>
-
             </div>
         </div>
     </div>
