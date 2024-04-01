@@ -20,6 +20,9 @@ class Escaloes extends CI_Controller {
         $this->load->library('form_validation');
         parse_str($_SERVER['QUERY_STRING'], $_GET);
         $this->load->library('session');
+        if ($this->session->userdata('login_efetuado') == false) {
+            redirect(base_url('admin/login'));
+        }
     }
 
     public function index() {

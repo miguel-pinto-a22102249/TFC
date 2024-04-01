@@ -48,9 +48,9 @@
                                     foreach ($produtos_quantidades as $produto_id => $quantidade) { ?>
                                         <div>
                                             <select name="produtos[]">
-                                                <?php foreach ($produtos as $produto): ?>
+                                                <?php foreach ($produtos as $produto) { ?>
                                                     <option value="<?= $produto->getId() ?>" <?= ($produto->getId() == $produto_id) ? 'selected' : '' ?>><?= $produto->getNome() ?></option>
-                                                <?php endforeach; ?>
+                                                <?php }; ?>
                                             </select>
                                             <input type="number" name="quantidades[]" value="<?= $quantidade ?>" placeholder="Quantidade">
                                             <button type="button" class="remove-product btn-style">Remover</button>

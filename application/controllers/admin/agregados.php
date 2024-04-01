@@ -1,8 +1,11 @@
 <?
 
-if (!defined('BASEPATH')) {
-    exit('No direct script access allowed');
-}
+defined('BASEPATH') or exit('No direct script access allowed');
+
+require 'application/libraries/vendor/autoload.php';
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 /**
  * Escalões
@@ -21,6 +24,10 @@ class Agregados extends CI_Controller {
         $this->load->library('form_validation');
         parse_str($_SERVER['QUERY_STRING'], $_GET);
         $this->load->library('session');
+
+        if ($this->session->userdata('login_efetuado') == false) {
+            redirect(base_url('admin/login'));
+        }
     }
 
     public function index() {
@@ -313,4 +320,83 @@ class Agregados extends CI_Controller {
             echo json_encode($data);
         }
     }
+
+    public function importacao() {
+        // Inclua a biblioteca PHPExcel
+        if ($this->session->userdata('login_efetuado') == false) {
+            redirect(base_url('admin/login'));
+        }
+
+        if (!$this->input->is_ajax_request() && empty($_FILES['ficheiro']['name'])) {
+            // Se não for uma requisição AJAX e não houver arquivo enviado, carregue a view normalmente
+            $this->load->view('admin/template/header', ["tituloArea" => "Agregados", "subtituloArea" => "Importação"]);
+            $this->load->view('admin/agregados/importacao');
+            $this->load->view('admin/template/footer');
+            return;
+        }
+
+        // Verifique se o arquivo foi enviado corretamente
+        if (!empty($_FILES['ficheiro']['name'])) {
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($_FILES['ficheiro']['tmp_name']);
+            $sheet = $spreadsheet->getActiveSheet();
+
+            // Inicializar um array para armazenar os dados
+            $dados = [];
+
+            // Itera todas as linahs do documento
+            foreach ($sheet->getRowIterator(2) as $row) {
+                $rowData = [];
+                $cellIterator = $row->getCellIterator();
+                $cellIterator->setIterateOnlyExistingCells(false); // Permitir células vazias
+
+                // Verifica se a linha contém pelo menos um valor
+                $hasValue = false;
+                foreach ($cellIterator as $cell) {
+                    if (!is_null($cell->getValue())) {
+                        $hasValue = true;
+                        break;
+                    }
+                }
+
+                // Se a linha não contiver nenhum valor, ignore-a
+                if (!$hasValue) {
+                    continue;
+                }
+
+                // Se a linha contiver pelo menos um valor, processe-a normalmente
+                foreach ($cellIterator as $cell) {
+                    $rowData[] = $cell->getValue();
+                }
+
+                // Adicione os dados da linha ao array principal
+                $dados[] = $rowData;
+            }
+
+            $agregados = [];
+
+            foreach ($dados as $dado) {
+                $constituinte = new Constituinte();
+                $constituinte->define([
+                    'NissAgregado' => $dado[0],
+                    'Niss' => $dado[1],
+                    'Nome' => $dado[2],
+                    'DataNascimento' => $dado[3],
+                    'IdAgregado' => null,
+                ]);
+
+                if (!isset($agregados[$dado[0]])) {
+                    $agregados[$dado[0]] = [$constituinte];
+                } else {
+                    $agregados[$dado[0]][] = $constituinte;
+                }
+            }
+
+            // Carrega a view para exibir os resultados
+            header('Content-Type: application/json');
+            echo json_encode(['success' => true, 'message' => 'Dados Importados com sucesso', 'view' => $this->load->view('admin/agregados/importacao_tabela', ['agregados' => $agregados],true)]);
+            return;
+        }
+    }
+
+
 }

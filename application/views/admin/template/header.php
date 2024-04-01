@@ -123,7 +123,7 @@
                                 if ($this->session->userdata('login_efetuado') == true && $this->session->userdata('TipoUtilizador') == Login::ADMIN) {
                                 }
                                 ?>
-                                <li><a href="<?= base_url() . "admin/agregados/importarAgregados" ?>">Importar</a></li>
+                                <li><a href="<?= base_url() . "admin/agregados/importacao" ?>">Importar</a></li>
                                 <li><a href="<?= base_url() . "admin/agregados" ?>">Listar Agregados</a></li>
                                 <li><a href="<?= base_url() . "admin/agregados/constituintes/listar" ?>">Listar Constituintes</a></li>
                             </ul>
