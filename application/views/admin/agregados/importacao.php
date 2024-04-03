@@ -1,10 +1,10 @@
-<div class="area-adicionar form-mask">
+<div id="Area-Importacao" class=" form-mask">
     <div class="row">
-        <div class="column large-8 medium-10 small-12 form-login-wrapper">
+        <div class="column large-8 medium-10 small-12">
             <form action="<?php echo base_url('admin/agregados/importacao'); ?>" method="post" enctype="multipart/form-data" class="no-reset form-agregados-importacao">
                 <div class="form-group">
                     <label for="ficheiro">Ficheiro</label>
-                    <input type="file" name="ficheiro" id="ficheiro" class="form-control" required>
+                    <input type="file" accept=".xls,.xlsx,.csv" name="ficheiro" id="ficheiro" class="form-control" required>
                 </div>
                 <button class="bottom btn-style margin-top-20" type="submit">Importar</button>
             </form>
@@ -23,12 +23,11 @@
          if ($('.form-mask').length > 0) {
              $('.form-mask').addClass('is-active');
              $('.form-mask').append('<div class="loading"></div>');
-         }else{
+         } else {
              $(this).addClass('is-active');
              $(this).append('<div class="loading"></div>');
          }
 
-         var form =
 
          $.ajax({
              type: form.attr('method'),
@@ -65,7 +64,6 @@
                      // console.log(response);
                      $('.resultado').html(response.view);
 
-
                      setTimeout(function() {
                          $(document).ready(function() {
                              $('.dataTable').DataTable({
@@ -90,8 +88,10 @@
                                  }
                              });
                          });
-
                      }, 100);
+
+
+                     $('form').remove();
 
                      notie.alert({type: 1, text: response.message, stay: true});
                      if (!form.hasClass('no-reset')) {

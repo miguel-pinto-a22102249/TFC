@@ -50,8 +50,19 @@ class Constituinte extends Model_Base {
     public function calculaEscalao() {
         $this->load->model('Escalao');
 
-        $query = $this->db->query(' SELECT * FROM ' . Escalao::TABELA . ' WHERE IdadeInicial <= ' . $this->Idade . ' AND IdadeFinal >= ' . $this->Idade . ' AND estado = 1');
+        // Se $this->Idade não estiver definido, calcular a idade a partir da data de nascimento
+        if (!isset($this->Idade) && isset($this->DataNascimento)) {
+            $dataNascimento = new DateTime($this->DataNascimento);
+            $hoje = new DateTime();
+            $idade = $hoje->diff($dataNascimento)->y; // Calcula a diferença em anos
 
+//            $this->Idade = $idade; // Define a idade calculada
+        }else{
+            $idade = $this->Idade;
+        }
+
+        // Consulta ao banco de dados para encontrar o escalão com base na idade
+        $query = $this->db->query('SELECT * FROM ' . Escalao::TABELA . ' WHERE IdadeInicial <= ' . $idade . ' AND IdadeFinal >= ' . $idade . ' AND estado = 1');
 
         if ($query->num_rows() > 0) {
             $dados = $query->row_array();

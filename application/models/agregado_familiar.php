@@ -30,23 +30,6 @@ class Agregado_Familiar extends Model_Base {
         $this->load->database('default');
     }
 
-    /**
-     * Para Colocar definir os valores passados num objeto
-     *
-     * @param array[] $dados
-     */
-    public function define($dados) {
-        if (empty($dados['Id'])) {
-            $this->NissConstituintePrincipal = $dados['NissConstituintePrincipal'];
-            $this->Grupo = $dados['Grupo'];
-            $this->Segmento = $dados['Segmento'];
-        } else {
-            $this->Id = $dados['Id'];
-            $this->NissConstituintePrincipal = $dados['NissConstituintePrincipal'];
-            $this->Grupo = $dados['Grupo'];
-            $this->Segmento = $dados['Segmento'];
-        }
-    }
 
 
     /**

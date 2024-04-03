@@ -422,5 +422,66 @@ class Agregados extends CI_Controller {
         }
     }
 
+    public function guardarImportacao() {
+        // Inclua a biblioteca PHPExcel
+        if ($this->session->userdata('login_efetuado') == false) {
+            redirect(base_url('admin/login'));
+        }
+
+        if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['dados'])) {
+            $dados = json_decode($_POST['dados'], true);
+
+
+            foreach ($dados as $IdAgregado => $constituinte_temp) {
+                $agregado = new Agregado_Familiar();
+                $agregado->define([
+                    'NissConstituintePrincipal' => $IdAgregado,
+                    'Grupo' => null,
+                    'Segmento' => url_title($IdAgregado, 'dash', true) . '-' . time() . '-' . rand(0, 1000),
+                    'Estado' => 1
+                ]);
+                $agregado->grava();
+            }
+
+            //Para obter todos os agregados que estão na base de dados
+            $agregados = (new Agregado_Familiar())->obtemElementos(null, ['Estado' => 1]);
+
+            foreach ($dados as $NissAgregado => $constituinte_temp) {
+
+
+                $IdAgregado = null;
+                //Para procurar qual o agregado para ser usado no constituinte para preencher o IdAgregado
+                foreach ($agregados as $agregado) {
+                    if ($agregado->getNissConstituintePrincipal() == $NissAgregado) {
+                        $IdAgregado = $agregado->getId();
+                        break;
+                    }
+                }
+
+                foreach ($constituinte_temp as $constituinte_novo) {
+                    $constituinte = new Constituinte();
+                    $constituinte->define([
+                        'Niss' => $constituinte_novo['Niss'],
+                        'Nome' => $constituinte_novo['Nome'],
+                        'DataNascimento' => $constituinte_novo['DataNascimento'],
+                        'IdAgregado' => $IdAgregado,
+                        'Estado' => 1,
+                        'Segmento' => url_title($constituinte_novo['Niss'], 'dash', true) . '-' . time() . '-' . rand(0, 1000),
+                    ]);
+                    $constituinte->calculaEscalao();
+                    unset($constituinte->Idade);
+                    $constituinte->grava();
+                }
+            }
+            header('Content-Type: application/json');
+            echo json_encode(['success' => true, 'message' => 'Dados importados com sucesso']);
+            return;
+        } else {
+            header('Content-Type: application/json');
+            echo json_encode(['success' => false, 'message' => 'Ocorreu um erro ao gravar os dados importados']);
+            return;
+        }
+    }
+
 
 }

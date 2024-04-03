@@ -104,6 +104,7 @@ $route['admin/agregados/constituintes/eliminar/(:num)'] = 'admin/agregados/elimi
 
 $route['admin/agregados/importacao'] = 'admin/agregados/importacao';
 $route['admin/agregados/importacao'] = 'admin/agregados/importacao';
+$route['admin/agregados/guardarImportacao'] = 'admin/agregados/guardarImportacao';
 /* * ********************************************************** */
 
 

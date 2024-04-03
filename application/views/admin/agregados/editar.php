@@ -3,7 +3,7 @@
         <div class="column large-8 medium-10 small-12 form-login-wrapper">
             <form action="<?= base_url("/admin/agregados/editar/" . $Agregado->getId()) ?>" method="POST" class="form-ajax" enctype="multipart/form-data">
                 <div class="row">
-                    <div class="column large-10 medium-9 small-12">
+                    <div class="column large-8 medium-9 small-12">
                         <div class="row">
                             <div class="column large-6 medium-6 small-12">
                                 <div class="input-group">
@@ -22,7 +22,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="column large-2 medium-3 small-12">
+                    <div class="column large-4 medium-3 small-12">
                         Constituintes do Agregado
                         <ul>
                             <?

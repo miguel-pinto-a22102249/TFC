@@ -4968,6 +4968,7 @@ body {
   background: #3b3b3b;
   border: 1px solid #3b3b3b;
   font-weight: 700;
+  padding: 2px 6px;
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
@@ -5362,14 +5363,18 @@ body {
   padding: 0.2em 2em;
 }
 
-div table {
+table {
   width: 100%;
 }
-div table th {
+table th {
   text-align: left;
   border-bottom: 1px solid #ccc;
 }
-div table th, div table td {
+table tr {
+  min-height: 40px;
+}
+table th, table td {
+  min-height: 40px !important;
   padding: 0.4rem !important;
 }
 
@@ -5542,6 +5547,18 @@ body .area-listagem table .th-opcoes {
 body .area-listagem table .td-opcoes {
   color: black;
   font-size: 20px;
+}
+body #Area-Importacao .area-importacao__footer div.area-importacao__footer__wrapper {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  gap: 1rem;
+  border-top: 1px solid #3b3b3b;
+}
+body #Area-Importacao .area-importacao__footer div.area-importacao__footer__wrapper .button {
+  margin-bottom: 0;
 }
 body #Page-Not-Found {
   position: absolute;

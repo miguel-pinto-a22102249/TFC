@@ -20,19 +20,22 @@ body {
     padding: .2em 2em;
 }
 
-div{
-    // Table
-    table {
-        width: 100%;
 
-        th {
-            text-align: left;
-            border-bottom: 1px solid #ccc;
-        }
+table {
+    width: 100%;
 
-        th, td {
-            padding: 0.4rem!important;
-        }
+    th {
+        text-align: left;
+        border-bottom: 1px solid #ccc;
+    }
+
+    tr {
+        min-height: 40px;
+    }
+
+    th, td {
+        min-height: 40px !important;
+        padding: 0.4rem !important;
     }
 }
 
@@ -266,6 +269,24 @@ body {
         }
     }
 
+    #Area-Importacao {
+        .area-importacao__footer {
+            div.area-importacao__footer__wrapper {
+                margin-top: 4rem;
+                padding-top: 2rem;
+                display: flex;
+                justify-content: right;
+                align-items: center;
+                gap: 1rem;
+                border-top: 1px solid $cor-principal;
+
+                .button {
+                    margin-bottom: 0;
+                }
+            }
+        }
+    }
+
     #Page-Not-Found {
         position: absolute;
         top: 0;
@@ -391,7 +412,8 @@ body {
                     .content__inner-wrapper__header__wrapper__coluna-acoes {
                         .button {
                             margin-bottom: 0;
-                            i,svg{
+
+                            i, svg {
                                 margin-right: 0.5rem;
                             }
                         }
