@@ -175,6 +175,14 @@ $(document).ready(function() {
     $(".form-ajax").submit(function(e) {
         e.preventDefault(); // Impede o envio padrão do formulário
 
+        if ($('.form-mask').length > 0) {
+            $('.form-mask').addClass('is-active');
+            $('.form-mask').append('<div class="loading"></div>');
+        }else{
+            $(this).addClass('is-active');
+            $(this).append('<div class="loading"></div>');
+        }
+
         var form = $(this);
         var formData = new FormData(form[0]);
 
@@ -185,6 +193,10 @@ $(document).ready(function() {
             processData: false,
             contentType: false,
             success: function(response) {
+
+                $('.is-active').removeClass('is-active');
+                $('.loading').remove();
+
                 if (response.success === false) {
                     let errors = response.errors;
 

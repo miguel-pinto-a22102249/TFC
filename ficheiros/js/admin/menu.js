@@ -22,6 +22,8 @@ $(document).ready(function() {
 
     for (i = 0; i < dropdown.length; i++) {
         dropdown[i].addEventListener("click", function() {
+            $('#sidebar .dropdown-container').css('display', 'none');
+            $('#sidebar .dropdown-btn').removeClass('active');
             this.classList.toggle("active");
             var dropdownContent = this.nextElementSibling;
             if (dropdownContent.style.display === "block") {

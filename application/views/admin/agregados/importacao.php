@@ -1,4 +1,4 @@
-<div class="area-adicionar">
+<div class="area-adicionar form-mask">
     <div class="row">
         <div class="column large-8 medium-10 small-12 form-login-wrapper">
             <form action="<?php echo base_url('admin/agregados/importacao'); ?>" method="post" enctype="multipart/form-data" class="no-reset form-agregados-importacao">
@@ -20,6 +20,16 @@
          var form = $(this);
          var formData = new FormData(form[0]);
 
+         if ($('.form-mask').length > 0) {
+             $('.form-mask').addClass('is-active');
+             $('.form-mask').append('<div class="loading"></div>');
+         }else{
+             $(this).addClass('is-active');
+             $(this).append('<div class="loading"></div>');
+         }
+
+         var form =
+
          $.ajax({
              type: form.attr('method'),
              url: form.attr('action'),
@@ -27,6 +37,10 @@
              processData: false,
              contentType: false,
              success: function(response) {
+
+                 $('.is-active').removeClass('is-active');
+                 $('.loading').remove();
+
                  if (response.success === false) {
                      let errors = response.errors;
 

@@ -3,10 +3,10 @@ $coresSofts = [
     '#E2E8F0', '#EEDEE5', '#EDF2F7', '#DFDEEE', '#EBF8FF', '#DFEEDE', '#F0F0F0', '#FAF5FF', '#FFF5F7', '#FFF7E6'
 ]; ?>
 
-<div class="area-importacao margin-top-40">
+<div class="area-importacao margin-top-40 area-listagem">
     <div class="row">
         <? if (count($agregados) > 0) { ?>
-            <div class="column large-12 medium-10 small-12 form-login-wrapper">
+            <div class="column large-12 medium-10 small-12">
                 <table class="dataTable display responsive">
                     <thead>
                     <tr>

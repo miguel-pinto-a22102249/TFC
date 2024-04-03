@@ -20,7 +20,7 @@ body {
     padding: .2em 2em;
 }
 
-div:not(#calendar) {
+div{
     // Table
     table {
         width: 100%;
@@ -31,7 +31,7 @@ div:not(#calendar) {
         }
 
         th, td {
-            padding: .4em;
+            padding: 0.4rem!important;
         }
     }
 }
