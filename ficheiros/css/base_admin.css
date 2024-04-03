@@ -4628,6 +4628,10 @@ p {
   width: 100%;
 }
 
+.label--error {
+  color: #ff4f4f;
+}
+
 /* The container */
 .container-checkbox {
   display: block;

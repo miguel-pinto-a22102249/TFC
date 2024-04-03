@@ -376,6 +376,23 @@ class Agregados extends CI_Controller {
 
             foreach ($dados as $dado) {
                 $constituinte = new Constituinte();
+
+                // Verifica se a data de nascimento é válida
+                if (!empty($dado[3])) {
+                    $aniversario = new DateTime($dado[3]);
+                    $data_atual = new DateTime();
+
+                    // Calcula a diferença entre as duas datas
+                    $diferenca = $aniversario->diff($data_atual);
+
+                    // Obtém a idade
+                    $idade = $diferenca->y;
+                } else {
+                    // Define a idade como null (ou outro valor padrão, se preferir)
+                    $idade = null;
+                }
+
+                // Define os atributos do constituinte
                 $constituinte->define([
                     'NissAgregado' => $dado[0],
                     'Niss' => $dado[1],
@@ -384,6 +401,12 @@ class Agregados extends CI_Controller {
                     'IdAgregado' => null,
                 ]);
 
+                $constituinte->Idade = $idade;
+
+                $constituinte->calculaEscalao();
+
+
+                // Adiciona o constituinte ao array de agregados
                 if (!isset($agregados[$dado[0]])) {
                     $agregados[$dado[0]] = [$constituinte];
                 } else {
@@ -391,9 +414,10 @@ class Agregados extends CI_Controller {
                 }
             }
 
+
             // Carrega a view para exibir os resultados
             header('Content-Type: application/json');
-            echo json_encode(['success' => true, 'message' => 'Dados Importados com sucesso', 'view' => $this->load->view('admin/agregados/importacao_tabela', ['agregados' => $agregados],true)]);
+            echo json_encode(['success' => true, 'message' => 'Dados Importados com sucesso', 'view' => $this->load->view('admin/agregados/importacao_tabela', ['agregados' => $agregados], true)]);
             return;
         }
     }

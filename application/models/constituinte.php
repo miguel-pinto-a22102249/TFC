@@ -39,6 +39,27 @@ class Constituinte extends Model_Base {
         $this->load->database('default');
     }
 
+
+    /**
+     * Função que preenche a propriedade IdEscalao do obj, em função dos escalões existentes na base de dados
+     *
+     * @param $Id
+     *
+     * @return Constituinte
+     */
+    public function calculaEscalao() {
+        $this->load->model('Escalao');
+
+        $query = $this->db->query(' SELECT * FROM ' . Escalao::TABELA . ' WHERE IdadeInicial <= ' . $this->Idade . ' AND IdadeFinal >= ' . $this->Idade . ' AND estado = 1');
+
+
+        if ($query->num_rows() > 0) {
+            $dados = $query->row_array();
+            $this->IdEscalao = $dados['Id'];
+        }
+    }
+
+
     /**
      * @return mixed
      */

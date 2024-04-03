@@ -48,8 +48,37 @@
                          notie.alert({type: 3, text: "Algo de errado aconteceu", stay: true});
                      });
                  } else {
-                     console.log(response);
+                     // console.log(response);
                      $('.resultado').html(response.view);
+
+
+                     setTimeout(function() {
+                         $(document).ready(function() {
+                             $('.dataTable').DataTable({
+                                 "order": [[$('th.defaultSort').index(), 'desc']],
+                                 "paging": true,
+                                 "responsive": true,
+                                 "pagingType": "full_numbers",
+                                 "rowsGroup": [0], // Agrupa pela primeira coluna
+                                 "language": {
+                                     "lengthMenu": "Número de registos por página  _MENU_",
+                                     "zeroRecords": "Não encontrámos nada",
+                                     "info": "Página _PAGE_ de _PAGES_",
+                                     "infoEmpty": "Não existem resultados disponiveis",
+                                     "infoFiltered": "(filtrado de um total de _MAX_ registros)",
+                                     "search": "Pesquisar",
+                                     "paginate": {
+                                         "previous": "<",
+                                         "next": ">",
+                                         "last": "Última",
+                                         "first": "Primeira"
+                                     }
+                                 }
+                             });
+                         });
+
+                     }, 100);
+
                      notie.alert({type: 1, text: response.message, stay: true});
                      if (!form.hasClass('no-reset')) {
                          form[0].reset(); // Limpa os campos do formulário
