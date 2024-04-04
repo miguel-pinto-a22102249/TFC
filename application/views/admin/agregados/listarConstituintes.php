@@ -21,7 +21,7 @@ if (count($Constituintes) > 0) {
                     foreach ($Constituintes as $Constituinte) { ?>
                         <tr class="tr-accordion">
                             <td class="trigger">
-                                    <?= substr($Constituinte->getNiss(), 0, 3); ?> xxx xxx
+                                xxx xxx <?= substr($Constituinte->getNiss(), 6, 9); ?>
                             </td>
                             <td class="text-center">
                                 <?= $Constituinte->getDesignacaoAgregado(); ?>

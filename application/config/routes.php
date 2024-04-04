@@ -100,6 +100,7 @@ $route['admin/agregados/eliminar/(:num)'] = 'admin/agregados/eliminar/$1';
 
 $route['admin/agregados/constituintes/listar'] = 'admin/agregados/listarConstituintes';
 $route['admin/agregados/constituintes/adicionar'] = 'admin/agregados/adicionarConstituinte';
+$route['admin/agregados/constituintes/editar'] = 'admin/agregados/editarConstituinte';
 $route['admin/agregados/constituintes/eliminar/(:num)'] = 'admin/agregados/eliminarConstituinte/$1';
 
 $route['admin/agregados/importacao'] = 'admin/agregados/importacao';

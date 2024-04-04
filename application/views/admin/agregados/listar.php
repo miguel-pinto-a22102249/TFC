@@ -21,7 +21,7 @@ if (count($Agregados) > 0) {
                         <tr class="tr-accordion">
                             <td class="trigger">
                                 <a style="text-decoration:none" href="admin/agregado/consultar/<?= $agregado->getSegmento() ?>">
-                                    <?= substr($agregado->getNissConstituintePrincipal(), 0, 3); ?> xxx xxx
+                                    xxx xxx <?= substr($agregado->getNissConstituintePrincipal(), 6, 9); ?>
                                 </a>
                             </td>
                             <td class="text-center">

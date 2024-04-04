@@ -321,6 +321,82 @@ class Agregados extends CI_Controller {
         }
     }
 
+    public function editarConstituinte($id) {
+        if ($this->session->userdata('login_efetuado') == false) {
+            redirect(base_url('admin/login'));
+        }
+
+        $this->load->helper('form');
+        $this->load->library('form_validation');
+
+        $Agregado_Familiar = new Agregado_Familiar();
+
+        $Agregado_Familiar->carregaPorId($id);
+
+        if (!$this->input->is_ajax_request()) {
+            // Se não for uma requisição AJAX, carregue a view normalmente
+            $this->load->view('admin/template/header', ["tituloArea" => "Agregados", "subtituloArea" => "Editar"]);
+            $this->load->view('admin/agregados/editar', ['Agregado' => $Agregado_Familiar]);
+            $this->load->view('admin/template/footer');
+            return;
+        }
+
+
+        $Designacao = $this->input->post('Designacao');
+        $IdadeInicial = $this->input->post('IdadeInicial');
+        $IdadeFinal = $this->input->post('IdadeFinal');
+
+        $this->form_validation->set_rules('Designacao', 'Designacao', 'required');
+        $this->form_validation->set_rules('IdadeInicial', 'IdadeInicial', 'required|numeric');
+        $this->form_validation->set_rules('IdadeFinal', 'IdadeFinal', 'required|numeric');
+
+        $this->form_validation->set_message('required', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
+        $this->form_validation->set_message('numeric', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
+
+        if ($this->form_validation->run() === false) {
+            $errors = [];
+
+            // Construa um array de erros associados aos campos
+            $fields = ['Designacao', 'IdadeInicial', 'IdadeFinal'];
+
+            foreach ($fields as $field) {
+                $error = form_error($field);
+                if (!empty($error)) {
+                    $errors[] = ['field' => $field, 'message' => $error];
+                }
+            }
+            if ($this->input->is_ajax_request()) {
+                // Se for uma requisição AJAX, envie os erros como resposta JSON
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'errors' => $errors, 'message' => 'Erro ao editar agregado']);
+                return;
+            } else {
+                // Se não for uma requisição AJAX, carregue a view normalmente
+                $this->load->view('admin/template/header', ["tituloArea" => "Escalões", "subtituloArea" => "Editar"]);
+                $this->load->view('admin/escaloes/editar');
+                $this->load->view('admin/template/footer');
+            }
+        } else {
+            if ($Agregado_Familiar->getDesignacao() != $Designacao) {
+                $Agregado_Familiar->setDesignacao($Designacao);
+                $Agregado_Familiar->setSegmento(url_title($Designacao, 'dash', true) . '-' . time() . '-' . rand(0, 1000));
+            }
+            $Agregado_Familiar->setIdadeInicial($IdadeInicial);
+            $Agregado_Familiar->setIdadeFinal($IdadeFinal);
+
+
+            if ($Agregado_Familiar->edita($id)) {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => true, 'message' => 'Escalão editado com sucesso']);
+                return;
+            } else {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'message' => 'Ocorreu um erro ao editar o agregado']);
+                return;
+            }
+        }
+    }
+
     public function importacao() {
         // Inclua a biblioteca PHPExcel
         if ($this->session->userdata('login_efetuado') == false) {
