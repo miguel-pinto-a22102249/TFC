@@ -3,3 +3,5 @@ old/src/db_conf.php
 css/base.css
 css/base.css.map
 *.map
+ficheiros/css/base_partilhado.css
+ficheiros/css/base_admin.css
