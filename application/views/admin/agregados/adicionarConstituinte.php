@@ -21,7 +21,11 @@
                                 <select name="IdAgregado">
                                     <option value="">Selecione um agregado</option>
                                     <? foreach ($agregados as $agregado) {
-                                        echo '<option value="' . $agregado->getId() . '">' . substr($agregado->getNissConstituintePrincipal(), 0, 3) . ' xxx xxx</option>';
+                                        if ($this->session->userdata('ModoPrivacidade') == false) {
+                                            echo '<option value="' . $agregado->getId() . '">xxx xxx ' . substr($agregado->getNissConstituintePrincipal(), 6, 9) . '</option>';
+                                        } else {
+                                            echo '<option value="' . $agregado->getId() . '">' . $agregado->getNissConstituintePrincipal() . '</option>';
+                                        }
                                     }
                                     ?>
                                 </select>

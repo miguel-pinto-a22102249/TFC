@@ -15,6 +15,8 @@ class Login extends Model_Base {
     public $Segmento;
     public $Email;
 
+    public $ModoPrivacidade = false;
+
     const SUPER_ADMIN = 5;
     const ADMIN = 4;
     const UTILIZADOR = 3;
@@ -23,31 +25,6 @@ class Login extends Model_Base {
     public function __construct() {
         parent::__construct();
         $this->load->database('default');
-    }
-
-    public function define($dados) {
-        if (empty($dados['Id'])) {
-            $this->Estado = $dados['Estado'];
-            $this->DataCriacao = $dados['DataCriacao'];
-            $this->Nome = $dados['Nome'];
-            $this->Username = $dados['Username'];
-            $this->Email = $dados['Email'];
-            $this->Foto = $dados['Foto'];
-            $this->Password = $dados['Password'];
-            $this->TipoUtilizador = $dados['TipoUtilizador'];
-            $this->Segmento = $dados['Segmento'];
-        } else {
-            $this->Id = $dados['Id'];
-            $this->Estado = $dados['Estado'];
-            $this->DataCriacao = $dados['DataCriacao'];
-            $this->Nome = $dados['Nome'];
-            $this->Username = $dados['Username'];
-            $this->Email = $dados['Email'];
-            $this->Foto = $dados['Foto'];
-            $this->Password = $dados['Password'];
-            $this->TipoUtilizador = $dados['TipoUtilizador'];
-            $this->Segmento = $dados['Segmento'];
-        }
     }
 
     public function carregaPorIdPass($Id = false) {
@@ -141,11 +118,19 @@ class Login extends Model_Base {
         return false;
     }
 
+    /**
+     * @param mixed $Id
+     */
+    public function setId($Id): void {
+        $this->Id = $Id;
+    }
+
     //<editor-fold defaultstate="collapsed" desc="Getters e Setters">
 
     /**
      * @return mixed
      */
+
     public function getNome() {
         return $this->Nome;
     }
@@ -247,6 +232,25 @@ class Login extends Model_Base {
     public function setEmail($Email): void {
         $this->Email = $Email;
     }
+
+    /**
+     * @return bool
+     */
+    public function getModoPrivacidade(): bool {
+        return $this->ModoPrivacidade;
+    }
+
+    /**
+     * @param bool $ModoPrivacidade
+     */
+    public function setModoPrivacidade(bool $ModoPrivacidade): void {
+        $this->ModoPrivacidade = $ModoPrivacidade;
+    }
+
+    public function getId() {
+        return $this->Id;
+    }
+
 
     //</editor-fold>
 

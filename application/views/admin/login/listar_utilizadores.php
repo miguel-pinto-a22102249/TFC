@@ -51,7 +51,7 @@
                             <td class="text-center">
 
                                 <? if (empty($utilizador->getFoto())) { ?>
-                                    <img  height="50" width="50" class="blog-home-img" src="<?= base_url() ?>ficheiros/imagens/base/default-user.png" alt=""><? } else {
+                                    <img  height="50" width="50" class="blog-home-img" src="<?= base_url('ficheiros/imagens/base/default-user.png') ?>" alt=""><? } else {
                                     ?>
                                     <img height="50" width="50"  class="blog-home-img" src="<?= base_url() ?><?php echo $utilizador->getCaminhoFoto() ?>" alt=""><? }
                                 ?>

@@ -61,6 +61,8 @@
         ?>
 
         <header id="topbar">
+
+
             <div class="topbar__wrapper-logo">
                 <a href="<?= base_url() . "admin/home_admin" ?>">
                     <img src="<?= base_url() ?>/ficheiros/imagens/base/logo.svg" id="logo">
@@ -71,6 +73,16 @@
             <div class="topbar__wrapper-account">
                 <span class="open-menu-btn"><span></span></span>
                 <div class="topbar__wrapper-account__inner-wrapper">
+                    <?
+                    $CI = &get_instance();
+                    if ($this->session->userdata('ModoPrivacidade') == false) { ?>
+                        <a class="btn-style trigger-modo-privacidade trigger-modo-privacidade--unlock"
+                           href="<?= base_url("/admin/utilizadores/desativaModoPrivacidade") ?>">Modo de Privacidade</a>
+                    <? } else { ?>
+                        <a class="btn-style trigger-modo-privacidade trigger-modo-privacidade--lock"
+                           href="<?= base_url("/admin/utilizadores/ativaModoPrivacidade") ?>">Modo de Privacidade</a>
+                    <? } ?>
+
                     <ul class="dropdown menu" data-dropdown-menu>
                         <li>
                             <a class="text-right" href="javascript:;">
@@ -81,7 +93,7 @@
                                         <?
                                     } else {
                                         ?>
-                                        <img width="50" class="menu-img-user" src="<?= base_url() ?>/ficheiros/imagens/base/default-user.png" alt="">
+                                        <img width="50" class="menu-img-user" src="<?= base_url('/ficheiros/imagens/base/default-user.png') ?>" alt="">
                                     <? } ?>
                                     <label class="for-dropdown-sub" for="dropdown-sub"><?= $this->session->userdata('Nome') ?></label>
                                 </div>
@@ -104,6 +116,9 @@
             <div id="sidebar">
                 <ul class="vertical medium-horizontal dropdown menu" data-responsive-menu="accordion medium-dropdown">
 
+                    <li>
+                        <a href="<?= base_url() . "home_admin" ?>">Dashboard</a>
+                    </li>
                     <li>
                         <a href="<?= base_url() . "admin/utilizadores" ?>">Utilizadores</a>
                     </li>
@@ -153,7 +168,7 @@
                         </a>
                         <div class="dropdown-container">
                             <ul class="menu vertical">
-                                <li><a href="<?= base_url() . "admin/produtos/adicionar" ?>">Iniciar Distribuição</a></li>
+                                <li><a href="<?= base_url() . "admin/distribuicoes/distribuicaoPasso1" ?>">Iniciar Distribuição</a></li>
                                 <li><a href="<?= base_url() . "admin/produtos" ?>">Listar</a></li>
                             </ul>
                         </div>

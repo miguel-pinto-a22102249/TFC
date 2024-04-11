@@ -49,7 +49,7 @@ class Model_Base extends CI_Model {
             }
 
             if (isset($dados['Id'])) {
-                $this->Id = $dados['Id'];
+                $this->Id = (int)$dados['Id'];
             }
 
             if (!key_exists('Estado', $dados)) {
@@ -79,11 +79,23 @@ class Model_Base extends CI_Model {
         return $this->db->insert($nome_class::TABELA, $this);
     }
 
-    public function edita($id) {
+    public function edita($idResponsavelAcao) {
         $nome_class = get_class($this);
 
-        $this->db->where('Id', $id);
-        return $this->db->update($nome_class::TABELA, $this);
+        $this->db->where('Id', $this->Id);
+        $this->db->update($nome_class::TABELA, $this);
+
+        if ($idResponsavelAcao != 0) {
+            $Log = new Log();
+
+            $Log->define([
+                'Objeto' => $nome_class,
+                'Acao' => 'Editar',
+                'Descricao' => $this->getDesignacaoDefault()
+            ]);
+            $Log->grava();
+        }
+        return true;
     }
 
     public function eliminar($Id) {
@@ -97,15 +109,16 @@ class Model_Base extends CI_Model {
         }
     }
 
-    public function alterar($Id) {
+    public
+    function alterar($Id) {
         $nome_class = get_class($this);
         $this->db->where('Id', $Id);
         $this->db->update($nome_class::TABELA, $this);
     }
 
-    public function carregaPorId($Id = false) {
+    public
+    function carregaPorId($Id = false) {
         $nome_class = get_class($this);
-
         if (is_null($Id)) {
             return false;
         }
@@ -116,7 +129,6 @@ class Model_Base extends CI_Model {
         if (!empty($dados_obj)) {
             //definir os seus valores
             $this->define($dados_obj);
-
             return true;
         }
         return false;
@@ -129,7 +141,8 @@ class Model_Base extends CI_Model {
      *
      * @return type
      */
-    public function carregaPorSegmento($segmento = false) {
+    public
+    function carregaPorSegmento($segmento = false) {
         $nome_class = get_class($this);
 
         if ($segmento === false) {
@@ -158,7 +171,8 @@ class Model_Base extends CI_Model {
      *
      * @return array|Model_Base|OBJ
      */
-    public function obtemElementos($ordenacao = null, $filtragem = null, $limites = null, $contar = false) {
+    public
+    function obtemElementos($ordenacao = null, $filtragem = null, $limites = null, $contar = false) {
         $nome_class = get_class($this);
 
         if (!is_array($ordenacao)) {
@@ -196,7 +210,6 @@ class Model_Base extends CI_Model {
         }
         // FIM FILTRAGEM
 
-        $array_escaloes = [];
         if ($contar == true && empty($filtragem)) {
             return $this->db->count_all_results($nome_class::TABELA);
         } elseif ($contar == true) {
@@ -220,13 +233,14 @@ class Model_Base extends CI_Model {
         foreach ($array_dados_obj as $dados_obj) {
             $obj = new $nome_class;
             $obj->define($dados_obj);
-            $array_objs[] = $obj;
+            $array_objs[$obj->getId()] = $obj;
         }
 
         return $array_objs;
     }
 
-    public function getDesignacaoDefault() {
+    public
+    function getDesignacaoDefault() {
         $nome_class = get_class($this);
 
         if (property_exists($nome_class, $nome_class::CAMPO_DESIGNACAO_DEFAULT)) {
@@ -273,14 +287,16 @@ class Model_Base extends CI_Model {
     /**
      * @return mixed
      */
-    public function getSegmento() {
+    public
+    function getSegmento() {
         return $this->Segmento;
     }
 
     /**
      * @param mixed $Segmento
      */
-    public function setSegmento($Segmento): void {
+    public
+    function setSegmento($Segmento): void {
         $this->Segmento = $Segmento;
     }
 //</editor-fold>

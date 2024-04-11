@@ -66,6 +66,7 @@ $(document).ready(function() {
             }
         );
     });
+
     // Para remover a div de loading
     setTimeout(function() {
         $(".loading").fadeOut(300, function() {
@@ -115,6 +116,73 @@ $(document).ready(function() {
 
     });
     // </editor-fold>
+
+    $('.trigger-modo-privacidade').off("click.confirma");
+    $('.trigger-modo-privacidade').on("click.confirma", function(eve) {
+        eve.preventDefault();
+        eve.stopPropagation();
+        eve.preventDefault();
+        if ($(this).data("mensagem-accao") === undefined) {
+            msg = "Tem a certeza que deseja efetuar esta ação?";
+        } else {
+            msg = $(this).data("mensagem-accao");
+        }
+
+        var $botao = $(this);
+
+
+        notie.confirm({
+            text: msg,
+            submitText: 'Sim',
+            cancelText: 'Não'
+        }, function() {
+            var url = $botao.attr('href');
+
+
+            if ($botao.hasClass('trigger-modo-privacidade--lock')) {
+                $botao.removeClass('trigger-modo-privacidade--lock');
+                $botao.addClass("trigger-modo-privacidade--unlock");
+            } else {
+                $botao.removeClass('trigger-modo-privacidade--unlock');
+                $botao.addClass("trigger-modo-privacidade--lock");
+            }
+
+
+            var hrefAtual = $botao.attr('href'); // Obtém o valor atual do href.
+
+            //Vamos verificar se o href contém a string "ativaModoPrivacidade"
+            if (hrefAtual.includes('ativaModoPrivacidade')) {
+                var novoHref = hrefAtual.replace('ativaModoPrivacidade', 'desativaModoPrivacidade');
+                $(this).attr('href', novoHref); // Define o novo valor do href.
+            } else if (hrefAtual.includes('desativaModoPrivacidade')) {
+                var novoHref = hrefAtual.replace('desativaModoPrivacidade', 'ativaModoPrivacidade');
+                $(this).attr('href', novoHref); // Define o novo valor do href.
+            }
+
+            $.ajax({//request ajax
+                url: url,
+                dataType: "json",
+                success: function(response) {
+                    if (response.success == true) {
+                        if (response.message == "") {
+                            response.message = "Ação efetuada com sucesso";
+                        }
+                        notie.alert({type: 1, text: response.message})
+                    } else {
+                        notie.alert({type: 3, text: response.message})
+                    }
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                },
+                error: function() {
+                    notie.alert({type: 3, text: "Erro", stay: true})
+                }
+            });
+        })
+
+    });
+
 
     // <editor-fold defaultstate="collapsed" desc="DATA TABLE ">
     $('.dataTable').DataTable({
@@ -171,14 +239,14 @@ $(document).ready(function() {
     $('.select-multiple').select2();
 
 
-// <editor-fold defaultstate="collapsed" desc="Código para submissão de formulários via AJAX">
+    // <editor-fold defaultstate="collapsed" desc="Código para submissão de formulários via AJAX">
     $(".form-ajax").submit(function(e) {
         e.preventDefault(); // Impede o envio padrão do formulário
 
         if ($('.form-mask').length > 0) {
             $('.form-mask').addClass('is-active');
             $('.form-mask').append('<div class="loading"></div>');
-        }else{
+        } else {
             $(this).addClass('is-active');
             $(this).append('<div class="loading"></div>');
         }
@@ -227,7 +295,7 @@ $(document).ready(function() {
             }
         });
     });
-// </editor-fold>
+    // </editor-fold>
 
 
 })

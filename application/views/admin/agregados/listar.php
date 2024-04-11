@@ -21,7 +21,12 @@ if (count($Agregados) > 0) {
                         <tr class="tr-accordion">
                             <td class="trigger">
                                 <a style="text-decoration:none" href="admin/agregado/consultar/<?= $agregado->getSegmento() ?>">
-                                    xxx xxx <?= substr($agregado->getNissConstituintePrincipal(), 6, 9); ?>
+                                    <? if ($this->session->userdata('ModoPrivacidade') == false) { ?>
+                                        xxx xxx <?= substr($agregado->getNissConstituintePrincipal(), 6, 9); ?>
+                                        <?
+                                    } else {
+                                        echo $agregado->getNissConstituintePrincipal();
+                                    } ?>
                                 </a>
                             </td>
                             <td class="text-center">

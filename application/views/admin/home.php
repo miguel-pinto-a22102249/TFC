@@ -24,6 +24,7 @@
                 <tr>
                     <th class="text-center">Data de Criação</th>
                     <th class="text-center">Utilizador</th>
+                    <th class="text-center">Ação</th>
                     <th class="text-center">Descrição</th>
                 </tr>
                 </thead>
@@ -40,6 +41,9 @@
                                 Id = <?= $log->getIdUtilizador(); ?>
                             </td>
                             <td>
+                                <?= $log->getAcao(); ?>
+                            </td>
+                            <td>
                                 <?= $log->getDescricao(); ?>
                             </td>
                         </tr>
@@ -47,7 +51,6 @@
                     }
                 }
                 ?>
-
             </table>
         </div>
     </div>

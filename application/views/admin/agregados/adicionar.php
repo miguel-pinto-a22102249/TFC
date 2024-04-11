@@ -1,7 +1,7 @@
 <div class="Area-Adicionar">
     <div class="row">
         <div class="column large-8 medium-10 small-12 form-login-wrapper">
-            <form action="<?= base_url("/admin/agregados/adicionar") ?>" method="POST" class="form - ajax" enctype="multipart / form - data">
+            <form action="<?= base_url("/admin/agregados/adicionar") ?>" method="POST" class="form-ajax" enctype="multipart / form - data">
                 <div class="row">
                     <div class="column large - 6 medium - 6 small - 12">
                         <div class="input - group">

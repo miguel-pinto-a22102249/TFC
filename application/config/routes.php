@@ -76,6 +76,11 @@ $route['admin/utilizadores/editar/(:num)'] = 'admin/logins/editar/$1';
 
 $route['admin/utilizador/consultar/(:any)'] = 'admin/logins/consultar/$1';
 $route['admin/gravar-alteracoes/(:any)'] = 'admin/logins/editarPost/$1';
+
+$route['admin/utilizadores/ativaModoPrivacidade'] = 'admin/logins/ativaModoPrivacidade';
+$route['admin/utilizadores/desativaModoPrivacidade'] = 'admin/logins/desativaModoPrivacidade';
+
+
 /* * ********************************************* */
 
 /* * ****************** Escalão ********************* */
@@ -106,6 +111,11 @@ $route['admin/agregados/constituintes/eliminar/(:num)'] = 'admin/agregados/elimi
 $route['admin/agregados/importacao'] = 'admin/agregados/importacao';
 $route['admin/agregados/importacao'] = 'admin/agregados/importacao';
 $route['admin/agregados/guardarImportacao'] = 'admin/agregados/guardarImportacao';
+/* * ********************************************************** */
+
+/* * ****************** Distribuições ********************* */
+$route['admin/distribuicoes/distribuicaoPasso1'] = 'admin/distribuicoes/distribuicaoPasso1';
+$route['admin/distribuicoes/distribuicaoPasso2'] = 'admin/distribuicoes/distribuicaoPasso2';
 /* * ********************************************************** */
 
 

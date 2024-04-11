@@ -170,6 +170,8 @@ class Log extends CI_Model {
     }
 
     public function grava() {
+        $this->DataCriacao = date('Y-m-d H:i:s');
+
         return $this->db->insert(Log::TABELA, $this);
     }
 
@@ -235,6 +237,35 @@ class Log extends CI_Model {
     function setDescricao($Descricao) {
         $this->Descricao = $Descricao;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getObjeto() {
+        return $this->Objeto;
+    }
+
+    /**
+     * @param mixed $Objeto
+     */
+    public function setObjeto($Objeto): void {
+        $this->Objeto = $Objeto;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAcao() {
+        return $this->Acao;
+    }
+
+    /**
+     * @param mixed $Acao
+     */
+    public function setAcao($Acao): void {
+        $this->Acao = $Acao;
+    }
+
 
     // </editor-fold>
 }

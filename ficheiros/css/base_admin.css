@@ -4450,12 +4450,12 @@ th.hide-for-touch {
 .btn-style:hover, .button:hover {
   background-color: #3b3b3b;
 }
-.btn-style.button--success, .button.button--success {
+.btn-style.button--success, body #topbar .btn-style.trigger-modo-privacidade.trigger-modo-privacidade--lock, .button.button--success, body #topbar .button.trigger-modo-privacidade.trigger-modo-privacidade--lock {
   color: #fff;
   background-color: #5cb85c;
   border-color: #4cae4c;
 }
-.btn-style.button--success:hover, .button.button--success:hover {
+.btn-style.button--success:hover, body #topbar .btn-style.trigger-modo-privacidade.trigger-modo-privacidade--lock:hover, .button.button--success:hover, body #topbar .button.trigger-modo-privacidade.trigger-modo-privacidade--lock:hover {
   background-color: #449d44;
 }
 
@@ -4630,6 +4630,10 @@ p {
 
 .label--error {
   color: #ff4f4f;
+}
+
+.label--correct {
+  color: #00a000;
 }
 
 /* The container */
@@ -5129,6 +5133,27 @@ body #topbar .topbar__wrapper-logo {
   align-items: center;
   min-width: calc(20% - 1rem);
   justify-content: space-between;
+}
+body #topbar .trigger-modo-privacidade {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  color: black;
+  margin-right: 20px;
+  padding: 0.5rem 0.7rem;
+}
+body #topbar .trigger-modo-privacidade:before {
+  content: "";
+  margin-right: 10px;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-image: url("../../ficheiros/imagens/base/icons/visibilidade_visivel.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+body #topbar .trigger-modo-privacidade.trigger-modo-privacidade--unlock:before {
+  background-image: url("../../ficheiros/imagens/base/icons/visibilidade_bloqueada.svg");
 }
 body .open-menu-btn {
   transition: all 0.3s ease-in-out;
@@ -5764,3 +5789,4 @@ table.responsive td {
 /* Medium only */
 /* Large and up */
 /* Large only */
+/*# sourceMappingURL=base_admin.css.map */

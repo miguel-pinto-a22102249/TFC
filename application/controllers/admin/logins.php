@@ -73,6 +73,12 @@ class Logins extends CI_Controller {
                 $foto = $utilizador->getFoto();
             }
 
+
+            if ($utilizador->ModoPrivacidade == 1) {
+                $utilizador->setModoPrivacidade(false);
+                $utilizador->edita($utilizador->getId());
+            }
+
             $userData = [
                 'login_efetuado' => true,
                 'Id' => $utilizador->Id,
@@ -81,6 +87,7 @@ class Logins extends CI_Controller {
                 'Nome' => $utilizador->Nome,
                 'Username' => $utilizador->Username,
                 'Password' => $utilizador->Password,
+                'ModoPrivacidade' => $utilizador->ModoPrivacidade,
                 'Foto' => $foto,
                 'TipoUtilizador' => $utilizador->TipoUtilizador,
             ];
@@ -438,6 +445,65 @@ class Logins extends CI_Controller {
         ]]);
         $this->load->view('admin/login/listar_utilizadores', ["Utilizadores" => $Utilizadores]);
         $this->load->view('admin/template/footer');
+    }
+
+    public function ativaModoPrivacidade() {
+        if ($this->session->userdata('login_efetuado') == false) {
+            redirect(base_url('admin/login'));
+        }
+
+        $Utilizador = new Login;
+        $Utilizador->carregaPorId((int)$this->session->userdata('Id'));
+
+        if ($Utilizador->getModoPrivacidade()) {
+            $this->session->set_userdata('ModoPrivacidade', false);
+
+            $Utilizador->setModoPrivacidade(0);
+            $Utilizador->edita(0);
+            $Log = new Log();
+
+            $Log->define([
+                'Objeto' => "Utilizador",
+                'Acao' => 'Ativou o Modo de Privacidade',
+                'Descricao' => "O Utilizador " . $Utilizador->getNome() . " ativou o modo de privacidade"
+            ]);
+
+            $Log->grava();
+
+            header('Content-Type: application/json');
+            echo json_encode(['success' => true, 'message' => 'Modo de privacidade desativado']);
+            return;
+        }
+    }
+
+    public function desativaModoPrivacidade() {
+        if ($this->session->userdata('login_efetuado') == false) {
+            redirect(base_url('admin/login'));
+        }
+
+        $Utilizador = new Login;
+        $Utilizador->carregaPorId((int)$this->session->userdata('Id'));
+
+
+        if (!$Utilizador->getModoPrivacidade()) {
+            $this->session->set_userdata('ModoPrivacidade', true);
+
+            $Utilizador->setModoPrivacidade(1);
+            $Utilizador->edita(0);
+            $Log = new Log();
+
+            $Log->define([
+                'Objeto' => "Utilizador",
+                'Acao' => 'Desativou o Modo de Privacidade',
+                'Descricao' => "O Utilizador " . $Utilizador->getNome() . " desativou o modo de privacidade"
+            ]);
+
+            $Log->grava();
+
+            header('Content-Type: application/json');
+            echo json_encode(['success' => true, 'message' => 'Modo de privacidade desativado']);
+            return;
+        }
     }
 
 }

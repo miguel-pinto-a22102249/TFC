@@ -21,7 +21,12 @@ if (count($Constituintes) > 0) {
                     foreach ($Constituintes as $Constituinte) { ?>
                         <tr class="tr-accordion">
                             <td class="trigger">
-                                xxx xxx <?= substr($Constituinte->getNiss(), 6, 9); ?>
+                                <? if ($this->session->userdata('ModoPrivacidade') == false) { ?>
+                                    xxx xxx <?= substr($Constituinte->getNiss(), 6, 9); ?>
+                                    <?
+                                } else {
+                                    echo $Constituinte->getNiss();
+                                } ?>
                             </td>
                             <td class="text-center">
                                 <?= $Constituinte->getDesignacaoAgregado(); ?>
