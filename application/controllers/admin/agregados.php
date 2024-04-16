@@ -603,10 +603,10 @@ class Agregados extends CI_Controller {
             }
 
             header('Content-Type: application/json');
-            if ($n_constituintes_importados > 0) {
+            if ($n_constituintes_importados > 0 || $n_agregados_importados > 0) {
                 echo json_encode(['success' => true, 'message' => 'Foram importados:  ' . $n_constituintes_importados . ' constituintes e ' . $n_agregados_importados . ' agregados com sucesso']);
             } else {
-                echo json_encode(['success' => true, 'message' => 'Não existem daods a importar']);
+                echo json_encode(['success' => true, 'message' => 'Não existem dados a importar']);
             }
             return;
         } else {
