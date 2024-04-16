@@ -10,12 +10,14 @@ $coresSofts = [
                 <table class="dataTable display responsive">
                     <thead>
                     <tr style="height: 40px">
-                        <th class="defaultSort">NISS Constituinte Principal</th>
+                        <th class="defaultSort">Importar</th>
+                        <th class="defaultSort">NISS Agregado</th>
                         <th class="text-center">NISS</th>
                         <th class="text-center">Nome</th>
                         <th class="text-center">Idade</th>
                         <th class="text-center">Escalão</th>
-                        <th class="text-center">Data Nascimento</th>
+                        <th class="text-center">Data Nasc</th>
+                        <th class="text-center">Erros</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -24,6 +26,15 @@ $coresSofts = [
                     foreach ($agregados as $IdAgregado => $constituinte_temp) { ?>
                         <? foreach ($constituinte_temp as $constituinte) { ?>
                             <tr class="" style="background-color:<?= $coresSofts[$count] ?>; height: 40px">
+                                <td style="background-color:<?= $coresSofts[$count] ?>">
+                                    <? if ($constituinte->Importar) { ?>
+                                        <label class="success">Sim</label>
+                                        <?
+                                    } else { ?>
+                                        <label class="error">Não</label>
+                                        <?
+                                    } ?>
+                                </td>
                                 <td style="background-color:<?= $coresSofts[$count] ?>"><?php echo $IdAgregado ?></td>
                                 <td class="text-center">
                                     <?= $constituinte->getNiss(); ?>
@@ -47,6 +58,12 @@ $coresSofts = [
                                 <td class="text-center">
                                     <?= $constituinte->getDataNascimento(); ?>
                                 </td>
+                                <td class="text-center">
+                                    <? foreach ($constituinte->Erros as $erro) { ?>
+                                        <div class="small"><?= $erro; ?></div>
+                                        <?
+                                    }; ?>
+                                </td>
                             </tr>
                         <? }
                         $count++;
@@ -56,6 +73,7 @@ $coresSofts = [
                     } ?>
                     </tbody>
                 </table>
+                <center><p>Todas a linhas com erros, não serão importadas.</p></center>
             </div>
         <? } ?>
     </div>

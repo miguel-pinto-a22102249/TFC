@@ -450,6 +450,11 @@ class Agregados extends CI_Controller {
 
             $agregados = [];
 
+            //Obter os constituintes que estão na base de dados para validarmos se já existem
+            $constituintes_bd = (new Constituinte())->obtemElementos();
+            //Obter os agregados que estão na base de dados para validarmos se já existem
+            $agregados_bd = (new Agregado_Familiar())->obtemElementos();
+
             foreach ($dados as $dado) {
                 $constituinte = new Constituinte();
 
@@ -476,6 +481,29 @@ class Agregados extends CI_Controller {
                     'DataNascimento' => $dado[3],
                     'IdAgregado' => null,
                 ]);
+
+                $constituinte->Erros = [];
+                $constituinte->Importar = true;
+
+                $CI = &get_instance();
+
+                //Validações dos dados do excell com os constituintes já existentes na base de dados
+                foreach ($constituintes_bd as $constituinte_temp) {
+                    //Validar se já existe um constituinte com o mesmo NISS
+                    if ($constituinte_temp->getNiss() == $constituinte->getNiss()) {
+                        $constituinte->Erros[] = 'O constituinte já existe na base de dados';
+                        $constituinte->Importar = false;
+                    }
+                }
+
+                //Validações dos dados do excell com os constituintes já existentes na base de dados
+                foreach ($agregados_bd as $agregado_temp) {
+                    //Validar se já existe um agregado com o mesmo niss
+                    if ($agregado_temp->getNissConstituintePrincipal() == $constituinte->getNiss()) {
+                        $constituinte->Erros[] = 'O Agregado já existe na base de dados';
+                        $constituinte->Importar = false;
+                    }
+                }
 
                 $constituinte->Idade = $idade;
 
@@ -507,24 +535,45 @@ class Agregados extends CI_Controller {
         if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['dados'])) {
             $dados = json_decode($_POST['dados'], true);
 
+            $CI = &get_instance();
 
+
+            //Obter os agregados que estão na base de dados para validarmos se já existem
+            $agregados_bd = (new Agregado_Familiar())->obtemElementos();
+            $agregados_bd_por_niss = [];
+
+            foreach ($agregados_bd as $agregado) {
+                $agregados_bd_por_niss[$agregado->getNissConstituintePrincipal()] = $agregado;
+            }
+
+
+            $n_agregados_importados = 0;
             foreach ($dados as $IdAgregado => $constituinte_temp) {
-                $agregado = new Agregado_Familiar();
-                $agregado->define([
-                    'NissConstituintePrincipal' => $IdAgregado,
-                    'Grupo' => null,
-                    'Segmento' => url_title($IdAgregado, 'dash', true) . '-' . time() . '-' . rand(0, 1000),
-                    'Estado' => 1
-                ]);
-                $agregado->grava();
+                if (!key_exists($IdAgregado, $agregados_bd_por_niss)) {
+                    $agregado = new Agregado_Familiar();
+                    $agregado->define([
+                        'NissConstituintePrincipal' => $IdAgregado,
+                        'Grupo' => null,
+                        'Segmento' => url_title($IdAgregado, 'dash', true) . '-' . time() . '-' . rand(0, 1000),
+                        'Estado' => 1
+                    ]);
+                    $n_agregados_importados++;
+                    $agregado->grava();
+                }
             }
 
             //Para obter todos os agregados que estão na base de dados
             $agregados = (new Agregado_Familiar())->obtemElementos(null, ['Estado' => 1]);
 
+            //Obter os constituintes que estão na base de dados para validarmos se já existem
+            $constituintes_bd = (new Constituinte())->obtemElementos();
+            $constituintes_bd_por_niss = [];
+            foreach ($constituintes_bd as $constituinte_temp) {
+                $constituintes_bd_por_niss[$constituinte_temp->getNiss()] = $constituinte_temp;
+            }
+
+            $n_constituintes_importados = 0;
             foreach ($dados as $NissAgregado => $constituinte_temp) {
-
-
                 $IdAgregado = null;
                 //Para procurar qual o agregado para ser usado no constituinte para preencher o IdAgregado
                 foreach ($agregados as $agregado) {
@@ -535,22 +584,30 @@ class Agregados extends CI_Controller {
                 }
 
                 foreach ($constituinte_temp as $constituinte_novo) {
-                    $constituinte = new Constituinte();
-                    $constituinte->define([
-                        'Niss' => $constituinte_novo['Niss'],
-                        'Nome' => $constituinte_novo['Nome'],
-                        'DataNascimento' => $constituinte_novo['DataNascimento'],
-                        'IdAgregado' => $IdAgregado,
-                        'Estado' => 1,
-                        'Segmento' => url_title($constituinte_novo['Niss'], 'dash', true) . '-' . time() . '-' . rand(0, 1000),
-                    ]);
-                    $constituinte->calculaEscalao();
-                    unset($constituinte->Idade);
-                    $constituinte->grava();
+                    if ($constituinte_novo['Importar'] && !key_exists($constituinte_novo['Niss'], $constituintes_bd_por_niss)) {
+                        $constituinte = new Constituinte();
+                        $constituinte->define([
+                            'Niss' => $constituinte_novo['Niss'],
+                            'Nome' => $constituinte_novo['Nome'],
+                            'DataNascimento' => $constituinte_novo['DataNascimento'],
+                            'IdAgregado' => $IdAgregado,
+                            'Estado' => 1,
+                            'Segmento' => url_title($constituinte_novo['Niss'], 'dash', true) . '-' . time() . '-' . rand(0, 1000),
+                        ]);
+                        $constituinte->calculaEscalao();
+                        unset($constituinte->Idade);
+                        $constituinte->grava();
+                        $n_constituintes_importados++;
+                    }
                 }
             }
+
             header('Content-Type: application/json');
-            echo json_encode(['success' => true, 'message' => 'Dados importados com sucesso']);
+            if ($n_constituintes_importados > 0) {
+                echo json_encode(['success' => true, 'message' => 'Foram importados:  ' . $n_constituintes_importados . ' constituintes e ' . $n_agregados_importados . ' agregados com sucesso']);
+            } else {
+                echo json_encode(['success' => true, 'message' => 'Não existem daods a importar']);
+            }
             return;
         } else {
             header('Content-Type: application/json');

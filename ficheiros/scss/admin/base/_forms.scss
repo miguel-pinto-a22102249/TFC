@@ -81,6 +81,10 @@ form {
         }
     }
 
+    .success {
+        color: $cor-verde;
+    }
+
 }
 
 textarea, [type=color], [type=date], [type=datetime-local], [type=datetime], [type=email], [type=month], [type=number], [type=password], [type=search], [type=tel], [type=text], [type=time], [type=url], [type=week], textarea {
@@ -108,6 +112,14 @@ label {
 
     small {
         text-transform: none;
+    }
+
+    &.error {
+        color: $cor-vermelho;
+    }
+
+    &.success {
+        color: $cor-verde;
     }
 }
 

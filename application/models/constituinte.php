@@ -57,7 +57,7 @@ class Constituinte extends Model_Base {
             $idade = $hoje->diff($dataNascimento)->y; // Calcula a diferença em anos
 
 //            $this->Idade = $idade; // Define a idade calculada
-        }else{
+        } else {
             $idade = $this->Idade;
         }
 
@@ -104,22 +104,30 @@ class Constituinte extends Model_Base {
 
         //Vamos validar se já foram obtidos os agregados, sendo assim não precisamos de fazer um novo pedido à BD
         if (isset($this->Agregados) && !empty($this->Agregados)) {
-            $this->firephp->log("já está carregado");
+            // $this->firephp->log("já está carregado");
             foreach ($this->Agregados as $Agregado) {
                 if ($Agregado->getId() == $this->IdAgregado) {
-                    return substr($Agregado->getNissConstituintePrincipal(), 0, 3) . " xxx xxx";
+                    $niss = $Agregado->getNissConstituintePrincipal();
                 }
             }
         } else {
-            $this->firephp->log("Não está carregado");
+            //$this->firephp->log("Não está carregado");
             $this->Agregados = (new Agregado_Familiar)->obtemElementos(null, ['Estado' => 1]);
 
             foreach ($this->Agregados as $Agregado) {
                 if ($Agregado->getId() == $this->IdAgregado) {
-                    return substr($Agregado->getNissConstituintePrincipal(), 0, 3) . " xxx xxx";
+                    $niss = $Agregado->getNissConstituintePrincipal();
                 }
             }
         }
+
+        if ($this->session->userdata('ModoPrivacidade') == false) {
+            return "xxx xxx " . substr($niss, 6, 9);
+        } else {
+            return $niss;
+        }
+
+
         return "-";
     }
 

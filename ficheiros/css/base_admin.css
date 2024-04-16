@@ -5002,6 +5002,10 @@ body {
   border: 1px solid #3b3b3b;
 }
 
+table.dataTable thead th {
+  font-size: 14px;
+}
+
 #sidebar {
   transition: all 0.3s ease-in-out;
   color: #3b3b3b;
@@ -5284,6 +5288,9 @@ form .error * {
   font-size: 12px;
   margin-bottom: 0;
 }
+form .success {
+  color: #00a000;
+}
 
 textarea, [type=color], [type=date], [type=datetime-local], [type=datetime], [type=email], [type=month], [type=number], [type=password], [type=search], [type=tel], [type=text], [type=time], [type=url], [type=week], textarea {
   width: 100%;
@@ -5308,6 +5315,12 @@ label {
 }
 label small {
   text-transform: none;
+}
+label.error {
+  color: #ff4f4f;
+}
+label.success {
+  color: #00a000;
 }
 
 form .loading, .form-mask .loading {
