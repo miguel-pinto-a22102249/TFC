@@ -39,7 +39,7 @@ define('FOPEN_READ_WRITE_CREATE', 'a+b');
 define('FOPEN_WRITE_CREATE_STRICT', 'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT', 'x+b');
 
-define('CACHE', "19102012322");
+define('CACHE', "34234");
 
 const ESTADO_INATIVO = 2;
 const ESTADO_ATIVO = 1;

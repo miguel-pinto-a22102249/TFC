@@ -116,6 +116,7 @@ $route['admin/agregados/guardarImportacao'] = 'admin/agregados/guardarImportacao
 /* * ****************** Distribuições ********************* */
 $route['admin/distribuicoes/distribuicaoPasso1'] = 'admin/distribuicoes/distribuicaoPasso1';
 $route['admin/distribuicoes/distribuicaoPasso2'] = 'admin/distribuicoes/distribuicaoPasso2';
+$route['admin/distribuicoes/distribuicaoPasso3'] = 'admin/distribuicoes/distribuicaoPasso3';
 /* * ********************************************************** */
 
 

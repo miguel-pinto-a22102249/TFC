@@ -49,6 +49,8 @@ class Distribuicoes extends CI_Controller {
         $this->load->model('produto');
         $this->load->model('constituinte');
 
+        $CI = &get_instance();
+
         $IdsAgregados = $this->input->post('agregados');
 
         // <editor-fold defaultstate="collapsed" desc="Obter os agregados selecionados">
@@ -72,6 +74,9 @@ class Distribuicoes extends CI_Controller {
         //Obter produtos
         $produtos = (new Produto())->obtemElementos(['Estado' => ESTADO_ATIVO]);
 
+        //Vamos mexer nesta variavel removendo logo stock à medida que é atribuido
+        $produtos_apos_distribuicao = $produtos;
+
         //Obter constituintes - São todos obtidos de uma unica vez para que seja mais rápido e eficiente
         $constituintes = (new Constituinte())->obtemElementos(['Estado' => ESTADO_ATIVO]);
 
@@ -90,19 +95,40 @@ class Distribuicoes extends CI_Controller {
                         $produtos_escalao = json_decode($escalao->getProdutos());
                     }
 
-                    $CI = &get_instance();
+                    //vai conter o id do produto como key e dentro [quantidade segundo o escalão, quantidade efetivamente atribuida]
+                    $produtos_atribuidos = [];
+
+                    foreach ($produtos_escalao as $produto_id => $quantidade) {
+                        if (array_key_exists($produto_id, $produtos_apos_distribuicao)) {
+                            //Aqui validamos que o stock atual é suficiente para atribuir
+                            if (($produtos_apos_distribuicao[$produto_id]->getStockAtual() - $quantidade) > 0) {
+                                $produtos_apos_distribuicao[$produto_id]->setStockAtual($produtos_apos_distribuicao[$produto_id]->getStockAtual() - $quantidade);
+                                $produtos_atribuidos[$produto_id] = [$quantidade, $quantidade];
+                            } else if ($produtos_apos_distribuicao[$produto_id]->getStockAtual() > 0) {
+                                //Se nao for suficiente vamos atribuir o que ainda houver e colocar o stock a 0
+                                $produtos_atribuidos[$produto_id] = [$quantidade, $produtos_apos_distribuicao[$produto_id]->getStockAtual()];
+                                $produtos_apos_distribuicao[$produto_id]->setStockAtual(0);
+                            } else {
+                                $produtos_atribuidos[$produto_id] = [$quantidade, $produtos_apos_distribuicao[$produto_id]->getStockAtual()];
+                            }
+                        }
+                    }
+
 
                     //Colocar os produtos do escalao no constituinte
-                    $constituinte->ProdtutosQuantidades = $produtos_escalao;
+                    $constituinte->ProdtutosQuantidades = $produtos_atribuidos;
 
                     $agregados_constituintes[$agregado->getNissConstituintePrincipal()][] = $constituinte;
                 }
             }
         }
 
+//        $CI = &get_instance();
+//        $CI->firephp->log($agregados_constituintes);
+//        return;
 
         header('Content-Type: application/json');
-        echo json_encode(['success' => true, 'message' => 'Dados Importados com sucesso', 'view' => $this->load->view('admin/distribuicao/area_distribuicao_passo_2', ["agregados_constituintes" => $agregados_constituintes], true)]);
+        echo json_encode(['success' => true, 'message' => 'Dados Importados com sucesso', 'view' => $this->load->view('admin/distribuicao/area_distribuicao_passo_2', ["agregados_constituintes" => $agregados_constituintes, "produtos_apos_distribuicao" => $produtos_apos_distribuicao], true)]);
         return;
     }
 

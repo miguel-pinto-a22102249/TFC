@@ -162,6 +162,10 @@ input:checked + .slider:before {
     border-radius: 10px;
 }
 
+.outline--error {
+    outline: 2px solid $cor-vermelho;
+}
+
 .success-box {
     padding: 10px;
     border: 1px solid #b5d56d;

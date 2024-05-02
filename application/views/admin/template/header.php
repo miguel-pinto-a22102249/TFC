@@ -31,7 +31,7 @@
         <link rel="stylesheet" type="text/css" href="<?= base_url() . '/ficheiros/plugins/DataTables/datatables.min.css' . "?" . CACHE ?>"/>
         <link rel="stylesheet" href="<?= base_url() . '/ficheiros/css/admin/notie.min.css' . "?" . CACHE ?>">
         <link rel="stylesheet" href="<?= base_url() . '/ficheiros/css/base_admin.css' . "?" . CACHE ?>">
-
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -47,7 +47,7 @@
         <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
     </head>
 
-    <body>
+    <body class="">
 
         <!--        <div class="loading loading-active">-->
         <!--            <div class="loading-wrapper">-->
@@ -114,22 +114,22 @@
         </header>
         <div class="wrapper-main">
             <div id="sidebar">
+                <a class="sidebar__mobile-close-button"><i class="fas fa-times"></i></a>
                 <ul class="vertical medium-horizontal dropdown menu" data-responsive-menu="accordion medium-dropdown">
 
                     <li>
-                        <a href="<?= base_url() . "home_admin" ?>">Dashboard</a>
+                        <a href="<?= base_url() . "home_admin" ?>"><i class="fas fa-chart-line"></i> Dashboard</a>
                     </li>
                     <li>
-                        <a href="<?= base_url() . "admin/utilizadores" ?>">Utilizadores</a>
-                    </li>
-
-                    <li>
-                        <a href="<?= base_url() . "admin/escaloes" ?>">Escalões</a>
+                        <a href="<?= base_url() . "admin/utilizadores" ?>"><i class="fas fa-users-cog"></i> Utilizadores</a>
                     </li>
 
                     <li>
-                        <a class="dropdown-btn">Agregados
-                            <i class="fa fa-caret-down"></i>
+                        <a href="<?= base_url() . "admin/escaloes" ?>"><i class="fas fa-layer-group"></i> Escalões</a>
+                    </li>
+
+                    <li>
+                        <a class="dropdown-btn"><i class="fas fa-users"></i> Agregados
                         </a>
                         <div class="dropdown-container">
                             <ul class="menu vertical">
@@ -146,8 +146,7 @@
                     </li>
 
                     <li>
-                        <a class="dropdown-btn">Produtos
-                            <i class="fa fa-caret-down"></i>
+                        <a class="dropdown-btn"><i class="fas fa-apple-alt"></i> Produtos
                         </a>
                         <div class="dropdown-container">
                             <ul class="menu vertical">
@@ -163,13 +162,12 @@
                     </li>
 
                     <li>
-                        <a class="dropdown-btn">Distribuições
-                            <i class="fa fa-caret-down"></i>
+                        <a class="dropdown-btn"><i class="fas fa-stream"></i> Distribuições
                         </a>
                         <div class="dropdown-container">
                             <ul class="menu vertical">
                                 <li><a href="<?= base_url() . "admin/distribuicoes/distribuicaoPasso1" ?>">Iniciar Distribuição</a></li>
-                                <li><a href="<?= base_url() . "admin/produtos" ?>">Listar</a></li>
+                                <!--                                <li><a href="--><?php //= base_url() . "admin/produtos" ?><!--">Listar</a></li>-->
                             </ul>
                         </div>
                     </li>

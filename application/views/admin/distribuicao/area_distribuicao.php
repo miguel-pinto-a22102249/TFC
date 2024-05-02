@@ -23,10 +23,10 @@
                         <?php foreach ($Agregados as $agregado) { ?>
                             <tr>
                                 <td>
-                                    <input type="checkbox" name="agregados[]" value="<?= $agregado->getId() ?>">
+                                    <input type="checkbox" name="agregados[]" id="<?= $agregado->getId() ?>" value="<?= $agregado->getId() ?>">
                                 </td>
                                 <td>
-                                    <label>
+                                    <label for="<?= $agregado->getId() ?>">
                                         <? if ($this->session->userdata('ModoPrivacidade') == false) { ?>
                                             xxx xxx <?= substr($agregado->getNissConstituintePrincipal(), 6, 9); ?>
                                             <?

@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-    $('.open-menu-btn').on('click', function() {
+    $('.open-menu-btn,.sidebar__mobile-close-button').on('click', function() {
         if ($('body').hasClass('closed-menu')) {
             $('body').removeClass('closed-menu');
             $('#logo').removeClass('hide');
@@ -14,6 +14,13 @@ $(document).ready(function() {
             $('#icon').removeClass('hide');
         }
     });
+
+    // Verifica se a largura da janela é menor que 860px
+    if (window.innerWidth < 1024) {
+        $('body').addClass('closed-menu');
+        $('#logo').addClass('hide');
+        $('#icon').removeClass('hide');
+    }
 
 
     // Para o menu dropdown lateral
