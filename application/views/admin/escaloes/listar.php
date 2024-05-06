@@ -12,7 +12,7 @@ if (count($Escaloes) > 0) {
                         <th class="text-center">Designação</th>
                         <th class="text-center defaultSort">Idade Inicial</th>
                         <th class="text-center">Idade Limite</th>
-                        <th class="th-opcoes"><i class="fas fa-cog fa-2x"></i></th>
+                        <th class="th-opcoes" data-orderable='false'></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -42,7 +42,7 @@ if (count($Escaloes) > 0) {
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="Editar" href="<?= base_url() . 'admin/escaloes/editar/' . $escalao->getId() ?>">
+                                                <a class="Editar btn-editar-popup-ajax" href="<?= base_url() . 'admin/escaloes/viewEditar/' . $escalao->getId() ?>">
                                                     <i class="fas fa-edit fa-1x"></i> Ediar
                                                 </a>
                                             </li>

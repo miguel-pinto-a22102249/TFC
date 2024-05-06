@@ -185,26 +185,28 @@ $(document).ready(function() {
 
 
     // <editor-fold defaultstate="collapsed" desc="DATA TABLE ">
-    $('.dataTable').DataTable({
-        "order": [[$('th.defaultSort').index(), 'desc']],
-        "pagin": true,
-        "responsive": true,
-        "pagingType": "full_numbers",
-        "language": {
-            "lengthMenu": "Número de registos por página  _MENU_",
-            "zeroRecords": "Não encontrámos nada",
-            "info": "Página _PAGE_ de _PAGES_",
-            "infoEmpty": "Não existem resultados disponiveis",
-            "infoFiltered": "(filtrado de um total de _MAX_ registros)",
-            "search": "Pesquisar",
-            "paginate": {
-                "previous": "<",
-                "next": ">",
-                "last": "Última",
-                "first": "Primeira"
-            }
-        },
-    });
+    setTimeout(function() {
+        $('.dataTable').DataTable({
+            "order": [[$('th.defaultSort').index(), 'desc']],
+            "pagin": true,
+            "responsive": true,
+            "pagingType": "full_numbers",
+            "language": {
+                "lengthMenu": "Número de registos por página  _MENU_",
+                "zeroRecords": "Não encontrámos nada",
+                "info": "Página _PAGE_ de _PAGES_",
+                "infoEmpty": "Não existem resultados disponiveis",
+                "infoFiltered": "(filtrado de um total de _MAX_ registros)",
+                "search": "Pesquisar",
+                "paginate": {
+                    "previous": "<",
+                    "next": ">",
+                    "last": "Última",
+                    "first": "Primeira"
+                }
+            },
+        });
+    }, 100);
     $("div.toolbar").html('<b>Custom tool bar! Text/images etc.</b>');
     // </editor-fold>
 
@@ -238,11 +240,39 @@ $(document).ready(function() {
 
     $('.select-multiple').select2();
 
+    triggerFormAjax();
 
-    // <editor-fold defaultstate="collapsed" desc="Código para submissão de formulários via AJAX">
+
+    // <editor-fold defaultstate="collapsed" desc="Código para AJAX janelas popup (Forms Editar)">
+    $(".btn-editar-popup-ajax").on("click", function(e) {
+        e.preventDefault();
+
+        let url = $(this).attr('href');
+
+        $.ajax({
+            url: url,
+            success: function(response) {
+                $.magnificPopup.open({
+                    items: {
+                        src: response.view,
+                        type: 'inline'
+                    }
+                });
+                triggerFormAjax();
+            }
+        });
+    });
+    // </editor-fold>
+
+});
+
+
+// <editor-fold defaultstate="collapsed" desc="Código para submissão de formulários via AJAX">
+function triggerFormAjax(){
     $(".form-ajax").submit(function(e) {
         e.preventDefault(); // Impede o envio padrão do formulário
-
+        e.stopPropagation();
+        e.preventDefault();
         if ($('.form-mask').length > 0) {
             $('.form-mask').addClass('is-active');
             $('.form-mask').append('<div class="loading"></div>');
@@ -295,8 +325,6 @@ $(document).ready(function() {
             }
         });
     });
-    // </editor-fold>
-
-})
-;
+}
+// </editor-fold>
 

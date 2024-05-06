@@ -328,6 +328,30 @@ class Logins extends CI_Controller {
         }
     }
 
+    public function viewEditar($id) {
+        /* Verifica se o login atual é de um ADMIN */
+        $Utilizador = new Login;
+        $Utilizador->eAdmin() != true ? redirect(base_url('admin/login')) : '';
+
+        $log = new Log();
+        $Utilizador->carregaPorId($id);
+
+        if ($this->input->is_ajax_request()) {
+            $html = $this->load->view('admin/login/editar_utilizador', ['Utilizador' => $Utilizador], true);
+            $html = $this->load->view('admin/popup/default_popup', ['titulo' => 'Editar Utilizador',
+                                                                    'html' => $html, 'URLNewWindow' => base_url("admin/utilizadores/editar/{$id}")], true);
+            header('Content-Type: application/json');
+            echo json_encode(['success' => true, 'message' => '', 'view' => $html]);
+            return;
+        } else {
+            // Se não for uma requisição AJAX, carregue a view normalmente
+            $this->load->view('admin/template/header', ["tituloArea" => "Utilizadores", "subtituloArea" => "Editar"]);
+            $this->load->view('admin/login/editar_utilizador', ['Utilizador' => $Utilizador]);
+            $this->load->view('admin/template/footer');
+            return;
+        }
+    }
+
     public function criar() {
         if ($this->session->userdata('login_efetuado') == false) {
             redirect(base_url('admin/login'));

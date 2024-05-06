@@ -12,7 +12,7 @@ if (count($Constituintes) > 0) {
                         <th class="text-center">NISS</th>
                         <th class="text-center defaultSort">Agregado</th>
                         <th class="text-center">Escalão</th>
-                        <th class="th-opcoes"><i class="fas fa-cog fa-2x"></i></th>
+                        <th class="th-opcoes"></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -45,7 +45,7 @@ if (count($Constituintes) > 0) {
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="Editar" href="<?= base_url() . 'admin/agregados/constituintes/editar/' . $Constituinte->getId() ?>">
+                                                <a class="Editar btn-editar-popup-ajax" href="<?= base_url() . 'admin/agregados/constituintes/editar/' . $Constituinte->getId() ?>">
                                                     <i class="fas fa-edit fa-1x"></i> Ediar
                                                 </a>
                                             </li>

@@ -70,6 +70,14 @@ class Constituinte extends Model_Base {
         }
     }
 
+    public function organizaPorNiss($constituintes) {
+        $constituintesOrganizados = [];
+        foreach ($constituintes as $constituinte) {
+            $constituintesOrganizados[$constituinte->Niss] = $constituinte;
+        }
+        return $constituintesOrganizados;
+    }
+
 
     /**
      * @return mixed

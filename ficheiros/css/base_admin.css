@@ -4784,6 +4784,11 @@ body {
   justify-content: space-between;
 }
 
+/* Notie */
+.notie-container {
+  z-index: 9999 !important;
+}
+
 /*Magnific PopUp*/
 .white-popup {
   border-radius: 10px;
@@ -4809,7 +4814,7 @@ body {
   padding: 0px 20px 20px 20px;
 }
 .white-popup .mfp-close {
-  font-size: 20px;
+  font-size: 25px;
 }
 .white-popup .mfp-close:hover {
   background-color: transparent;
@@ -4817,6 +4822,50 @@ body {
 
 .mfp-removing {
   animation: close 1s;
+}
+
+.default-dialog {
+  position: relative;
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 22px -5px rgba(0, 0, 0, 0.2);
+}
+.default-dialog .mfp-close {
+  font-size: 25px;
+  padding: 3px 1rem;
+  color: #3b3b3b !important;
+  border-radius: 0 10px 0 5px;
+  background-color: #c9c9c9;
+  opacity: 1;
+  height: auto;
+  width: auto;
+  line-height: 1;
+}
+.default-dialog .mfp-close:hover {
+  background-color: transparent;
+}
+.default-dialog .default-dialog__button-maximize {
+  background-color: #c9c9c9;
+  font-size: 15px;
+  right: 50px;
+  position: absolute;
+  top: 0;
+  padding: 0.3rem 1rem;
+  color: #3b3b3b;
+  border-radius: 0 0 5px 5px;
+}
+
+.default-dialog__inner-wrapper .large-8, .default-dialog__inner-wrapper .large-10, .default-dialog__inner-wrapper .large-19 {
+  width: 100%;
+}
+
+.default-dialog__inner-wrapper__wrapper-titulo {
+  border-bottom: 1px solid #767676;
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 
 .dialog {
@@ -5063,6 +5112,11 @@ table.dataTable thead th {
 #sidebar > .menu > li .dropdown-container ul li a {
   padding: 1rem 1rem;
   display: block;
+}
+#sidebar > .menu > li .dropdown-container ul li a svg {
+  margin-right: 10px;
+  height: 17px;
+  width: 17px;
 }
 #sidebar a.dropdown-btn {
   padding: 10px 0;

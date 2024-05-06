@@ -10,7 +10,7 @@
                         <th class="text-center">Tipo de Utilizador</th>
                         <th class="text-center">Estado</th>
                         <th class="text-center">Foto</th>
-                        <th class="th-opcoes"><i class="fas fa-cog fa-2x"></i></th>
+                        <th class="th-opcoes" data-orderable='false'></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -67,7 +67,7 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="Editar" href="<?= base_url() . 'admin/utilizadores/editar/' . $utilizador->getId() ?>">
+                                                <a class="Editar btn-editar-popup-ajax" href="<?= base_url() . 'admin/utilizadores/viewEditar/' . $utilizador->getId() ?>">
                                                     <i class="fas fa-edit fa-1x"></i> Ediar
                                                 </a>
                                             </li>

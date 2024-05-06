@@ -138,27 +138,15 @@
                                 if ($this->session->userdata('login_efetuado') == true && $this->session->userdata('TipoUtilizador') == Login::ADMIN) {
                                 }
                                 ?>
-                                <li><a href="<?= base_url() . "admin/agregados/importacao" ?>">Importar</a></li>
-                                <li><a href="<?= base_url() . "admin/agregados" ?>">Listar Agregados</a></li>
-                                <li><a href="<?= base_url() . "admin/agregados/constituintes/listar" ?>">Listar Constituintes</a></li>
+                                <li><a href="<?= base_url() . "admin/agregados/importacao" ?>"><i class="fas fa-file-excel"></i> Importar</a></li>
+                                <li><a href="<?= base_url() . "admin/agregados" ?>"><i class="fas fa-users"></i> Listar Agregados</a></li>
+                                <li><a href="<?= base_url() . "admin/agregados/constituintes/listar" ?>"><i class="fas fa-user"></i> Listar Constituintes</a></li>
                             </ul>
                         </div>
                     </li>
 
                     <li>
-                        <a class="dropdown-btn"><i class="fas fa-apple-alt"></i> Produtos
-                        </a>
-                        <div class="dropdown-container">
-                            <ul class="menu vertical">
-                                <?
-
-                                if ($this->session->userdata('login_efetuado') == true && $this->session->userdata('TipoUtilizador') == Login::ADMIN) {
-                                }
-                                ?>
-                                <li><a href="<?= base_url() . "admin/produtos/adicionar" ?>">Adicionar</a></li>
-                                <li><a href="<?= base_url() . "admin/produtos" ?>">Listar</a></li>
-                            </ul>
-                        </div>
+                        <a href="<?= base_url() . "admin/produtos" ?>"><i class="fas fa-apple-alt"></i> Produtos</a>
                     </li>
 
                     <li>
@@ -166,8 +154,10 @@
                         </a>
                         <div class="dropdown-container">
                             <ul class="menu vertical">
-                                <li><a href="<?= base_url() . "admin/distribuicoes/distribuicaoPasso1" ?>">Iniciar Distribuição</a></li>
-                                <!--                                <li><a href="--><?php //= base_url() . "admin/produtos" ?><!--">Listar</a></li>-->
+                                <li><a href="<?= base_url() . "admin/distribuicoes/distribuicaoPasso1" ?>"><i class="fas fa-cubes"></i> Iniciar Distribuição</a></li>
+                                <li><a href="<?= base_url() . "admin/distribuicoes/" ?>"><i class="fas fa-calendar"></i> Listar Datas Distribuições</a></li>
+                                <li><a href="<?= base_url() . "admin/distribuicoes/constituinte" ?>"><i class="fas fa-user"></i> Listar Ativas por Constituinte</a></li>
+                                <li><a href="<?= base_url() . "admin/distribuicoes/agregado" ?>"><i class="fas fa-users"></i> Listar Ativas por Agregado</a></li>
                             </ul>
                         </div>
                     </li>

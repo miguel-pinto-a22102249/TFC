@@ -29,6 +29,80 @@ class Distribuicoes extends CI_Controller {
         self::listar();
     }
 
+    public function listar() {
+        $CI = &get_instance();
+
+        $this->db->select('DATE(Data) as Data, COUNT(*) as numero_distribuicoes');
+        $this->db->from('distribuicao');
+        $this->db->group_by('Data');
+        $query = $this->db->get();
+        $resultados = $query->result();
+
+//        $CI->firephp->log($resultados);
+
+
+        $this->load->view('admin/template/header', ["tituloArea" => "Distribuições", "subtituloArea" => "Listar", "acoes" => [
+            [
+                "titulo" => "Adicionar",
+                "link" => base_url('admin/distribuicoes/distribuicaoPasso1'),
+                "icone" => "fas fa-plus",
+                'class' => 'button--add button--success'
+            ]
+        ]]);
+        $this->load->view('admin/distribuicao/listar_por_data', ["Datas" => $resultados]);
+        $this->load->view('admin/template/footer');
+    }
+
+    public function listarPorConstituinte() {
+        $this->load->model('produto');
+        $this->load->model('distribuicao');
+        $this->load->model('distribuicao_individual_constituinte');
+        $this->load->model('entrega');
+
+        $distribuicoes = (new Distribuicao())->obtemElementos(['Estado' => ESTADO_ATIVO]);
+        $agregados = (new Agregado_Familiar())->obtemElementos(['Estado' => ESTADO_ATIVO]);
+        $produtos = (new Produto())->obtemElementos(['Estado' => ESTADO_ATIVO]);
+        $entregas = (new Entrega())->obtemElementos(['Estado' => ESTADO_ATIVO]);
+        $distribuicoes_individuais = (new Distribuicao_Individual_Constituinte())->obtemElementos(['Estado' => ESTADO_ATIVO]);
+
+        $this->load->view('admin/template/header', ["tituloArea" => "Distribuições", "subtituloArea" => "Listar", "acoes" => [
+            [
+                "titulo" => "Adicionar",
+                "link" => base_url('admin/distribuicoes/distribuicaoPasso1'),
+                "icone" => "fas fa-plus",
+                'class' => 'button--add button--success'
+            ]
+        ]]);
+        $this->load->view('admin/distribuicao/listar_por_constituinte', ['distribuicoes' => $distribuicoes, 'distribuicoes_individuais' => $distribuicoes_individuais, 'entregas' => $entregas, 'agregados' => $agregados, 'produtos' => $produtos]);
+        $this->load->view('admin/template/footer');
+    }
+
+    public function listarPorAgregado() {
+//        $this->load->model('escalao');
+        $this->load->model('produto');
+//        $this->load->model('constituinte');
+        $this->load->model('distribuicao');
+        $this->load->model('distribuicao_individual_constituinte');
+        $this->load->model('entrega');
+
+        $distribuicoes = (new Distribuicao())->obtemElementos(['Estado' => ESTADO_ATIVO]);
+        $agregados = (new Agregado_Familiar())->obtemElementos(['Estado' => ESTADO_ATIVO]);
+        $produtos = (new Produto())->obtemElementos(['Estado' => ESTADO_ATIVO]);
+        $entregas = (new Entrega())->obtemElementos(['Estado' => ESTADO_ATIVO]);
+        $distribuicoes_individuais = (new Distribuicao_Individual_Constituinte())->obtemElementos(['Estado' => ESTADO_ATIVO]);
+
+        $this->load->view('admin/template/header', ["tituloArea" => "Distribuições", "subtituloArea" => "Listar por Agregado", "acoes" => [
+            [
+                "titulo" => "Adicionar",
+                "link" => base_url('admin/distribuicoes/distribuicaoPasso1'),
+                "icone" => "fas fa-plus",
+                'class' => 'button--add button--success'
+            ]
+        ]]);
+        $this->load->view('admin/distribuicao/listar_por_agregado', ['distribuicoes' => $distribuicoes, 'distribuicoes_individuais' => $distribuicoes_individuais, 'entregas' => $entregas, 'agregados' => $agregados, 'produtos' => $produtos]);
+        $this->load->view('admin/template/footer');
+    }
+
     public function distribuicaoPasso1() {
         $agregados = (new Agregado_Familiar())->obtemElementos(['Estado' => ESTADO_ATIVO]);
 
@@ -48,7 +122,6 @@ class Distribuicoes extends CI_Controller {
         $this->load->model('escalao');
         $this->load->model('produto');
         $this->load->model('constituinte');
-
         $CI = &get_instance();
 
         $IdsAgregados = $this->input->post('agregados');
@@ -63,7 +136,6 @@ class Distribuicoes extends CI_Controller {
         }
         // </editor-fold>
 
-
         //Obter escalões
         $escaloes_temp = (new Escalao())->obtemElementos(['Estado' => ESTADO_ATIVO]);
         //organizar o array de escaloes por id
@@ -74,11 +146,14 @@ class Distribuicoes extends CI_Controller {
         //Obter produtos
         $produtos = (new Produto())->obtemElementos(['Estado' => ESTADO_ATIVO]);
 
+        $this->produtos = $produtos; // Para poder ser usado nos proximos passos
+
         //Vamos mexer nesta variavel removendo logo stock à medida que é atribuido
         $produtos_apos_distribuicao = $produtos;
 
         //Obter constituintes - São todos obtidos de uma unica vez para que seja mais rápido e eficiente
         $constituintes = (new Constituinte())->obtemElementos(['Estado' => ESTADO_ATIVO]);
+
 
         /** @var Agregado_Familiar $agregado */
         /** @var Escalao $escalao */
@@ -132,5 +207,144 @@ class Distribuicoes extends CI_Controller {
         return;
     }
 
+    public function distribuicaoPasso3() {
+        $this->load->model('escalao');
+        $this->load->model('produto');
+        $this->load->model('constituinte');
+        $this->load->model('distribuicao');
+        $this->load->model('distribuicao_individual_constituinte');
+        $this->load->model('entrega');
+        $CI = &get_instance();
+//        $CI->db->trans_start();
+        $agregados = (new Agregado_Familiar())->obtemElementos(['Estado' => ESTADO_ATIVO]);
+        $produtos_bd = (new Produto())->obtemElementos(['Estado' => ESTADO_ATIVO]);
+        $constituintes = (new Constituinte())->obtemElementos(['Estado' => ESTADO_ATIVO]);
+        $constituintesPorNiss = (new Constituinte())->organizaPorNiss($constituintes);
 
+
+        $QuantidadeAjustada = $this->input->post('QuantidadeAjustada');
+        $NissConstituintes = $this->input->post('NissConstituintes');
+
+        //Vamos criar uma distribuição por agregado, esta distribuição pode ter multiplas entregas e
+        // cada entrega tem multiplas distribuições individuais (as distribuicoes individuais tem o registo dos produtos de cada constituinte)
+
+        $count = 0;
+        //------ 1º - Vamos criar as distribuições individuais
+        foreach ($QuantidadeAjustada as $IdConstituinte => $produtos) {
+//            $CI->firephp->log($constituintes[$IdConstituinte]);
+
+            //Gerar a distribuicao individual para este constituinte
+            $DistribuicaoIndividual = new Distribuicao_Individual_Constituinte();
+            $produtos_constituinte = [];
+            foreach ($produtos as $produto_id => $quantidade) {
+                $produtos_constituinte[$produto_id] = $quantidade;
+//                $CI->firephp->log($produtos_bd[$produto_id]);
+                $produtos_bd[$produto_id]->setStockAtual((int)$produtos_bd[$produto_id]->getStockAtual() - $quantidade);
+                $produtos_bd[$produto_id]->edita(0);
+            }
+
+            $DistribuicaoIndividual->define([
+                'NissConstituinte' => $constituintes[$IdConstituinte]->getNiss(),
+                'ProdutosQuantidades' => json_encode($produtos_constituinte),
+                'Data' => date('Y-m-d H:i:s'),
+            ]);
+            $DistribuicaoIndividual->grava();
+            $count++;
+        }
+
+        //------ 2º - Vamos obter as distribuições individuais que foram agora criadas
+        $distribuicoes_individuais = (new Distribuicao_Individual_Constituinte())->obtemElementos(
+            ['Id' => 'DESC'],
+            null,
+            ['limite' => $count]
+        );
+
+        //------ 3º - Vamos organizar as distribuições individuais por agregado
+        $distribuicoesPorAgregado = [];
+        foreach ($distribuicoes_individuais as $distribuicao_individual) {
+            $distribuicoesPorAgregado[$constituintesPorNiss[$distribuicao_individual->getNissConstituinte()]->getIdAgregado()][] = $distribuicao_individual;
+        }
+
+
+        //------ 4º - Com base nas distribuições individuais vamos criar as entregas
+        $count = 0;
+        foreach ($distribuicoesPorAgregado as $IdAgregado => $distribuicoes) {
+            $ids_distribuicoes = [];
+            foreach ($distribuicoes as $distribuicao) {
+                $ids_distribuicoes[] = $distribuicao->getId();
+            }
+
+            $Entrega = new Entrega();
+            $Entrega->define([
+                'IdsDistribuicoesIndividuais' => json_encode($ids_distribuicoes), // Aqui deve ter os ids das distribuicoes do mesmo agregado
+                'IdAgregado' => $IdAgregado,
+                'Descricao' => "Entrega gerada automáticamente pelo sistema",
+                'DataEntrega' => date('Y-m-d H:i:s'),
+                'TipoEntrega' => Entrega::TIPO_ENTREGA_LOCAL,
+            ]);
+            $Entrega->grava();
+            $count++;
+        }
+
+
+        //------ 5º - Vamos obter as entregas que foram agora criadas
+        $entregas = (new Entrega())->obtemElementos(
+            ['Id' => 'DESC'],
+            null,
+            ['limite' => $count]
+        );
+
+        //------ 6º - Vamos organizar as entregas por id de agregado
+        $entregasPorAgregado = [];
+        foreach ($entregas as $entrega) {
+            $entregasPorAgregado[$entrega->getIdAgregado()][] = $entrega;
+        }
+
+        //------ 7º - Vamos criar as distribuições
+        $count = 0;
+        foreach ($entregasPorAgregado as $IdAgregado => $entregas) {
+            $ids_entregas = [];
+            foreach ($entregas as $entrega) {
+                $ids_entregas[] = $entrega->getId();
+            }
+
+            $Distribuicao = new Distribuicao();
+            $Distribuicao->define([
+                'NissAgregado' => $agregados[$IdAgregado]->getNissConstituintePrincipal(),
+                'IdAgregado' => $IdAgregado,
+                'IdsEntregas' => json_encode($ids_entregas),
+                'Data' => date('Y-m-d H:i:s'),
+            ]);
+            $Distribuicao->grava();
+            $count++;
+        }
+
+        //------ 8º - Vamos obter as distribuições que foram agora criadas
+        $distribuicoes = (new Distribuicao())->obtemElementos(
+            ['Id' => 'DESC'],
+            null,
+            ['limite' => $count]
+        );
+
+
+//        $CI->db->trans_complete();
+//
+//        // Verificar se a transação foi bem-sucedida
+//        if ($CI->db->trans_status() === false) {
+//            // Se a transação falhar, reverta todas as alterações feitas no banco de dados
+//            $CI->db->trans_rollback();
+//            // Lidar com o erro, se necessário
+//        } else {
+//            // Se a transação for bem-sucedida, confirme as alterações feitas no banco de dados
+//            $CI->db->trans_commit();
+//            // Lidar com o sucesso, se necessário
+//        }
+
+
+        header('Content-Type: application/json');
+        echo json_encode(['success' => true, 'message' => 'Distribuições Geradas com Sucesso',
+                          'view' => $this->load->view('admin/distribuicao/area_distribuicao_passo_3',
+                              ['distribuicoes' => $distribuicoes, 'produtos' => $produtos_bd, 'agregados' => $agregados], true)]);
+        return;
+    }
 }

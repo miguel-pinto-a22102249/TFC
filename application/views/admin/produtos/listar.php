@@ -13,7 +13,7 @@ if (count($Produtos) > 0) {
                         <th class="text-center">Detalhes</th>
                         <th class="text-center defaultSort">Stock Atual</th>
                         <th class="text-center">Estado</th>
-                        <th class="th-opcoes"><i class="fas fa-cog fa-2x"></i></th>
+                        <th class="th-opcoes" data-orderable='false'></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -45,7 +45,7 @@ if (count($Produtos) > 0) {
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="Editar" href="<?= base_url() . 'admin/produtos/editar/' . $produto->Id ?>">
+                                                <a class="Editar btn-editar-popup-ajax" href="<?= base_url() . 'admin/produtos/viewEditar/' . $produto->Id ?>">
                                                     <i class="fas fa-edit fa-1x"></i> Ediar
                                                 </a>
                                             </li>

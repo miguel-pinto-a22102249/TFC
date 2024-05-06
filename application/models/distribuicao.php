@@ -9,7 +9,7 @@ class Distribuicao extends Model_Base {
     /*
      * @var String
      */
-    public $Niss;
+    public $NissAgregado;
 
     /*
      * @var int
@@ -37,15 +37,15 @@ class Distribuicao extends Model_Base {
     /**
      * @return mixed
      */
-    public function getNiss() {
-        return $this->Niss;
+    public function getNissAgregado() {
+        return $this->NissAgregado;
     }
 
     /**
-     * @param mixed $Niss
+     * @param mixed $NissAgregado
      */
-    public function setNiss($Niss): void {
-        $this->Niss = $Niss;
+    public function setNissAgregado($NissAgregado): void {
+        $this->NissAgregado = $NissAgregado;
     }
 
     /**
@@ -90,5 +90,7 @@ class Distribuicao extends Model_Base {
         $this->Data = $Data;
     }
 
+    public function getDesignacaoEstado(){
+    }
 
 }

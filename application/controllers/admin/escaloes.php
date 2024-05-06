@@ -217,6 +217,31 @@ class Escaloes extends CI_Controller {
         }
     }
 
+    public function viewEditar($id) {
+        if ($this->session->userdata('login_efetuado') == false) {
+            redirect(base_url('admin/login'));
+        }
+
+        $log = new Log();
+        $Escalao = new Escalao();
+        $Escalao->carregaPorId($id);
+
+        if ($this->input->is_ajax_request()) {
+            $html = $this->load->view('admin/escaloes/editar', ['Escalao' => $Escalao], true);
+            $html = $this->load->view('admin/popup/default_popup', ['titulo' => 'Editar Escalão',
+                                                                    'html' => $html, 'URLNewWindow' => base_url("admin/escaloes/editar/{$id}")], true);
+            header('Content-Type: application/json');
+            echo json_encode(['success' => true, 'message' => '', 'view' => $html]);
+            return;
+        } else {
+            // Se não for uma requisição AJAX, carregue a view normalmente
+            $this->load->view('admin/template/header', ["tituloArea" => "Escalões", "subtituloArea" => "Editar"]);
+            $this->load->view('admin/produtos/editar', ['Escalao' => $Escalao]);
+            $this->load->view('admin/template/footer');
+            return;
+        }
+    }
+
     public function eliminar($id) {
         if ($this->session->userdata('login_efetuado') == false) {
             redirect(base_url('admin/login'));

@@ -79,7 +79,12 @@ class Model_Base extends CI_Model {
         return $this->db->insert($nome_class::TABELA, $this);
     }
 
-    public function edita($idResponsavelAcao) {
+    /**
+     * @param $idResponsavelAcao // Por defeito é 0, 0 é o sistema
+     *
+     * @return true
+     */
+    public function edita($idResponsavelAcao = 0) {
         $nome_class = get_class($this);
 
         $this->db->where('Id', $this->Id);
@@ -109,15 +114,13 @@ class Model_Base extends CI_Model {
         }
     }
 
-    public
-    function alterar($Id) {
+    public function alterar($Id) {
         $nome_class = get_class($this);
         $this->db->where('Id', $Id);
         $this->db->update($nome_class::TABELA, $this);
     }
 
-    public
-    function carregaPorId($Id = false) {
+    public function carregaPorId($Id = false) {
         $nome_class = get_class($this);
         if (is_null($Id)) {
             return false;
@@ -141,8 +144,7 @@ class Model_Base extends CI_Model {
      *
      * @return type
      */
-    public
-    function carregaPorSegmento($segmento = false) {
+    public function carregaPorSegmento($segmento = false) {
         $nome_class = get_class($this);
 
         if ($segmento === false) {
@@ -164,15 +166,14 @@ class Model_Base extends CI_Model {
     /**
      * Obtem Elementos
      *
-     * @param array $ordenacao
+     * @param array $ordenacao - ['Id' => 'DESC']
      * @param array $filtragem - [Campo => Valor] - Exemplo: ['Estado' => 1]
-     * @param array $limites
+     * @param array $limites - ['limite' => 10, 'offset' => 0]
      * @param type $contar
      *
      * @return array|Model_Base|OBJ
      */
-    public
-    function obtemElementos($ordenacao = null, $filtragem = null, $limites = null, $contar = false) {
+    public function obtemElementos($ordenacao = null, $filtragem = null, $limites = null, $contar = false) {
         $nome_class = get_class($this);
 
         if (!is_array($ordenacao)) {

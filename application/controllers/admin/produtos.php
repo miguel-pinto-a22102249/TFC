@@ -32,7 +32,14 @@ class Produtos extends CI_Controller {
     public function listar() {
         $Produtos = (new Produto)->obtemElementos();
 
-        $this->load->view('admin/template/header', ["tituloArea" => "Produtos", "subtituloArea" => "Listar"]);
+        $this->load->view('admin/template/header', ["tituloArea" => "Produtos", "subtituloArea" => "Listar", "acoes" => [
+            [
+                "titulo" => "Adicionar",
+                "link" => base_url('admin/produtos/adicionar'),
+                "icone" => "fas fa-plus",
+                'class' => 'button--add button--success'
+            ]
+        ]]);
         $this->load->view('admin/produtos/listar', ['Produtos' => $Produtos]);
         $this->load->view('admin/template/footer');
     }
@@ -152,7 +159,7 @@ class Produtos extends CI_Controller {
             } else {
                 // Se não for uma requisição AJAX, carregue a view normalmente
                 $this->load->view('admin/template/header', ["tituloArea" => "Produtos", "subtituloArea" => "Editar"]);
-                $this->load->view('admin/produtos/editar',["Produto" => $Produto]);
+                $this->load->view('admin/produtos/editar', ["Produto" => $Produto]);
                 $this->load->view('admin/template/footer');
             }
         } else {
@@ -174,6 +181,31 @@ class Produtos extends CI_Controller {
                 echo json_encode(['success' => false, 'message' => 'Ocorreu um erro ao editar o produto']);
                 return;
             }
+        }
+    }
+
+    public function viewEditar($id) {
+        if ($this->session->userdata('login_efetuado') == false) {
+            redirect(base_url('admin/login'));
+        }
+
+        $log = new Log();
+        $Produto = new Produto();
+        $Produto->carregaPorId($id);
+
+        if ($this->input->is_ajax_request()) {
+            $html = $this->load->view('admin/produtos/editar', ['Produto' => $Produto], true);
+            $html = $this->load->view('admin/popup/default_popup', ['titulo' => 'Editar Produto',
+                                                                    'html' => $html, 'URLNewWindow' => base_url("admin/produtos/editar/{$id}")], true);
+            header('Content-Type: application/json');
+            echo json_encode(['success' => true, 'message' => '', 'view' => $html]);
+            return;
+        } else {
+            // Se não for uma requisição AJAX, carregue a view normalmente
+            $this->load->view('admin/template/header', ["tituloArea" => "Produtos", "subtituloArea" => "Editar"]);
+            $this->load->view('admin/produtos/editar', ['Produto' => $Produto]);
+            $this->load->view('admin/template/footer');
+            return;
         }
     }
 

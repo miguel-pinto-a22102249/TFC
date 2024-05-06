@@ -11,7 +11,7 @@ if (count($Agregados) > 0) {
                         <th class="text-center">NISS Constituinte Principal</th>
                         <th class="text-center defaultSort">Grupo</th>
                         <th class="text-center">Estado</th>
-                        <th class="th-opcoes"><i class="fas fa-cog fa-2x"></i></th>
+                        <th class="th-opcoes" data-orderable='false'></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -46,7 +46,7 @@ if (count($Agregados) > 0) {
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="Editar" href="<?= base_url() . 'admin/agregados/editar/' . $agregado->getId() ?>">
+                                                <a class="Editar btn-editar-popup-ajax" href="<?= base_url() . 'admin/agregados/editar/' . $agregado->getId() ?>">
                                                     <i class="fas fa-edit fa-1x"></i> Ediar
                                                 </a>
                                             </li>

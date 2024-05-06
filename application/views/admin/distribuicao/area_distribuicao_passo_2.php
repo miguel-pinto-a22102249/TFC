@@ -12,7 +12,8 @@ $totaisProdutosNecessarios = [];
 
 ?>
 <div class="Area-Disctribuicao-passo-2">
-    <form action="<?= base_url("/admin/distribuicoes/distribuicaoPasso3") ?>" method="POST" class="no-ajax form-distribuicao" enctype="multipart/form-data">
+    <form action="<?= base_url("/admin/distribuicoes/distribuicaoPasso3") ?>" method="POST"
+          class="no-ajax form-distribuicao-passo2" enctype="multipart/form-data">
         <section>
             <div class="row">
                 <div class="column large-12 medium-12 small-12" style="overflow-x: auto">
@@ -28,7 +29,12 @@ $totaisProdutosNecessarios = [];
                         </thead>
                         <? foreach ($agregados_constituintes as $niss_agregado => $agregado_constituintes) {
                             foreach ($agregado_constituintes as $agregado_constituinte) {
+//                                $CI = &get_instance();
+//                                $CI->firephp->log($agregado_constituinte);
+
+                                // hidden input para guardar o niss do agregado
                                 ?>
+                                <input type="hidden" name="NissConstituintes[]" value="<?= $agregado_constituinte->getNiss() ?>">
                                 <tr>
                                     <td>
                                         <? if ($this->session->userdata('ModoPrivacidade') == false) { ?>
@@ -82,7 +88,8 @@ $totaisProdutosNecessarios = [];
                                                             <tr>
                                                                 <td class="text-center"><?= $quantidade[0] ?></td>
                                                                 <td>
-                                                                    <input class="<?= $quantidade[1] == 0 ? 'outline--error' : '' ?>" type="number" name="adjustedQuantity[<?= $produto_id ?>]" value="<?= $quantidade[1] ?>" min="0">
+                                                                    <input class="<?= $quantidade[1] == 0 ? 'outline--error' : '' ?>" type="number"
+                                                                           name="QuantidadeAjustada[<?= $agregado_constituinte->getId() ?>][<?= $produto_id ?>]" value="<?= $quantidade[1] ?>" min="0">
                                                                 </td>
                                                             </tr>
                                                         </table>
@@ -155,9 +162,9 @@ $totaisProdutosNecessarios = [];
 
         <div class="row">
             <div class="column large-12 medium-12s small-12 text-right">
-                <a class="confirma-accao btn-style button">
+                <button class="btn-style button" type="submit">
                     <i class="fas fa-save fa-1x"></i> Gravar Distribuição
-                </a>
+                </button>
             </div>
         </div>
     </form>

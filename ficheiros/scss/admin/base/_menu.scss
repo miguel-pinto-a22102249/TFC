@@ -66,6 +66,12 @@
                         a {
                             padding: 1rem 1rem;
                             display: block;
+
+                            svg {
+                                margin-right: 10px;
+                                height: 17px;
+                                width: 17px;
+                            }
                         }
                     }
                 }
@@ -384,7 +390,7 @@ body {
                 }
             }
 
-            >ul {
+            > ul {
                 background-color: white;
                 width: 70%;
                 max-width: 270px;

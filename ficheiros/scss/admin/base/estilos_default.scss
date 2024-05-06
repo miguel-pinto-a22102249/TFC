@@ -395,6 +395,11 @@ body {
 
 //***********************************************************************************
 
+/* Notie */
+.notie-container{
+    z-index: 9999!important;
+}
+
 /*Magnific PopUp*/
 .white-popup {
     border-radius: 10px;
@@ -423,7 +428,7 @@ body {
     }
 
     .mfp-close {
-        font-size: 20px;
+        font-size: 25px;
 
         &:hover {
             background-color: transparent;
@@ -433,6 +438,56 @@ body {
 
 .mfp-removing {
     animation: close 1s;
+}
+
+.default-dialog {
+    position: relative;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 22px -5px rgba(0, 0, 0, 0.2);
+
+    .mfp-close {
+        font-size: 25px;
+        padding: 3px 1rem;
+        color: $cor-preto !important;
+        border-radius: 0 10px 0 5px;
+        background-color: #c9c9c9;
+        opacity: 1;
+        height: auto;
+        width: auto;
+        line-height: 1;
+
+        &:hover {
+            background-color: transparent;
+        }
+    }
+
+    .default-dialog__button-maximize {
+        background-color: #c9c9c9;
+        font-size: 15px;
+        right: 50px;
+        position: absolute;
+        top: 0;
+        padding: 0.3rem 1rem;
+        color: $cor-preto;
+        border-radius: 0 0 5px 5px;
+    }
+}
+
+.default-dialog__inner-wrapper {
+
+    .large-8, .large-10, .large-19 {
+        width: 100%;
+    }
+}
+
+.default-dialog__inner-wrapper__wrapper-titulo {
+    border-bottom: 1px solid #767676;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
 }
 
 //Mais tarde usar estes estilos
