@@ -292,6 +292,50 @@ body {
         }
     }
 
+    #Area-Lista-Distribuicoes-Data {
+        details {
+            margin-bottom: 1rem;
+            background-color: #ededed;
+            border-radius: 4px;
+
+            summary {
+                //font-weight: bold;
+                cursor: pointer;
+                padding: 1rem;
+
+                &::marker {
+                    content: "";
+                    display: none;
+                }
+
+                i, svg {
+                    transition: all 0.2s ease-in-out;
+                    transform: rotate(-90deg);
+                    margin-right: 1rem;
+                }
+            }
+
+            &[open] {
+                summary {
+                    i, svg {
+                        transform: rotate(0deg);
+                        transition: all 0.2s ease-in-out;
+                        margin-right: 1rem;
+                    }
+                }
+            }
+
+            ul {
+                margin-left: 6rem;
+                padding-bottom: 1rem;
+
+                li {
+                    margin-top: 5px;
+                }
+            }
+        }
+    }
+
     #Page-Not-Found {
         position: absolute;
         top: 0;

@@ -133,13 +133,11 @@ class Agregados extends CI_Controller {
         }
 
 
-        $Designacao = $this->input->post('Designacao');
-        $IdadeInicial = $this->input->post('IdadeInicial');
-        $IdadeFinal = $this->input->post('IdadeFinal');
+        $NissConstituintePrincipal = $this->input->post('NissConstituintePrincipal');
+        $Grupo = $this->input->post('Grupo');
 
-        $this->form_validation->set_rules('Designacao', 'Designacao', 'required');
-        $this->form_validation->set_rules('IdadeInicial', 'IdadeInicial', 'required|numeric');
-        $this->form_validation->set_rules('IdadeFinal', 'IdadeFinal', 'required|numeric');
+        $this->form_validation->set_rules('NissConstituintePrincipal', 'NissConstituintePrincipal', 'required');
+        $this->form_validation->set_rules('Grupo', 'Grupo', 'numeric');
 
         $this->form_validation->set_message('required', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
         $this->form_validation->set_message('numeric', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
@@ -148,7 +146,7 @@ class Agregados extends CI_Controller {
             $errors = [];
 
             // Construa um array de erros associados aos campos
-            $fields = ['Designacao', 'IdadeInicial', 'IdadeFinal'];
+            $fields = ['NissConstituintePrincipal', 'Grupo'];
 
             foreach ($fields as $field) {
                 $error = form_error($field);
@@ -163,28 +161,53 @@ class Agregados extends CI_Controller {
                 return;
             } else {
                 // Se não for uma requisição AJAX, carregue a view normalmente
-                $this->load->view('admin/template/header', ["tituloArea" => "Escalões", "subtituloArea" => "Editar"]);
-                $this->load->view('admin/escaloes/editar');
+                $this->load->view('admin/template/header', ["tituloArea" => "Agregados", "subtituloArea" => "Editar"]);
+                $this->load->view('admin/agregados/editar');
                 $this->load->view('admin/template/footer');
             }
         } else {
-            if ($Agregado_Familiar->getDesignacao() != $Designacao) {
-                $Agregado_Familiar->setDesignacao($Designacao);
-                $Agregado_Familiar->setSegmento(url_title($Designacao, 'dash', true) . '-' . time() . '-' . rand(0, 1000));
+            if ($Agregado_Familiar->getNissConstituintePrincipal() != $NissConstituintePrincipal) {
+                $Agregado_Familiar->setNissConstituintePrincipal($NissConstituintePrincipal);
+                $Agregado_Familiar->setSegmento(url_title($NissConstituintePrincipal, 'dash', true) . '-' . time() . '-' . rand(0, 1000));
             }
-            $Agregado_Familiar->setIdadeInicial($IdadeInicial);
-            $Agregado_Familiar->setIdadeFinal($IdadeFinal);
+            $Agregado_Familiar->setGrupo($Grupo);
 
 
             if ($Agregado_Familiar->edita($id)) {
                 header('Content-Type: application/json');
-                echo json_encode(['success' => true, 'message' => 'Escalão editado com sucesso']);
+                echo json_encode(['success' => true, 'message' => 'Agregado editado com sucesso']);
                 return;
             } else {
                 header('Content-Type: application/json');
                 echo json_encode(['success' => false, 'message' => 'Ocorreu um erro ao editar o agregado']);
                 return;
             }
+        }
+    }
+
+    public function viewEditarAgregado($id,$soConsulta = false) {
+        if ($this->session->userdata('login_efetuado') == false) {
+            redirect(base_url('admin/login'));
+        }
+
+        $log = new Log();
+        $Agregado = new Agregado_Familiar();
+        $Agregado->carregaPorId($id);
+
+        if ($this->input->is_ajax_request()) {
+            $html = $this->load->view('admin/agregados/editar', ['Agregado' => $Agregado], true);
+            $html = $this->load->view('admin/popup/default_popup', ['titulo' => 'Editar Agregado',
+                                                                    'soConsulta' => $soConsulta,
+                                                                    'html' => $html, 'URLNewWindow' => base_url("admin/agregados/editar/{$id}")], true);
+            header('Content-Type: application/json');
+            echo json_encode(['success' => true, 'message' => '', 'view' => $html]);
+            return;
+        } else {
+            // Se não for uma requisição AJAX, carregue a view normalmente
+            $this->load->view('admin/template/header', ["tituloArea" => "Agregados", "subtituloArea" => "Editar"]);
+            $this->load->view('admin/agregados/editar', ['Agregado' => $Agregado]);
+            $this->load->view('admin/template/footer');
+            return;
         }
     }
 
@@ -329,26 +352,26 @@ class Agregados extends CI_Controller {
         $this->load->helper('form');
         $this->load->library('form_validation');
 
-        $Agregado_Familiar = new Agregado_Familiar();
+        $Constituinte = new Constituinte();
 
-        $Agregado_Familiar->carregaPorId($id);
+        $Constituinte->carregaPorId($id);
 
         if (!$this->input->is_ajax_request()) {
             // Se não for uma requisição AJAX, carregue a view normalmente
-            $this->load->view('admin/template/header', ["tituloArea" => "Agregados", "subtituloArea" => "Editar"]);
-            $this->load->view('admin/agregados/editar', ['Agregado' => $Agregado_Familiar]);
+            $this->load->view('admin/template/header', ["tituloArea" => "Constituinte", "subtituloArea" => "Editar"]);
+            $this->load->view('admin/agregados/editarConstituinte', ['Constituinte' => $Constituinte]);
             $this->load->view('admin/template/footer');
             return;
         }
 
 
-        $Designacao = $this->input->post('Designacao');
-        $IdadeInicial = $this->input->post('IdadeInicial');
-        $IdadeFinal = $this->input->post('IdadeFinal');
+        $Niss = $this->input->post('Niss');
+        $IdEscalao = $this->input->post('IdEscalao');
+        $IdAgregado = $this->input->post('IdAgregado');
 
-        $this->form_validation->set_rules('Designacao', 'Designacao', 'required');
-        $this->form_validation->set_rules('IdadeInicial', 'IdadeInicial', 'required|numeric');
-        $this->form_validation->set_rules('IdadeFinal', 'IdadeFinal', 'required|numeric');
+        $this->form_validation->set_rules('Niss', 'Niss', 'required|numeric');
+        $this->form_validation->set_rules('IdEscalao', 'IdEscalao', 'required|numeric');
+        $this->form_validation->set_rules('IdAgregado', 'IdAgregado', 'required|numeric');
 
         $this->form_validation->set_message('required', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
         $this->form_validation->set_message('numeric', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
@@ -357,7 +380,7 @@ class Agregados extends CI_Controller {
             $errors = [];
 
             // Construa um array de erros associados aos campos
-            $fields = ['Designacao', 'IdadeInicial', 'IdadeFinal'];
+            $fields = ['Niss', 'IdEscalao', 'IdAgregado'];
 
             foreach ($fields as $field) {
                 $error = form_error($field);
@@ -368,32 +391,58 @@ class Agregados extends CI_Controller {
             if ($this->input->is_ajax_request()) {
                 // Se for uma requisição AJAX, envie os erros como resposta JSON
                 header('Content-Type: application/json');
-                echo json_encode(['success' => false, 'errors' => $errors, 'message' => 'Erro ao editar agregado']);
+                echo json_encode(['success' => false, 'errors' => $errors, 'message' => 'Erro ao editar constituinte']);
                 return;
             } else {
                 // Se não for uma requisição AJAX, carregue a view normalmente
-                $this->load->view('admin/template/header', ["tituloArea" => "Escalões", "subtituloArea" => "Editar"]);
-                $this->load->view('admin/escaloes/editar');
+                $this->load->view('admin/template/header', ["tituloArea" => "Constituintes", "subtituloArea" => "Editar"]);
+                $this->load->view('admin/agregados/editarConstituinte', ['Constituinte' => $Constituinte]);
                 $this->load->view('admin/template/footer');
             }
         } else {
-            if ($Agregado_Familiar->getDesignacao() != $Designacao) {
-                $Agregado_Familiar->setDesignacao($Designacao);
-                $Agregado_Familiar->setSegmento(url_title($Designacao, 'dash', true) . '-' . time() . '-' . rand(0, 1000));
+            if ($Constituinte->getNiss() != $Niss) {
+                $Constituinte->setNiss($Niss);
+                $Constituinte->setSegmento(url_title($Niss, 'dash', true) . '-' . time() . '-' . rand(0, 1000));
             }
-            $Agregado_Familiar->setIdadeInicial($IdadeInicial);
-            $Agregado_Familiar->setIdadeFinal($IdadeFinal);
+            $Constituinte->setIdEscalao($IdEscalao);
+            $Constituinte->setIdAgregado($IdAgregado);
 
 
-            if ($Agregado_Familiar->edita($id)) {
+            if ($Constituinte->edita($id)) {
                 header('Content-Type: application/json');
-                echo json_encode(['success' => true, 'message' => 'Escalão editado com sucesso']);
+                echo json_encode(['success' => true, 'message' => 'Constituinte editado com sucesso']);
                 return;
             } else {
                 header('Content-Type: application/json');
-                echo json_encode(['success' => false, 'message' => 'Ocorreu um erro ao editar o agregado']);
+                echo json_encode(['success' => false, 'message' => 'Ocorreu um erro ao editar o constituinte']);
                 return;
             }
+        }
+    }
+
+    public function viewEditarConstituinte($id,$soConsulta = false) {
+        if ($this->session->userdata('login_efetuado') == false) {
+            redirect(base_url('admin/login'));
+        }
+
+        $log = new Log();
+        $Constituinte = new Constituinte();
+        $Constituinte->carregaPorId($id);
+
+        if ($this->input->is_ajax_request()) {
+            $html = $this->load->view('admin/agregados/editarConstituinte', ['Constituinte' => $Constituinte], true);
+            $html = $this->load->view('admin/popup/default_popup', ['titulo' => 'Editar Constituinte',
+                                                                    'soConsulta' => $soConsulta,
+                                                                    'html' => $html, 'URLNewWindow' => base_url("admin/agregados/constituintes/editar/{$id}")], true);
+            header('Content-Type: application/json');
+            echo json_encode(['success' => true, 'message' => '', 'view' => $html]);
+            return;
+        } else {
+            // Se não for uma requisição AJAX, carregue a view normalmente
+            $this->load->view('admin/template/header', ["tituloArea" => "Constituintes", "subtituloArea" => "Editar"]);
+            $this->load->view('admin/agregados/editarConstituinte', ['Constituinte' => $Constituinte]);
+            $this->load->view('admin/template/footer');
+            return;
         }
     }
 

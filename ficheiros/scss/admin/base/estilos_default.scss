@@ -135,6 +135,14 @@ input:checked + .slider:before {
     transform: translateX(18px);
 }
 
+input:read-only {
+    background-color: #ededed;
+}
+
+input:focus, input:active {
+    outline: none;
+}
+
 .form-search {
     border-bottom: 1px solid $cor-1;
     display: inline-block;
@@ -396,8 +404,8 @@ body {
 //***********************************************************************************
 
 /* Notie */
-.notie-container{
-    z-index: 9999!important;
+.notie-container {
+    z-index: 9999 !important;
 }
 
 /*Magnific PopUp*/
@@ -475,6 +483,22 @@ body {
         color: $cor-preto;
         border-radius: 0 0 5px 5px;
     }
+
+    .default-dialog__button-edit {
+        background-color: #c9c9c9;
+        font-size: 15px;
+        right: 100px;
+        position: absolute;
+        top: 0;
+        padding: 0.3rem 1rem;
+        color: $cor-preto;
+        border-radius: 0 0 5px 5px;
+
+        &.active{
+            background-color: $cor-verde;
+            color: white;
+        }
+    }
 }
 
 .default-dialog__inner-wrapper {
@@ -489,6 +513,7 @@ body {
     padding-bottom: 1rem;
     margin-bottom: 2rem;
 }
+
 
 //Mais tarde usar estes estilos
 .dialog {

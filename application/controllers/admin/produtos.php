@@ -184,7 +184,7 @@ class Produtos extends CI_Controller {
         }
     }
 
-    public function viewEditar($id) {
+    public function viewEditar($id,$soConsulta = false) {
         if ($this->session->userdata('login_efetuado') == false) {
             redirect(base_url('admin/login'));
         }
@@ -196,6 +196,7 @@ class Produtos extends CI_Controller {
         if ($this->input->is_ajax_request()) {
             $html = $this->load->view('admin/produtos/editar', ['Produto' => $Produto], true);
             $html = $this->load->view('admin/popup/default_popup', ['titulo' => 'Editar Produto',
+                                                                    'soConsulta' => $soConsulta,
                                                                     'html' => $html, 'URLNewWindow' => base_url("admin/produtos/editar/{$id}")], true);
             header('Content-Type: application/json');
             echo json_encode(['success' => true, 'message' => '', 'view' => $html]);

@@ -244,7 +244,7 @@ $(document).ready(function() {
 
 
     // <editor-fold defaultstate="collapsed" desc="Código para AJAX janelas popup (Forms Editar)">
-    $(".btn-editar-popup-ajax").on("click", function(e) {
+    $(".btn-editar-popup-ajax,.btn-consultar-popup-ajax").on("click", function(e) {
         e.preventDefault();
 
         let url = $(this).attr('href');
@@ -259,6 +259,39 @@ $(document).ready(function() {
                     }
                 });
                 triggerFormAjax();
+
+                if ($('.dialog-consulta').length > 0) {
+                    $('.dialog-consulta input').attr('readonly', true);
+                    $('.dialog-consulta select').attr('disabled', true);
+                    $('.dialog-consulta textarea').attr('readonly', true);
+                    $('.dialog-consulta checkbox').attr('readonly', true);
+                    $('.dialog-consulta button[type="submit"]').hide();
+                }
+
+                //Para ativar o modo de edição
+                $('.default-dialog__button-edit').on('click', function(e) {
+                    e.preventDefault();
+                    $('.dialog-consulta input').attr('readonly', false);
+                    $('.dialog-consulta select').attr('disabled', false);
+                    $('.dialog-consulta textarea').attr('readonly', false);
+                    $('.dialog-consulta checkbox').attr('readonly', false);
+                    $('.dialog-consulta button[type="submit"]').show();
+                    $(this).addClass("active");
+
+                    //Para desativar o modo de edição
+                    $('.default-dialog__button-edit.active').on('click', function(e) {
+                        e.preventDefault();
+                        $('.dialog-consulta input').attr('readonly', true);
+                        $('.dialog-consulta select').attr('disabled', true);
+                        $('.dialog-consulta textarea').attr('readonly', true);
+                        $('.dialog-consulta checkbox').attr('readonly', true);
+                        $('.dialog-consulta button[type="submit"]').hide();
+                        $(this).removeClass("active");
+                    });
+
+                });
+
+
             }
         });
     });
@@ -268,7 +301,7 @@ $(document).ready(function() {
 
 
 // <editor-fold defaultstate="collapsed" desc="Código para submissão de formulários via AJAX">
-function triggerFormAjax(){
+function triggerFormAjax() {
     $(".form-ajax").submit(function(e) {
         e.preventDefault(); // Impede o envio padrão do formulário
         e.stopPropagation();
@@ -326,5 +359,6 @@ function triggerFormAjax(){
         });
     });
 }
+
 // </editor-fold>
 

@@ -41,12 +41,12 @@ if (count($Agregados) > 0) {
                                         <a class="text-right" href="javascript:;"><i class="fas fa-2x fa-cog"></i></a>
                                         <ul class="menu text-left">
                                             <li>
-                                                <a style="text-decoration:none" href="<?= base_url() . 'admin/agregados/consultar/' . $agregado->Segmento ?>">
+                                                <a class="btn-consultar-popup-ajax" style="text-decoration:none" href="<?= base_url() . 'admin/agregados/consultarAgregado/' . $agregado->getId() ?>">
                                                     <i class="fas fa-search-plus fa-1x"></i> Consultar
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="Editar btn-editar-popup-ajax" href="<?= base_url() . 'admin/agregados/editar/' . $agregado->getId() ?>">
+                                                <a class="Editar btn-editar-popup-ajax" href="<?= base_url() . 'admin/agregados/viewEditarAgregado/' . $agregado->getId() ?>">
                                                     <i class="fas fa-edit fa-1x"></i> Ediar
                                                 </a>
                                             </li>

@@ -37,7 +37,7 @@ if (count($Escaloes) > 0) {
                                         <a class="text-right" href="javascript:;"><i class="fas fa-2x fa-cog"></i></a>
                                         <ul class="menu text-left">
                                             <li>
-                                                <a style="text-decoration:none" href="<?= base_url() . 'admin/escaloes/consultar/' . $escalao->Segmento ?>">
+                                                <a class="btn-consultar-popup-ajax" style="text-decoration:none" href="<?= base_url() . 'admin/escaloes/consultar/' . $escalao->getId() ?>">
                                                     <i class="fas fa-search-plus fa-1x"></i> Consultar
                                                 </a>
                                             </li>

@@ -4549,6 +4549,14 @@ input:checked + .slider:before {
   transform: translateX(18px);
 }
 
+input:read-only {
+  background-color: #ededed;
+}
+
+input:focus, input:active {
+  outline: none;
+}
+
 .form-search {
   border-bottom: 1px solid #3b3b3b;
   display: inline-block;
@@ -4856,6 +4864,20 @@ body {
   padding: 0.3rem 1rem;
   color: #3b3b3b;
   border-radius: 0 0 5px 5px;
+}
+.default-dialog .default-dialog__button-edit {
+  background-color: #c9c9c9;
+  font-size: 15px;
+  right: 100px;
+  position: absolute;
+  top: 0;
+  padding: 0.3rem 1rem;
+  color: #3b3b3b;
+  border-radius: 0 0 5px 5px;
+}
+.default-dialog .default-dialog__button-edit.active {
+  background-color: #00a000;
+  color: white;
 }
 
 .default-dialog__inner-wrapper .large-8, .default-dialog__inner-wrapper .large-10, .default-dialog__inner-wrapper .large-19 {
@@ -5738,6 +5760,36 @@ body #Area-Importacao .area-importacao__footer div.area-importacao__footer__wrap
 }
 body #Area-Importacao .area-importacao__footer div.area-importacao__footer__wrapper .button {
   margin-bottom: 0;
+}
+body #Area-Lista-Distribuicoes-Data details {
+  margin-bottom: 1rem;
+  background-color: #ededed;
+  border-radius: 4px;
+}
+body #Area-Lista-Distribuicoes-Data details summary {
+  cursor: pointer;
+  padding: 1rem;
+}
+body #Area-Lista-Distribuicoes-Data details summary::marker {
+  content: "";
+  display: none;
+}
+body #Area-Lista-Distribuicoes-Data details summary i, body #Area-Lista-Distribuicoes-Data details summary svg {
+  transition: all 0.2s ease-in-out;
+  transform: rotate(-90deg);
+  margin-right: 1rem;
+}
+body #Area-Lista-Distribuicoes-Data details[open] summary i, body #Area-Lista-Distribuicoes-Data details[open] summary svg {
+  transform: rotate(0deg);
+  transition: all 0.2s ease-in-out;
+  margin-right: 1rem;
+}
+body #Area-Lista-Distribuicoes-Data details ul {
+  margin-left: 6rem;
+  padding-bottom: 1rem;
+}
+body #Area-Lista-Distribuicoes-Data details ul li {
+  margin-top: 5px;
 }
 body #Page-Not-Found {
   position: absolute;

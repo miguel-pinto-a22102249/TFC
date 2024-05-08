@@ -32,14 +32,12 @@ class Distribuicoes extends CI_Controller {
     public function listar() {
         $CI = &get_instance();
 
-        $this->db->select('DATE(Data) as Data, COUNT(*) as numero_distribuicoes');
+        $this->db->select('DATE(Data) as Data, NumeroGrupoDistribuicao, COUNT(*) as numero_distribuicoes');
         $this->db->from('distribuicao');
-        $this->db->group_by('Data');
+        $this->db->group_by('Data, NumeroGrupoDistribuicao');
+        $this->db->order_by('Data', 'DESC');
         $query = $this->db->get();
         $resultados = $query->result();
-
-//        $CI->firephp->log($resultados);
-
 
         $this->load->view('admin/template/header', ["tituloArea" => "Distribuições", "subtituloArea" => "Listar", "acoes" => [
             [
@@ -53,27 +51,49 @@ class Distribuicoes extends CI_Controller {
         $this->load->view('admin/template/footer');
     }
 
-    public function listarPorConstituinte() {
+    public function listarPorConstituinte($NumeroGrupoDistribuicao) {
         $this->load->model('produto');
         $this->load->model('distribuicao');
         $this->load->model('distribuicao_individual_constituinte');
         $this->load->model('entrega');
 
-        $distribuicoes = (new Distribuicao())->obtemElementos(['Estado' => ESTADO_ATIVO]);
-        $agregados = (new Agregado_Familiar())->obtemElementos(['Estado' => ESTADO_ATIVO]);
-        $produtos = (new Produto())->obtemElementos(['Estado' => ESTADO_ATIVO]);
-        $entregas = (new Entrega())->obtemElementos(['Estado' => ESTADO_ATIVO]);
-        $distribuicoes_individuais = (new Distribuicao_Individual_Constituinte())->obtemElementos(['Estado' => ESTADO_ATIVO]);
+        $distribuicoes = (new Distribuicao())->obtemElementos(null,['Estado' => ESTADO_ATIVO, 'NumeroGrupoDistribuicao' => $NumeroGrupoDistribuicao]);
+        $IDSEntregas = [];
+        foreach ($distribuicoes as $distribuicao) {
+            $IDSEntregas = array_merge($IDSEntregas, json_decode($distribuicao->getIdsEntregas()));
+        }
 
-        $this->load->view('admin/template/header', ["tituloArea" => "Distribuições", "subtituloArea" => "Listar", "acoes" => [
-            [
-                "titulo" => "Adicionar",
-                "link" => base_url('admin/distribuicoes/distribuicaoPasso1'),
-                "icone" => "fas fa-plus",
-                'class' => 'button--add button--success'
-            ]
-        ]]);
-        $this->load->view('admin/distribuicao/listar_por_constituinte', ['distribuicoes' => $distribuicoes, 'distribuicoes_individuais' => $distribuicoes_individuais, 'entregas' => $entregas, 'agregados' => $agregados, 'produtos' => $produtos]);
+        $entregas = (new Entrega())->obtemElementos(null,['Estado' => ESTADO_ATIVO, 'Id' => [$IDSEntregas,'where_in']]);
+
+        $IDSDistribuicoesIndividuais = [];
+        foreach ($entregas as $entrega) {
+            $IDSDistribuicoesIndividuais = array_merge($IDSDistribuicoesIndividuais, json_decode($entrega->getIdsDistribuicoesIndividuais()));
+        }
+        $distribuicoes_individuais = (new Distribuicao_Individual_Constituinte())->obtemElementos(null,['Estado' => ESTADO_ATIVO,'Id' => [$IDSDistribuicoesIndividuais,'where_in']]);
+
+
+
+        $agregados = (new Agregado_Familiar())->obtemElementos(null,['Estado' => ESTADO_ATIVO]);
+        $produtos = (new Produto())->obtemElementos(null,['Estado' => ESTADO_ATIVO]);
+//        $entregas = (new Entrega())->obtemElementos(['Estado' => ESTADO_ATIVO]);
+
+        $this->load->view('admin/template/header',
+            ["tituloArea" => "Distribuições",
+             "subtituloArea" => "Listar - Distribuição de ".reset($distribuicoes)->getData(),
+             "acoes" => [
+                 [
+                     "titulo" => "Adicionar",
+                     "link" => base_url('admin/distribuicoes/distribuicaoPasso1'),
+                     "icone" => "fas fa-plus",
+                     'class' => 'button--add button--success'
+                 ]
+             ]
+            ]);
+        $this->load->view('admin/distribuicao/listar_por_constituinte',
+            ['distribuicoes' => $distribuicoes,
+             'distribuicoes_individuais' => $distribuicoes_individuais,
+             'entregas' => $entregas, 'agregados' => $agregados,
+             'produtos' => $produtos]);
         $this->load->view('admin/template/footer');
     }
 
@@ -198,10 +218,6 @@ class Distribuicoes extends CI_Controller {
             }
         }
 
-//        $CI = &get_instance();
-//        $CI->firephp->log($agregados_constituintes);
-//        return;
-
         header('Content-Type: application/json');
         echo json_encode(['success' => true, 'message' => 'Dados Importados com sucesso', 'view' => $this->load->view('admin/distribuicao/area_distribuicao_passo_2', ["agregados_constituintes" => $agregados_constituintes, "produtos_apos_distribuicao" => $produtos_apos_distribuicao], true)]);
         return;
@@ -214,8 +230,8 @@ class Distribuicoes extends CI_Controller {
         $this->load->model('distribuicao');
         $this->load->model('distribuicao_individual_constituinte');
         $this->load->model('entrega');
+
         $CI = &get_instance();
-//        $CI->db->trans_start();
         $agregados = (new Agregado_Familiar())->obtemElementos(['Estado' => ESTADO_ATIVO]);
         $produtos_bd = (new Produto())->obtemElementos(['Estado' => ESTADO_ATIVO]);
         $constituintes = (new Constituinte())->obtemElementos(['Estado' => ESTADO_ATIVO]);
@@ -302,6 +318,14 @@ class Distribuicoes extends CI_Controller {
 
         //------ 7º - Vamos criar as distribuições
         $count = 0;
+
+        $this->db->select('*, (SELECT MAX(NumeroGrupoDistribuicao) FROM distribuicao) AS MaxNumeroGrupoDistribuicao');
+        $this->db->from('distribuicao');
+        $query = $this->db->get();
+        $row = $query->row();
+        // Esta variavel serve para colocarmos todas as distribuicoes no mesmo grupo (num foturo podemos ter um obj acima deste para agrupar)
+        $MaxNumeroGrupoDistribuicao = $row->MaxNumeroGrupoDistribuicao + 1;
+
         foreach ($entregasPorAgregado as $IdAgregado => $entregas) {
             $ids_entregas = [];
             foreach ($entregas as $entrega) {
@@ -314,6 +338,7 @@ class Distribuicoes extends CI_Controller {
                 'IdAgregado' => $IdAgregado,
                 'IdsEntregas' => json_encode($ids_entregas),
                 'Data' => date('Y-m-d H:i:s'),
+                'NumeroGrupoDistribuicao' => $MaxNumeroGrupoDistribuicao
             ]);
             $Distribuicao->grava();
             $count++;

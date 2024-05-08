@@ -167,7 +167,7 @@ class Model_Base extends CI_Model {
      * Obtem Elementos
      *
      * @param array $ordenacao - ['Id' => 'DESC']
-     * @param array $filtragem - [Campo => Valor] - Exemplo: ['Estado' => 1]
+     * @param array $filtragem - [Campo => Valor] OU [Campo => [Valor,filtro]] - Exemplo: ['Estado' => 1] OU ['Estado' => [Valor,'in]]
      * @param array $limites - ['limite' => 10, 'offset' => 0]
      * @param type $contar
      *
@@ -205,12 +205,20 @@ class Model_Base extends CI_Model {
         }
 
 
+        $CI = &get_instance();
+//        $CI->firephp->log($filtragem);
         //FILTRAGEM
         foreach ($filtragem as $campo_filtragem => $filtro) {
-            $this->db->like($campo_filtragem, $filtro);
+            if (is_array($filtro)) {
+                $condicao = (String)$filtro[1];
+                $this->db->$condicao($campo_filtragem,$filtro[0]);
+            } else {
+                $this->db->like($campo_filtragem, $filtro);
+            }
         }
-        // FIM FILTRAGEM
 
+
+        // FIM FILTRAGEM
         if ($contar == true && empty($filtragem)) {
             return $this->db->count_all_results($nome_class::TABELA);
         } elseif ($contar == true) {

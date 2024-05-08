@@ -26,6 +26,11 @@ class Distribuicao extends Model_Base {
      */
     public $Data;
 
+    /*
+     * @var bigint
+     */
+    public $NumeroGrupoDistribuicao;
+
 
     const TABELA = 'distribuicao';
 
@@ -90,7 +95,22 @@ class Distribuicao extends Model_Base {
         $this->Data = $Data;
     }
 
-    public function getDesignacaoEstado(){
+    public function getDesignacaoEstado() {
     }
+
+    /**
+     * @return mixed
+     */
+    public function getNumeroGrupoDistribuicao() {
+        return $this->NumeroGrupoDistribuicao;
+    }
+
+    /**
+     * @param mixed $NumeroGrupoDistribuicao
+     */
+    public function setNumeroGrupoDistribuicao($NumeroGrupoDistribuicao): void {
+        $this->NumeroGrupoDistribuicao = $NumeroGrupoDistribuicao;
+    }
+
 
 }
