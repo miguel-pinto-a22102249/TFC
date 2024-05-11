@@ -31,62 +31,70 @@ if (count($distribuicoesPorAgregado) > 0) { ?>
                         <th class="text-center defaultSort">NISS Constituinte Principal</th>
                         <th class="text-center">Estado</th>
                         <th class="text-center">Entregas</th>
-<!--                        <th class="th-opcoes"><i class="fas fa-cog fa-2x"></i></th>-->
+                        <!--                        <th class="th-opcoes"><i class="fas fa-cog fa-2x"></i></th>-->
                     </tr>
                     </thead>
                     <tbody>
                     <? foreach ($distribuicoesPorAgregado as $IdAgregado => $distribuicaoAgregado) { ?>
                         <tr class="tr-accordion">
                             <td class="trigger">
-                                <?= $agregados[$IdAgregado]->getNissConstituintePrincipal() ?>
+                                <? if ($this->session->userdata('ModoPrivacidade') == false) { ?>
+                                    xxx xxx <?= substr($agregados[$IdAgregado]->getNissConstituintePrincipal(), 6, 9); ?>
+                                    <?
+                                } else {
+                                    echo $agregados[$IdAgregado]->getNissConstituintePrincipal();
+                                } ?>
                             </td>
                             <td>
                                 <?= $agregados[$IdAgregado]->getDesignacaoEstado() ?>
                             </td>
                             <td>
                                 <?
+                                $ProdutosQuantidadesAgregado = [];
                                 foreach ($distribuicaoAgregado as $distribuicao) { ?>
                                     <?
                                     $IdsEntregas = json_decode($distribuicao->getIdsEntregas());
                                     foreach ($IdsEntregas as $IdEntrega) {
                                         $entrega = $entregas[$IdEntrega];
                                         $IdsDistriIndividuais = json_decode($entrega->getIdsDistribuicoesIndividuais());
-                                        $ProdutosQuantidadesAgregado = [];
                                         foreach ($IdsDistriIndividuais as $IdDistriIndividual) {
                                             $distribuicaoIndividual = $distribuicoes_individuais[$IdDistriIndividual];
                                             $ProdutosDistribuicaoIndividual = json_decode($distribuicaoIndividual->getProdutosQuantidades());
                                             foreach ($ProdutosDistribuicaoIndividual as $IdProduto => $Quantidade) {
-                                                if (key_exists($IdProduto, $ProdutosQuantidadesAgregado) == false) {
+                                                if (!key_exists($IdProduto, $ProdutosQuantidadesAgregado)) {
                                                     $ProdutosQuantidadesAgregado[$IdProduto] = 0;
                                                 }
                                                 $ProdutosQuantidadesAgregado[$IdProduto] += $Quantidade;// Aqui vamos junatar todas as quantidades de produtos do agregado
                                             }
                                         } ?>
-                                        <table class="responsive">
-                                            <thead>
-                                            <tr>
-                                                <th>Produto</th>
-                                                <th>Quantidade</th>
-                                            </tr>
-                                            </thead>
-                                            <? foreach ($ProdutosQuantidadesAgregado as $IdProduto => $Quantidade) {
-                                                $produto = $produtos[$IdProduto];
-                                                ?>
-                                                <tr>
-                                                    <td>
-                                                        <?= $produto->getNome() ?>
-                                                    </td>
-                                                    <td>
-                                                        <?= $Quantidade ?>
-                                                    </td>
-                                                </tr>
-                                                <?
-                                            } ?>
-                                        </table>
                                     <? } ?>
                                     <?
                                 }
                                 ?>
+                                <table class="responsive">
+                                    <thead>
+                                    <tr>
+                                        <th>Produto</th>
+                                        <th>Quantidade</th>
+                                    </tr>
+                                    </thead>
+                                    <? foreach ($ProdutosQuantidadesAgregado as $IdProduto => $Quantidade) {
+                                        $produto = $produtos[$IdProduto];
+                                        if ($Quantidade == 0) {
+                                            continue;
+                                        }
+                                        ?>
+                                        <tr>
+                                            <td>
+                                                <?= $produto->getNome() ?>
+                                            </td>
+                                            <td>
+                                                <?= $Quantidade ?>
+                                            </td>
+                                        </tr>
+                                        <?
+                                    } ?>
+                                </table>
                             </td>
                         </tr>
                         <?

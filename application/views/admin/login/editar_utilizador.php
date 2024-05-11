@@ -29,7 +29,7 @@ $Utilizador ??= null;
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row cosulta-esconder">
                     <div class="column large-6 medium-6 small-12">
                         <div class="input-group">
                             <div class="flex justify-content-center flex-align-center">
@@ -40,7 +40,7 @@ $Utilizador ??= null;
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row cosulta-esconder">
                     <div class="column large-6 medium-6 small-12">
                         <div class="input-group">
                             <label for="Password">Password</label>

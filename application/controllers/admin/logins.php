@@ -111,8 +111,8 @@ class Logins extends CI_Controller {
 
         if ($Username == "") {
             $data = [
-                "Sucesso" => false,
-                "Mensagem" => "Username incorreto!"
+                "success" => false,
+                "message" => "Username incorreto!"
             ];
             echo json_encode($data);
         } else {
@@ -135,23 +135,23 @@ class Logins extends CI_Controller {
 
                     if (enviaEmail($config)) {
                         $data = [
-                            "Sucesso" => true,
-                            "Mensagem" => '<div><i class="fas fa-check-circle" style="color:#b5d56d;"></i> Foi enviado um email com a nova password 
+                            "success" => true,
+                            "message" => '<div><i class="fas fa-check-circle" style="color:#b5d56d;"></i> Foi enviado um email com a nova password 
                         para o email associado a este username.</div>'
                         ];
                         echo json_encode($data);
                     }
                 } else {
                     $data = [
-                        "Sucesso" => false,
-                        "Mensagem" => '<div><i class="fas fa-exclamation-circle" style="color:#e13300;"></i> Algo de inesperado aconteceu por favor recarregue a página e tente novamente, caso o problema persista, por favor contacte o suporte.</div>'
+                        "success" => false,
+                        "message" => '<div><i class="fas fa-exclamation-circle" style="color:#e13300;"></i> Algo de inesperado aconteceu por favor recarregue a página e tente novamente, caso o problema persista, por favor contacte o suporte.</div>'
                     ];
                     echo json_encode($data);
                 }
             } else {
                 $data = [
-                    "Sucesso" => false,
-                    "Mensagem" => 'O Username inserido não foi encontrado no nosso sistema.'
+                    "success" => false,
+                    "message" => 'O Username inserido não foi encontrado no nosso sistema.'
                 ];
                 echo json_encode($data);
             }
@@ -195,14 +195,14 @@ class Logins extends CI_Controller {
 
         if ($resultado === true) {
             $data = [
-                "Sucesso" => true,
-                "Mensagem" => 'Utilizador eliminado com sucesso'
+                "success" => true,
+                "message" => 'Utilizador eliminado com sucesso'
             ];
             echo json_encode($data);
         } else {
             $data = [
-                "Sucesso" => false,
-                "Mensagem" => 'Não foi possivel eliminar o Utilizador solicitado.'
+                "success" => false,
+                "message" => 'Não foi possivel eliminar o Utilizador solicitado.'
             ];
             echo json_encode($data);
         }

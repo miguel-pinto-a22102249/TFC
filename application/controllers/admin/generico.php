@@ -51,14 +51,14 @@ class Generico extends CI_Controller {
 
         if (!$res) {
             $data = array(
-                "Sucesso" => FALSE,
-                "Mensagem" => 'Não foi possivel guardar o ficheiro.'
+                "success" => FALSE,
+                "message" => 'Não foi possivel guardar o ficheiro.'
             );
             echo json_encode($data);
         } else {
             $data = array(
-                "Sucesso" => TRUE,
-                "Mensagem" => 'Backup efetuado com sucesso'
+                "success" => TRUE,
+                "message" => 'Backup efetuado com sucesso'
             );
             echo json_encode($data);
         }
@@ -117,14 +117,14 @@ class Generico extends CI_Controller {
 
         if (!$res) {
             $data = array(
-                "Sucesso" => FALSE,
-                "Mensagem" => 'Não foi possivel guardar o ficheiro.'
+                "success" => FALSE,
+                "message" => 'Não foi possivel guardar o ficheiro.'
             );
             echo json_encode($data);
         } else {
             $data = array(
-                "Sucesso" => TRUE,
-                "Mensagem" => 'Backup efetuado com sucesso'
+                "success" => TRUE,
+                "message" => 'Backup efetuado com sucesso'
             );
             echo json_encode($data);
         }

@@ -31,14 +31,19 @@ if (count($distribuicoesPorAgregado) > 0) { ?>
                         <th class="text-center">NISS Constituinte Principal</th>
                         <th class="text-center">Estado</th>
                         <th class="text-center defaultSort">Entregas</th>
-<!--                        <th class="th-opcoes"><i class="fas fa-cog fa-2x"></i></th>-->
+                        <!--                        <th class="th-opcoes"><i class="fas fa-cog fa-2x"></i></th>-->
                     </tr>
                     </thead>
                     <tbody>
                     <? foreach ($distribuicoesPorAgregado as $IdAgregado => $distribuicaoAgregado) { ?>
                         <tr class="tr-accordion">
                             <td class="trigger">
-                                <?= $agregados[$IdAgregado]->getNissConstituintePrincipal() ?>
+                                <? if ($this->session->userdata('ModoPrivacidade') == false) { ?>
+                                    xxx xxx <?= substr($agregados[$IdAgregado]->getNissConstituintePrincipal(), 6, 9); ?>
+                                    <?
+                                } else {
+                                    echo $agregados[$IdAgregado]->getNissConstituintePrincipal();
+                                } ?>
                             </td>
                             <td>
                                 <?= $agregados[$IdAgregado]->getDesignacaoEstado() ?>
@@ -55,29 +60,41 @@ if (count($distribuicoesPorAgregado) > 0) { ?>
                                             $distribuicaoIndividual = $distribuicoes_individuais[$IdDistriIndividual];
                                             $ProdutosDistribuicaoIndividual = json_decode($distribuicaoIndividual->getProdutosQuantidades());
                                             ?>
-                                            <p>Niss Constituinte: <?= $distribuicaoIndividual->getNissConstituinte()?></p>
-                                            <table class="responsive">
-                                                <thead>
-                                                <tr>
-                                                    <th>Produto</th>
-                                                    <th>Quantidade</th>
-                                                </thead>
-                                                <? foreach ($ProdutosDistribuicaoIndividual as $IdProduto => $Quantidade) {
-                                                    $produto = new Produto();
-                                                    $produto = $produtos[$IdProduto];
-                                                    ?>
+                                            <details class="details__tabela-produtos-a-receber">
+                                                <summary><i class="fa fa-arrow-down"></i>
+                                                    <? if ($this->session->userdata('ModoPrivacidade') == false) { ?>
+                                                        xxx xxx <?= substr($distribuicaoIndividual->getNissConstituinte(), 6, 9); ?>
+                                                        <?
+                                                    } else {
+                                                        echo $distribuicaoIndividual->getNissConstituinte();
+                                                    } ?>
+                                                </summary>
+                                                <table class="responsive">
+                                                    <thead>
                                                     <tr>
-                                                        <td>
-                                                            <?= $produto->getNome() ?>
-                                                        </td>
-                                                        <td>
-                                                            <?= $Quantidade ?>
-                                                        </td>
-                                                    </tr>
+                                                        <th>Produto</th>
+                                                        <th>Quantidade</th>
+                                                    </thead>
+                                                    <? foreach ($ProdutosDistribuicaoIndividual as $IdProduto => $Quantidade) {
+                                                        $produto = new Produto();
+                                                        $produto = $produtos[$IdProduto];
+                                                        if ($Quantidade == 0) {
+                                                            continue;
+                                                        }
+                                                        ?>
+                                                        <tr>
+                                                            <td>
+                                                                <?= $produto->getNome() ?>
+                                                            </td>
+                                                            <td>
+                                                                <?= $Quantidade ?>
+                                                            </td>
+                                                        </tr>
 
-                                                    <?
-                                                } ?>
-                                            </table>
+                                                        <?
+                                                    } ?>
+                                                </table>
+                                            </details>
                                             <?
                                         }
                                     } ?>

@@ -40,16 +40,16 @@ $(document).ready(function() {
                 success: function(data) {
                     var obj = jQuery.parseJSON(data);
                     //Se existir algum erro
-                    if (obj.Sucesso == false) {
+                    if (obj.success == false) {
                         $("#loading-wrapper").css("display", "none");
-                        $(".popup-wrapper").html(obj.Mensagem);
+                        $(".popup-wrapper").html(obj.message);
                     } else
                         //Se for enviado sem problemas
-                    if (obj.Sucesso == true) {
+                    if (obj.success == true) {
                         $("#loading-wrapper").css("display", "none");
                         //guardar o html antes de ser substituido por a mensagem de erro
                         var htmlForm = $(".popup-wrapper").html();
-                        $(".popup-wrapper").html(obj.Mensagem);
+                        $(".popup-wrapper").html(obj.message);
                         setTimeout(function() {
                             var magnificPopup = $.magnificPopup.instance; // save instance in magnificPopup variable
                             magnificPopup.close(); // Close popup that is currently opened
@@ -61,7 +61,7 @@ $(document).ready(function() {
                 error: function(data) {
                     var obj = jQuery.parseJSON(data);
                     $("#loading-wrapper").css("display", "none");
-                    $(".popup-wrapper").html(obj.Mensagem);
+                    $(".popup-wrapper").html(obj.message);
                 }
             }
         );
@@ -96,13 +96,13 @@ $(document).ready(function() {
                 url: url,
                 dataType: "json",
                 success: function(response) {
-                    if (response.Sucesso == true) {
-                        if (response.Mensagem == "") {
-                            response.Mensagem = "Ação efetuada com sucesso";
+                    if (response.success == true) {
+                        if (response.message == "") {
+                            response.message = "Ação efetuada com sucesso";
                         }
-                        notie.alert({type: 1, text: response.Mensagem})
+                        notie.alert({type: 1, text: response.message})
                     } else {
-                        notie.alert({type: 3, text: response.Mensagem})
+                        notie.alert({type: 3, text: response.message})
                     }
                     setTimeout(function() {
                         location.reload();
@@ -223,10 +223,10 @@ $(document).ready(function() {
                 url: $('#backup-bd').attr('href'),
                 dataType: "json",
                 success: function(response) {
-                    if (response.Sucesso == true) {
-                        notie.alert({type: 1, text: response.Mensagem})
+                    if (response.success == true || response.success == true) {
+                        notie.alert({type: 1, text: response.message})
                     } else {
-                        notie.alert({type: 3, text: response.Mensagem})
+                        notie.alert({type: 3, text: response.message})
                     }
                 },
                 error: function() {
@@ -261,34 +261,13 @@ $(document).ready(function() {
                 triggerFormAjax();
 
                 if ($('.dialog-consulta').length > 0) {
-                    $('.dialog-consulta input').attr('readonly', true);
-                    $('.dialog-consulta select').attr('disabled', true);
-                    $('.dialog-consulta textarea').attr('readonly', true);
-                    $('.dialog-consulta checkbox').attr('readonly', true);
-                    $('.dialog-consulta button[type="submit"]').hide();
+                    consultaEsconderElementos();
                 }
 
                 //Para ativar o modo de edição
                 $('.default-dialog__button-edit').on('click', function(e) {
                     e.preventDefault();
-                    $('.dialog-consulta input').attr('readonly', false);
-                    $('.dialog-consulta select').attr('disabled', false);
-                    $('.dialog-consulta textarea').attr('readonly', false);
-                    $('.dialog-consulta checkbox').attr('readonly', false);
-                    $('.dialog-consulta button[type="submit"]').show();
-                    $(this).addClass("active");
-
-                    //Para desativar o modo de edição
-                    $('.default-dialog__button-edit.active').on('click', function(e) {
-                        e.preventDefault();
-                        $('.dialog-consulta input').attr('readonly', true);
-                        $('.dialog-consulta select').attr('disabled', true);
-                        $('.dialog-consulta textarea').attr('readonly', true);
-                        $('.dialog-consulta checkbox').attr('readonly', true);
-                        $('.dialog-consulta button[type="submit"]').hide();
-                        $(this).removeClass("active");
-                    });
-
+                    toggleEditMode();
                 });
 
 
@@ -298,6 +277,40 @@ $(document).ready(function() {
     // </editor-fold>
 
 });
+
+function toggleEditMode() {
+    $('.default-dialog__button-edit').toggleClass("active");
+    if ($('.default-dialog__button-edit').hasClass("active")) {
+        consultaMostrarElementos();
+    } else {
+        consultaEsconderElementos();
+    }
+}
+
+function consultaEsconderElementos() {
+    $('.dialog-consulta input').attr('readonly', true);
+    $('.dialog-consulta select').attr('disabled', true);
+    $('.dialog-consulta textarea').attr('readonly', true);
+    $('.dialog-consulta checkbox').attr('readonly', true);
+
+    $('.dialog-consulta .cosulta-esconder').hide();
+
+
+    $('.dialog-consulta button[type="submit"]').hide();
+}
+
+function consultaMostrarElementos() {
+    $('.dialog-consulta input').attr('readonly', false);
+    $('.dialog-consulta select').attr('disabled', false);
+    $('.dialog-consulta textarea').attr('readonly', false);
+    $('.dialog-consulta checkbox').attr('readonly', false);
+    $(['data-cosulta-esconder']).show();
+    $('.dialog-consulta button[type="submit"]').show();
+
+    $('.dialog-consulta .cosulta-esconder').show();
+
+    $('.data-cosulta-esconder').show();
+}
 
 
 // <editor-fold defaultstate="collapsed" desc="Código para submissão de formulários via AJAX">

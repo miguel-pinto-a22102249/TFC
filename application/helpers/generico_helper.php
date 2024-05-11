@@ -119,6 +119,11 @@ function redimensionarImagem($caminho_original, $caminho_destino, $largura_maxim
     }
 }
 
-
+function callback_date_valid($date){
+    $day = (int) substr($date, 0, 2);
+    $month = (int) substr($date, 3, 2);
+    $year = (int) substr($date, 6, 4);
+    return checkdate($month, $day, $year);
+}
 
 

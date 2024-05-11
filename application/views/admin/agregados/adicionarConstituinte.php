@@ -9,6 +9,12 @@
                             <input type="text" name="Niss" placeholder="Niss"/>
                         </div>
                     </div>
+                    <div class="column large-6 medium-6 small-12">
+                        <div class="input-group">
+                            <label for="DataNascimento">DataNascimento</label>
+                            <input type="date" name="DataNascimento" placeholder=""/>
+                        </div>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="column large-6 medium-6 small-12">

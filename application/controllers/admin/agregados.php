@@ -63,11 +63,12 @@ class Agregados extends CI_Controller {
         $NissConstituintePrincipal = $this->input->post('NissConstituintePrincipal');
         $Grupo = $this->input->post('Grupo');
 
-        $this->form_validation->set_rules('NissConstituintePrincipal', 'NissConstituintePrincipal', 'required');
-        $this->form_validation->set_rules('Grupo', 'Grupo', 'required');
+        $this->form_validation->set_rules('NissConstituintePrincipal', 'NissConstituintePrincipal', 'required|is_unique[' . Agregado_Familiar::TABELA . '.NissConstituintePrincipal]');
+        $this->form_validation->set_rules('Grupo', 'Grupo', 'required|is_unique[' . Agregado_Familiar::TABELA . '.Grupo]');
 
         $this->form_validation->set_message('required', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
         $this->form_validation->set_message('numeric', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
+        $this->form_validation->set_message('is_unique', '<i class="fas fa-exclamation-triangle"></i> Já existe um agregado com este valor.');
 
         if ($this->form_validation->run() === false) {
             $errors = [];
@@ -185,7 +186,7 @@ class Agregados extends CI_Controller {
         }
     }
 
-    public function viewEditarAgregado($id,$soConsulta = false) {
+    public function viewEditarAgregado($id, $soConsulta = false) {
         if ($this->session->userdata('login_efetuado') == false) {
             redirect(base_url('admin/login'));
         }
@@ -216,23 +217,23 @@ class Agregados extends CI_Controller {
             redirect(base_url('admin/login'));
         }
 
-        $Escalao = new Agregado_Familiar();
-        $Escalao->carregaPorId($id);
+        if (count((new Constituinte())->obtemElementos(null, ['IdAgregado' => $id])) > 0) {
+            echo json_encode(['success' => false, 'message' => 'Não é possivel eliminar o agregado porque existem constituintes associados.']);
+            return;
+        }
 
-        $resultado = $Escalao->eliminar($id);
+        $Agregado = new Agregado_Familiar();
+        $Agregado->carregaPorId($id);
+
+        $resultado = $Agregado->eliminar($id);
+
 
         if ($resultado === true) {
-            $data = [
-                "Sucesso" => true,
-                "Mensagem" => 'Escalão eliminado com sucesso'
-            ];
-            echo json_encode($data);
+            header('Content-Type: application/json');
+            echo json_encode(['success' => true, 'message' => 'Agregado eliminado com sucesso.']);
         } else {
-            $data = [
-                "Sucesso" => false,
-                "Mensagem" => 'Não foi possivel eliminar o Escalão solicitado.'
-            ];
-            echo json_encode($data);
+            header('Content-Type: application/json');
+            echo json_encode(['success' => false, 'message' => 'Não foi possivel eliminar o Agregado solicitado.']);
         }
     }
 
@@ -249,10 +250,12 @@ class Agregados extends CI_Controller {
         $Niss = $this->input->post('Niss');
         $IdEscalao = $this->input->post('IdEscalao');
         $IdAgregado = $this->input->post('IdAgregado');
+        $DataNascimento = $this->input->post('DataNascimento');
 
         $this->form_validation->set_rules('Niss', 'Niss', 'required|numeric');
         $this->form_validation->set_rules('IdEscalao', 'IdEscalao', 'required|numeric');
         $this->form_validation->set_rules('IdAgregado', 'IdAgregado', 'required|numeric');
+        $this->form_validation->set_rules('IdAgregado', 'IdAgregado', 'required|date_valid');
 
         $this->form_validation->set_message('required', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
         $this->form_validation->set_message('numeric', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
@@ -261,7 +264,7 @@ class Agregados extends CI_Controller {
             $errors = [];
 
             // Construa um array de erros associados aos campos
-            $fields = ['Niss', 'IdEscalao', 'IdAgregado'];
+            $fields = ['Niss', 'IdEscalao', 'IdAgregado', 'DataNascimento'];
 
             foreach ($fields as $field) {
                 $error = form_error($field);
@@ -285,6 +288,7 @@ class Agregados extends CI_Controller {
                 'Niss' => $Niss,
                 'IdEscalao' => $IdEscalao,
                 'IdAgregado' => $IdAgregado,
+                'DataNascimento' => $DataNascimento,
                 'Segmento' => url_title($Niss, 'dash', true) . '-' . time() . '-' . rand(0, 1000),
             ]);
 
@@ -320,25 +324,20 @@ class Agregados extends CI_Controller {
         if ($this->session->userdata('login_efetuado') == false) {
             redirect(base_url('admin/login'));
         }
-
-        echo $id;
         $Constituinte = new Constituinte();
         $Constituinte->carregaPorId($id);
-//        $this->firephp->log($Constituinte);
-//        var_dump($Constituinte);
-        return;
         $resultado = $Constituinte->eliminar($id);
 
         if ($resultado === true) {
             $data = [
-                "Sucesso" => true,
-                "Mensagem" => 'Constituinte eliminado com sucesso'
+                "success" => true,
+                "message" => 'Constituinte eliminado com sucesso'
             ];
             echo json_encode($data);
         } else {
             $data = [
-                "Sucesso" => false,
-                "Mensagem" => 'Não foi possivel eliminar o Constituinte.'
+                "success" => false,
+                "message" => 'Não foi possivel eliminar o Constituinte.'
             ];
             echo json_encode($data);
         }
@@ -420,7 +419,7 @@ class Agregados extends CI_Controller {
         }
     }
 
-    public function viewEditarConstituinte($id,$soConsulta = false) {
+    public function viewEditarConstituinte($id, $soConsulta = false) {
         if ($this->session->userdata('login_efetuado') == false) {
             redirect(base_url('admin/login'));
         }

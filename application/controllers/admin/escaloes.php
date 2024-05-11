@@ -255,14 +255,14 @@ class Escaloes extends CI_Controller {
 
         if ($resultado === true) {
             $data = [
-                "Sucesso" => true,
-                "Mensagem" => 'Escalão eliminado com sucesso'
+                "success" => true,
+                "message" => 'Escalão eliminado com sucesso'
             ];
             echo json_encode($data);
         } else {
             $data = [
-                "Sucesso" => false,
-                "Mensagem" => 'Não foi possivel eliminar o Escalão solicitado.'
+                "success" => false,
+                "message" => 'Não foi possivel eliminar o Escalão solicitado.'
             ];
             echo json_encode($data);
         }

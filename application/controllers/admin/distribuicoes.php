@@ -57,29 +57,28 @@ class Distribuicoes extends CI_Controller {
         $this->load->model('distribuicao_individual_constituinte');
         $this->load->model('entrega');
 
-        $distribuicoes = (new Distribuicao())->obtemElementos(null,['Estado' => ESTADO_ATIVO, 'NumeroGrupoDistribuicao' => $NumeroGrupoDistribuicao]);
+        $distribuicoes = (new Distribuicao())->obtemElementos(null, ['Estado' => ESTADO_ATIVO, 'NumeroGrupoDistribuicao' => $NumeroGrupoDistribuicao]);
         $IDSEntregas = [];
         foreach ($distribuicoes as $distribuicao) {
             $IDSEntregas = array_merge($IDSEntregas, json_decode($distribuicao->getIdsEntregas()));
         }
 
-        $entregas = (new Entrega())->obtemElementos(null,['Estado' => ESTADO_ATIVO, 'Id' => [$IDSEntregas,'where_in']]);
+        $entregas = (new Entrega())->obtemElementos(null, ['Estado' => ESTADO_ATIVO, 'Id' => [$IDSEntregas, 'where_in']]);
 
         $IDSDistribuicoesIndividuais = [];
         foreach ($entregas as $entrega) {
             $IDSDistribuicoesIndividuais = array_merge($IDSDistribuicoesIndividuais, json_decode($entrega->getIdsDistribuicoesIndividuais()));
         }
-        $distribuicoes_individuais = (new Distribuicao_Individual_Constituinte())->obtemElementos(null,['Estado' => ESTADO_ATIVO,'Id' => [$IDSDistribuicoesIndividuais,'where_in']]);
+        $distribuicoes_individuais = (new Distribuicao_Individual_Constituinte())->obtemElementos(null, ['Estado' => ESTADO_ATIVO, 'Id' => [$IDSDistribuicoesIndividuais, 'where_in']]);
 
 
-
-        $agregados = (new Agregado_Familiar())->obtemElementos(null,['Estado' => ESTADO_ATIVO]);
-        $produtos = (new Produto())->obtemElementos(null,['Estado' => ESTADO_ATIVO]);
+        $agregados = (new Agregado_Familiar())->obtemElementos(null, ['Estado' => ESTADO_ATIVO]);
+        $produtos = (new Produto())->obtemElementos(null, ['Estado' => ESTADO_ATIVO]);
 //        $entregas = (new Entrega())->obtemElementos(['Estado' => ESTADO_ATIVO]);
 
         $this->load->view('admin/template/header',
             ["tituloArea" => "Distribuições",
-             "subtituloArea" => "Listar - Distribuição de ".reset($distribuicoes)->getData(),
+             "subtituloArea" => "Listar Distribuição: " . reset($distribuicoes)->getData() . "- Por Constituinte",
              "acoes" => [
                  [
                      "titulo" => "Adicionar",
@@ -97,7 +96,7 @@ class Distribuicoes extends CI_Controller {
         $this->load->view('admin/template/footer');
     }
 
-    public function listarPorAgregado() {
+    public function listarPorAgregado($NumeroGrupoDistribuicao) {
 //        $this->load->model('escalao');
         $this->load->model('produto');
 //        $this->load->model('constituinte');
@@ -105,20 +104,34 @@ class Distribuicoes extends CI_Controller {
         $this->load->model('distribuicao_individual_constituinte');
         $this->load->model('entrega');
 
-        $distribuicoes = (new Distribuicao())->obtemElementos(['Estado' => ESTADO_ATIVO]);
-        $agregados = (new Agregado_Familiar())->obtemElementos(['Estado' => ESTADO_ATIVO]);
-        $produtos = (new Produto())->obtemElementos(['Estado' => ESTADO_ATIVO]);
-        $entregas = (new Entrega())->obtemElementos(['Estado' => ESTADO_ATIVO]);
-        $distribuicoes_individuais = (new Distribuicao_Individual_Constituinte())->obtemElementos(['Estado' => ESTADO_ATIVO]);
+        $distribuicoes = (new Distribuicao())->obtemElementos(null, ['Estado' => ESTADO_ATIVO, 'NumeroGrupoDistribuicao' => $NumeroGrupoDistribuicao]);
 
-        $this->load->view('admin/template/header', ["tituloArea" => "Distribuições", "subtituloArea" => "Listar por Agregado", "acoes" => [
-            [
-                "titulo" => "Adicionar",
-                "link" => base_url('admin/distribuicoes/distribuicaoPasso1'),
-                "icone" => "fas fa-plus",
-                'class' => 'button--add button--success'
-            ]
-        ]]);
+        $IDSEntregas = [];
+        foreach ($distribuicoes as $distribuicao) {
+            $IDSEntregas = array_merge($IDSEntregas, json_decode($distribuicao->getIdsEntregas()));
+        }
+
+        $entregas = (new Entrega())->obtemElementos(null, ['Estado' => ESTADO_ATIVO, 'Id' => [$IDSEntregas, 'where_in']]);
+
+        $IDSDistribuicoesIndividuais = [];
+        foreach ($entregas as $entrega) {
+            $IDSDistribuicoesIndividuais = array_merge($IDSDistribuicoesIndividuais, json_decode($entrega->getIdsDistribuicoesIndividuais()));
+        }
+        $distribuicoes_individuais = (new Distribuicao_Individual_Constituinte())->obtemElementos(null, ['Estado' => ESTADO_ATIVO, 'Id' => [$IDSDistribuicoesIndividuais, 'where_in']]);
+
+        $agregados = (new Agregado_Familiar())->obtemElementos(null, ['Estado' => ESTADO_ATIVO]);
+        $produtos = (new Produto())->obtemElementos(null, ['Estado' => ESTADO_ATIVO]);
+
+
+        $this->load->view('admin/template/header', ["tituloArea" => "Distribuições",
+                                                    "subtituloArea" => "Listar Distribuição: " . reset($distribuicoes)->getData() . "- Por Agregado", "acoes" => [
+                [
+                    "titulo" => "Adicionar",
+                    "link" => base_url('admin/distribuicoes/distribuicaoPasso1'),
+                    "icone" => "fas fa-plus",
+                    'class' => 'button--add button--success'
+                ]
+            ]]);
         $this->load->view('admin/distribuicao/listar_por_agregado', ['distribuicoes' => $distribuicoes, 'distribuicoes_individuais' => $distribuicoes_individuais, 'entregas' => $entregas, 'agregados' => $agregados, 'produtos' => $produtos]);
         $this->load->view('admin/template/footer');
     }
@@ -255,7 +268,12 @@ class Distribuicoes extends CI_Controller {
             foreach ($produtos as $produto_id => $quantidade) {
                 $produtos_constituinte[$produto_id] = $quantidade;
 //                $CI->firephp->log($produtos_bd[$produto_id]);
-                $produtos_bd[$produto_id]->setStockAtual((int)$produtos_bd[$produto_id]->getStockAtual() - $quantidade);
+                //Caso o numero seja negativo (DEVIA MOSTRAR UM ERRO)
+                if ((int)$produtos_bd[$produto_id]->getStockAtual() - $quantidade < 0) {
+                    $produtos_bd[$produto_id]->setStockAtual(0);
+                } else {
+                    $produtos_bd[$produto_id]->setStockAtual((int)$produtos_bd[$produto_id]->getStockAtual() - $quantidade);
+                }
                 $produtos_bd[$produto_id]->edita(0);
             }
 

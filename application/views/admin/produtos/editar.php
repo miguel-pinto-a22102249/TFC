@@ -1,7 +1,7 @@
 <div class="area-editar">
     <div class="row">
         <div class="column large-8 medium-10 small-12 form-login-wrapper">
-            <form action="<?= base_url("/admin/produtos/editar/" . $Produto->getId()) ?>" method="POST" class="form-ajax" enctype="multipart/form-data">
+            <form action="<?= base_url("/admin/produtos/editar/" . $Produto->getId()) ?>" method="POST" class="form-ajax no-reset" enctype="multipart/form-data">
                 <div class="row">
                     <div class="column large-6 medium-6 small-12">
                         <div class="input-group">
@@ -24,12 +24,6 @@
                     <div class="column large-6 medium-6 small-12">
                         <div class="input-group">
                             <label for="StockAtual">Stock Atual</label>
-                            <input type="number" step="1" name="StockAtual" placeholder="Stock Inícial" value="<?= $Produto->getStockInicial() ?>"/>
-                        </div>
-                    </div>
-                    <div class="column large-6 medium-6 small-12">
-                        <div class="input-group">
-                            <label for="StockAtual">Stock Final</label>
                             <input type="number" step="1" name="StockAtual" placeholder="Stock Atual" value="<?= $Produto->getStockAtual() ?>"/>
                         </div>
                     </div>

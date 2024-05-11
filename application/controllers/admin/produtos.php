@@ -222,14 +222,14 @@ class Produtos extends CI_Controller {
 
         if ($resultado === true) {
             $data = [
-                "Sucesso" => true,
-                "Mensagem" => 'Produto eliminado com sucesso'
+                "success" => true,
+                "message" => 'Produto eliminado com sucesso'
             ];
             echo json_encode($data);
         } else {
             $data = [
-                "Sucesso" => false,
-                "Mensagem" => 'Não foi possivel eliminar o Produto solicitado.'
+                "success" => false,
+                "message" => 'Não foi possivel eliminar o Produto solicitado.'
             ];
             echo json_encode($data);
         }
