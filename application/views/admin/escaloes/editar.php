@@ -53,12 +53,12 @@
                                                 <?php }; ?>
                                             </select>
                                             <input type="number" name="quantidades[]" value="<?= $quantidade ?>" placeholder="Quantidade">
-                                            <button type="button" class="remove-product btn-style">Remover</button>
+                                            <button type="button" class="remove-product cosulta-esconder btn-style">Remover</button>
                                         </div>
                                     <? } ?>
                                 <? } ?>
                             </div>
-                            <button type="button" class="add-product btn-style">Adicionar Produto</button>
+                            <button type="button" class="add-product btn-style cosulta-esconder">Adicionar Produto</button>
                         </div>
                     </div>
                 </div>

@@ -16,7 +16,7 @@ if (count($distribuicoes) > 0) {
 
     //Agora vamos mostrar as distribuicoes por agregado
     foreach ($distribuicoes_Agregados as $distribuicao_Agregado) {
-        $CI->firephp->log($distribuicao_Agregado);
+//        $CI->firephp->log($distribuicao_Agregado);
         foreach ($distribuicao_Agregado as $distribuicao) {
             $CI->firephp->log($distribuicao);
         }

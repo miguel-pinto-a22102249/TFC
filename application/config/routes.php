@@ -136,6 +136,9 @@ $route['admin/distribuicoes/distribuicaoPasso2'] = 'admin/distribuicoes/distribu
 $route['admin/distribuicoes/distribuicaoPasso3'] = 'admin/distribuicoes/distribuicaoPasso3';
 /* * ********************************************************** */
 
+/* * ****************** Credenciais ********************* */
+$route['admin/credenciais/gerarCredencialA/(:num)'] = 'admin/credenciais/gerarCredencialA/$1';
+/* * ********************************************************** */
 
 /* * ********************** GENERICO ************************** */
 

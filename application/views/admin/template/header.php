@@ -176,7 +176,7 @@
                                         </div>
                                         <div class="content__inner-wrapper__header__wrapper__coluna-acoes">
                                             <?
-                                            if (isset($acoes)) {
+                                            if (isset($acoes) && count($acoes) > 0) {
                                                 foreach ($acoes as $acao) {
                                                     ?>
                                                     <a href="<?= $acao['link'] ?>" class="button <?= $acao['class'] ?>"><i class="<?= $acao['icone'] ?>"></i><?= $acao['titulo'] ?></a>
