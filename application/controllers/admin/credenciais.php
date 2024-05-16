@@ -50,23 +50,37 @@ class Credenciais extends CI_Controller {
         $agregados = (new Agregado_Familiar())->obtemElementos(null, ['Estado' => ESTADO_ATIVO]);
         $produtos = (new Produto())->obtemElementos(null, ['Estado' => ESTADO_ATIVO]);
 
-        $this->load->view('admin/template/header',
-            ["tituloArea" => "Credencial A",
-             "subtituloArea" => "Gerar Credencial A: " . reset($distribuicoes)->getData(),
-             "acoes" => [
+
+        if ($this->input->is_ajax_request()) {
+            $html = $this->load->view('admin/credenciais/gerar_credencial_a', ['distribuicoes' => $distribuicoes,
+                                                                               'distribuicoes_individuais' => $distribuicoes_individuais,
+                                                                               'entregas' => $entregas, 'agregados' => $agregados,
+                                                                               'produtos' => $produtos], true);
+            $html = $this->load->view('admin/popup/default_popup', ['titulo' => "Gerar Credencial A: " . reset($distribuicoes)->getData(),
+                                                                    'soConsulta' => false,
+                                                                    'html' => $html, 'URLNewWindow' => base_url("admin/credenciais/gerarCredencialA/{$NumeroGrupoDistribuicao}")], true);
+            header('Content-Type: application/json');
+            echo json_encode(['success' => true, 'message' => '', 'view' => $html]);
+            return;
+        } else {
+            $this->load->view('admin/template/header',
+                ["tituloArea" => "Credencial A",
+                 "subtituloArea" => "Gerar Credencial A: " . reset($distribuicoes)->getData(),
+                 "acoes" => [
 //                 [
 ////                     "titulo" => "Adicionar",
 ////                     "link" => base_url('admin/distribuicoes/distribuicaoPasso1'),
 ////                     "icone" => "fas fa-plus",
 ////                     'class' => 'button--add button--success'
 //                 ]
-             ]
-            ]);
-        $this->load->view('admin/credenciais/gerar_credencial_a',
-            ['distribuicoes' => $distribuicoes,
-             'distribuicoes_individuais' => $distribuicoes_individuais,
-             'entregas' => $entregas, 'agregados' => $agregados,
-             'produtos' => $produtos]);
-        $this->load->view('admin/template/footer');
+                 ]
+                ]);
+            $this->load->view('admin/credenciais/gerar_credencial_a',
+                ['distribuicoes' => $distribuicoes,
+                 'distribuicoes_individuais' => $distribuicoes_individuais,
+                 'entregas' => $entregas, 'agregados' => $agregados,
+                 'produtos' => $produtos]);
+            $this->load->view('admin/template/footer');
+        }
     }
 }

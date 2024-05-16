@@ -31,9 +31,11 @@
                             </td>
                             <td class="text-center">
                                 <?
-                                if ($utilizador->getTipoUtilizador() == Login::ADMIN) {
+                                if ($utilizador->getTipoUtilizador() == Login::SUPER_ADMIN) {
                                     echo "<label class='label primary'>Administrador</label>";
-                                } else if ($utilizador->getTipoUtilizador() == Login::UTILIZADOR) {
+                                } else if ($utilizador->getTipoUtilizador() == Login::TECNICO) {
+                                    echo "<label class='label secondary'>Técnico</label>";
+                                }if ($utilizador->getTipoUtilizador() == Login::UTILIZADOR) {
                                     echo "<label class='label secondary'>Utilizador</label>";
                                 }
                                 ?>

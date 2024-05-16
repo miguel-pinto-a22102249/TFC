@@ -15,22 +15,32 @@
                 ?>
                 <details>
                     <summary><i class="fa fa-arrow-down"></i> Distribuições de: <?= $Ano ?></summary>
-                    <ul>
+                    <table class="responsive">
+                        <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Número de Grupo da Distribuição</th>
+                            <th>Opções</th>
+                        </tr>
+                        </thead>
                         <? foreach ($Data as $D) {
                             /*
                              * $D[0] - Data
                              * $D[1] - NumeroGrupoDistribuicao
                              * */
                             ?>
-                            <li>
-                                <?= $D[0] . ' - Número de Grupo da Distribuição: ' . $D[1] ?>
-                                <a title="Listar distribuição por Constituinte" href="<?= base_url('admin/distruibuicoes/listarPorConstituinte/' . $D[1]) ?>"><i class="fas fa-user"></i></a>
-                                <a title="Listar distribuição por Agregado" href="<?= base_url('admin/distruibuicoes/listarPorAgregado/' . $D[1]) ?>"><i class="fas fa-users"></i></a>
-                                <a title="Gerar Credencial A" href="<?= base_url('admin/credenciais/gerarCredencialA/' . $D[1]) ?>"><i class="fas fa-file"></i></a>
-                            </li>
+                            <tr>
+                                <td><?= $D[0] ?></td>
+                                <td><?= $D[1] ?></td>
+                                <td>
+                                    <a title="Listar distribuição por Constituinte" class="btn-style small" href="<?= base_url('admin/distruibuicoes/listarPorConstituinte/' . $D[1]) ?>"><i class="fas fa-user"></i></a>
+                                    <a title="Listar distribuição por Agregado" class="btn-style small" href="<?= base_url('admin/distruibuicoes/listarPorAgregado/' . $D[1]) ?>"><i class="fas fa-users"></i></a>
+                                    <a title="Gerar Credencial A" class="btn-style small btn-assinar-credencial" href="<?= base_url('admin/credenciais/gerarCredencialA/' . $D[1]) ?>"><i class="fas fa-file"></i></a>
+                                </td>
+                            </tr>
                             <?
                         } ?>
-                    </ul>
+                    </table>
                 </details>
             <? } ?>
         </div>

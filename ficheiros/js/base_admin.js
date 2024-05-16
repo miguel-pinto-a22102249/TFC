@@ -242,39 +242,7 @@ $(document).ready(function() {
 
     triggerFormAjax();
 
-
-    // <editor-fold defaultstate="collapsed" desc="Código para AJAX janelas popup (Forms Editar)">
-    $(".btn-editar-popup-ajax,.btn-consultar-popup-ajax").on("click", function(e) {
-        e.preventDefault();
-
-        let url = $(this).attr('href');
-
-        $.ajax({
-            url: url,
-            success: function(response) {
-                $.magnificPopup.open({
-                    items: {
-                        src: response.view,
-                        type: 'inline'
-                    }
-                });
-                triggerFormAjax();
-
-                if ($('.dialog-consulta').length > 0) {
-                    consultaEsconderElementos();
-                }
-
-                //Para ativar o modo de edição
-                $('.default-dialog__button-edit').on('click', function(e) {
-                    e.preventDefault();
-                    toggleEditMode();
-                });
-
-
-            }
-        });
-    });
-    // </editor-fold>
+    triggerPopupAjaxConsultaEdicao();
 
 });
 
@@ -310,6 +278,41 @@ function consultaMostrarElementos() {
     $('.dialog-consulta .cosulta-esconder').show();
 
     $('.data-cosulta-esconder').show();
+}
+
+function triggerPopupAjaxConsultaEdicao() {
+    // <editor-fold defaultstate="collapsed" desc="Código para AJAX janelas popup (Forms Editar)">
+    $(".btn-editar-popup-ajax,.btn-consultar-popup-ajax, .btn-assinar-credencial").on("click", function(e) {
+        e.preventDefault();
+
+        let url = $(this).attr('href');
+
+        $.ajax({
+            url: url,
+            success: function(response) {
+                $.magnificPopup.open({
+                    items: {
+                        src: response.view,
+                        type: 'inline'
+                    }
+                });
+                triggerFormAjax();
+
+                if ($('.dialog-consulta').length > 0) {
+                    consultaEsconderElementos();
+                }
+
+                //Para ativar o modo de edição
+                $('.default-dialog__button-edit').on('click', function(e) {
+                    e.preventDefault();
+                    toggleEditMode();
+                });
+
+
+            }
+        });
+    });
+    // </editor-fold>
 }
 
 

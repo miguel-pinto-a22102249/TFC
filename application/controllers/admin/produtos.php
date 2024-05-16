@@ -23,6 +23,7 @@ class Produtos extends CI_Controller {
         if ($this->session->userdata('login_efetuado') == false) {
             redirect(base_url('admin/login'));
         }
+        !eUtilizador() ? '' : redirect(base_url('dashboard'));
     }
 
     public function index() {
@@ -55,10 +56,12 @@ class Produtos extends CI_Controller {
         $produto = new Produto();
 
         $Nome = $this->input->post('Nome');
+        $Categoria = $this->input->post('Categoria');
         $Detalhes = $this->input->post('Detalhes');
         $StockAtual = $this->input->post('StockAtual');
 
         $this->form_validation->set_rules('Nome', 'Nome', 'required');
+        $this->form_validation->set_rules('Categoria', 'Categoria', 'required');
         $this->form_validation->set_rules('StockAtual', 'StockAtual', 'required|numeric');
 
         $this->form_validation->set_message('required', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
@@ -68,7 +71,7 @@ class Produtos extends CI_Controller {
             $errors = [];
 
             // Construa um array de erros associados aos campos
-            $fields = ['Nome', 'Detalhes', 'StockAtual'];
+            $fields = ['Nome', 'Categoria', 'Detalhes', 'StockAtual'];
 
             foreach ($fields as $field) {
                 $error = form_error($field);
@@ -90,6 +93,7 @@ class Produtos extends CI_Controller {
         } else {
             $produto->define([
                 'Nome' => $Nome,
+                'Categoria' => $Categoria,
                 'StockInicial' => $StockAtual,
                 'StockAtual' => $StockAtual,
                 'Detalhes' => $Detalhes,
@@ -131,8 +135,10 @@ class Produtos extends CI_Controller {
         $Nome = $this->input->post('Nome');
         $Detalhes = $this->input->post('Detalhes');
         $StockAtual = $this->input->post('StockAtual');
+        $Categoria = $this->input->post('Categoria');
 
         $this->form_validation->set_rules('Nome', 'Nome', 'required');
+        $this->form_validation->set_rules('Categoria', 'Categoria', 'required');
         $this->form_validation->set_rules('Detalhes', 'Detalhes', 'required');
         $this->form_validation->set_rules('StockAtual', 'StockAtual', 'required|numeric');
 
@@ -143,7 +149,7 @@ class Produtos extends CI_Controller {
             $errors = [];
 
             // Construa um array de erros associados aos campos
-            $fields = ['Nome', 'Detalhes', 'StockAtual'];
+            $fields = ['Nome', 'Categoria', 'Detalhes', 'StockAtual'];
 
             foreach ($fields as $field) {
                 $error = form_error($field);
@@ -167,6 +173,7 @@ class Produtos extends CI_Controller {
                 $Produto->setNome($Nome);
                 $Produto->setSegmento(url_title($Nome, 'dash', true) . '-' . time() . '-' . rand(0, 1000));
             }
+            $Produto->setCategoria($Categoria);
             $Produto->setDetalhes($Detalhes);
             $Produto->setStockAtual($StockAtual);
             $Produto->setStockInicial($StockAtual);
@@ -184,7 +191,7 @@ class Produtos extends CI_Controller {
         }
     }
 
-    public function viewEditar($id,$soConsulta = false) {
+    public function viewEditar($id, $soConsulta = false) {
         if ($this->session->userdata('login_efetuado') == false) {
             redirect(base_url('admin/login'));
         }

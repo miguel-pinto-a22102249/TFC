@@ -8,11 +8,33 @@
  */
 function eAdmin() {
     $CI = &get_instance();
-    if ($CI->session->userdata('TipoUtilizador') == Login::ADMIN) {
+    if ($CI->session->userdata('TipoUtilizador') == Login::TECNICO) {
         return true;
     }
     return false;
 }
+
+function eTecnico() {
+    return eAdmin();
+}
+
+function eSuperAdmin() {
+    $CI = &get_instance();
+    if ($CI->session->userdata('TipoUtilizador') == Login::SUPER_ADMIN) {
+        return true;
+    }
+    return false;
+}
+
+function eUtilizador() {
+    $CI = &get_instance();
+    if ($CI->session->userdata('TipoUtilizador') == Login::UTILIZADOR) {
+        return true;
+    }
+    return false;
+}
+
+
 
 /**
  * Funcao para codificar urls

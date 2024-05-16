@@ -117,8 +117,8 @@
 
 
     </body>
-    <!--<script type = "text/javascript" src = "<?= base_url() . '/ficheiros/plugins/DataTables/datatables.min.js' . "?" . CACHE ?>" ></script>-->    
-    <!--<script src="<?= base_url() . '/ficheiros/plugins/tinymce/js/tinymce.min.js' . "?" . CACHE ?>"></script>-->
+    <!--<script type = "text/javascript" src = "<?= base_url() . '/ficheiros/plugins/DataTables/datatables.min.js' . "?" . config_item('gestao.assets_version'); ?>" ></script>-->
+    <!--<script src="<?= base_url() . '/ficheiros/plugins/tinymce/js/tinymce.min.js' . "?" . config_item('gestao.assets_version'); ?>"></script>-->
     <script src="<?= base_url() . "/ficheiros/js/vendor/jquery.min.js" ?>"></script>
     <script src="<?= base_url() . "/ficheiros/js/vendor/what-input.js" ?>"></script>
     <script src="<?= base_url() . "/ficheiros/js/vendor/foundation.js" ?>"></script>

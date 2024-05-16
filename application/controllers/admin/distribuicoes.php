@@ -158,81 +158,23 @@ class Distribuicoes extends CI_Controller {
         $CI = &get_instance();
 
         $IdsAgregados = $this->input->post('agregados');
+        $TipoDistribuicao = $this->input->post('TipoDistribuicao');
 
-        // <editor-fold defaultstate="collapsed" desc="Obter os agregados selecionados">
-        $agregados_temp = (new Agregado_Familiar())->obtemElementos(['Estado' => ESTADO_ATIVO]);
-        $agregados = [];
-        foreach ($agregados_temp as $agregado) {
-            if (in_array($agregado->getId(), $IdsAgregados)) {
-                $agregados[] = $agregado;
-            }
-        }
-        // </editor-fold>
+        $dados = [];
 
-        //Obter escalões
-        $escaloes_temp = (new Escalao())->obtemElementos(['Estado' => ESTADO_ATIVO]);
-        //organizar o array de escaloes por id
-        foreach ($escaloes_temp as $escalao) {
-            $escaloes[$escalao->getId()] = $escalao;
+        switch ($TipoDistribuicao) {
+            case 1:
+                $dados = $this->distribuicaoPorTotais($IdsAgregados, $TipoDistribuicao);
+                break;
+            case 2:
+                $dados = $this->distribuicaoEquitativa($IdsAgregados, $TipoDistribuicao);
+                break;
         }
 
-        //Obter produtos
-        $produtos = (new Produto())->obtemElementos(['Estado' => ESTADO_ATIVO]);
-
-        $this->produtos = $produtos; // Para poder ser usado nos proximos passos
-
-        //Vamos mexer nesta variavel removendo logo stock à medida que é atribuido
-        $produtos_apos_distribuicao = $produtos;
-
-        //Obter constituintes - São todos obtidos de uma unica vez para que seja mais rápido e eficiente
-        $constituintes = (new Constituinte())->obtemElementos(['Estado' => ESTADO_ATIVO]);
-
-
-        /** @var Agregado_Familiar $agregado */
-        /** @var Escalao $escalao */
-
-        foreach ($agregados as $agregado) {
-            //Ir a cada constituinte do agregado e fazer os calculos da distribuicao
-            foreach ($constituintes as $constituinte) {
-                if ($constituinte->getIdAgregado() == $agregado->getId()) {
-                    if ($constituinte->getIdEscalao()) {
-                        $escalao = $escaloes[$constituinte->getIdEscalao()];
-                    }
-
-                    if ($escalao) {
-                        $produtos_escalao = json_decode($escalao->getProdutos());
-                    }
-
-                    //vai conter o id do produto como key e dentro [quantidade segundo o escalão, quantidade efetivamente atribuida]
-                    $produtos_atribuidos = [];
-
-                    foreach ($produtos_escalao as $produto_id => $quantidade) {
-                        if (array_key_exists($produto_id, $produtos_apos_distribuicao)) {
-                            //Aqui validamos que o stock atual é suficiente para atribuir
-                            if (($produtos_apos_distribuicao[$produto_id]->getStockAtual() - $quantidade) > 0) {
-                                $produtos_apos_distribuicao[$produto_id]->setStockAtual($produtos_apos_distribuicao[$produto_id]->getStockAtual() - $quantidade);
-                                $produtos_atribuidos[$produto_id] = [$quantidade, $quantidade];
-                            } else if ($produtos_apos_distribuicao[$produto_id]->getStockAtual() > 0) {
-                                //Se nao for suficiente vamos atribuir o que ainda houver e colocar o stock a 0
-                                $produtos_atribuidos[$produto_id] = [$quantidade, $produtos_apos_distribuicao[$produto_id]->getStockAtual()];
-                                $produtos_apos_distribuicao[$produto_id]->setStockAtual(0);
-                            } else {
-                                $produtos_atribuidos[$produto_id] = [$quantidade, $produtos_apos_distribuicao[$produto_id]->getStockAtual()];
-                            }
-                        }
-                    }
-
-
-                    //Colocar os produtos do escalao no constituinte
-                    $constituinte->ProdtutosQuantidades = $produtos_atribuidos;
-
-                    $agregados_constituintes[$agregado->getNissConstituintePrincipal()][] = $constituinte;
-                }
-            }
-        }
 
         header('Content-Type: application/json');
-        echo json_encode(['success' => true, 'message' => 'Dados Importados com sucesso', 'view' => $this->load->view('admin/distribuicao/area_distribuicao_passo_2', ["agregados_constituintes" => $agregados_constituintes, "produtos_apos_distribuicao" => $produtos_apos_distribuicao], true)]);
+        echo json_encode(['success' => true, 'message' => 'Dados Importados com sucesso',
+                          'view' => $this->load->view('admin/distribuicao/area_distribuicao_passo_2', $dados, true)]);
         return;
     }
 
@@ -389,5 +331,159 @@ class Distribuicoes extends CI_Controller {
                           'view' => $this->load->view('admin/distribuicao/area_distribuicao_passo_3',
                               ['distribuicoes' => $distribuicoes, 'produtos' => $produtos_bd, 'agregados' => $agregados], true)]);
         return;
+    }
+
+    public function distribuicaoPorTotais($IdsAgregados, $TipoDistribuicao) {
+        // <editor-fold defaultstate="collapsed" desc="Obter os agregados selecionados">
+        $agregados_temp = (new Agregado_Familiar())->obtemElementos(['Estado' => ESTADO_ATIVO]);
+        $agregados = [];
+        foreach ($agregados_temp as $agregado) {
+            if (in_array($agregado->getId(), $IdsAgregados)) {
+                $agregados[] = $agregado;
+            }
+        }
+        // </editor-fold>
+
+        //Obter escalões
+        $escaloes_temp = (new Escalao())->obtemElementos(['Estado' => ESTADO_ATIVO]);
+
+        //organizar o array de escaloes por id
+        foreach ($escaloes_temp as $escalao) {
+            $escaloes[$escalao->getId()] = $escalao;
+        }
+
+        //Obter produtos
+        $produtos = (new Produto())->obtemElementos(['Estado' => ESTADO_ATIVO]);
+
+        $this->produtos = $produtos; // Para poder ser usado nos proximos passos
+
+        //Vamos mexer nesta variavel removendo logo stock à medida que é atribuido
+        $produtos_apos_distribuicao = $produtos;
+
+        //Obter constituintes - São todos obtidos de uma unica vez para que seja mais rápido e eficiente
+        $constituintes = (new Constituinte())->obtemElementos(['Estado' => ESTADO_ATIVO]);
+
+
+        /** @var Agregado_Familiar $agregado */
+        /** @var Escalao $escalao */
+
+        foreach ($agregados as $agregado) {
+            //Ir a cada constituinte do agregado e fazer os calculos da distribuicao
+            foreach ($constituintes as $constituinte) {
+                if ($constituinte->getIdAgregado() == $agregado->getId()) {
+                    if ($constituinte->getIdEscalao()) {
+                        $escalao = $escaloes[$constituinte->getIdEscalao()];
+                    }
+
+                    if ($escalao) {
+                        $produtos_escalao = json_decode($escalao->getProdutos());
+                    }
+
+                    //vai conter o id do produto como key e dentro [quantidade segundo o escalão, quantidade efetivamente atribuida]
+                    $produtos_atribuidos = [];
+
+                    foreach ($produtos_escalao as $produto_id => $quantidade) {
+                        if (array_key_exists($produto_id, $produtos_apos_distribuicao)) {
+                            //Aqui validamos que o stock atual é suficiente para atribuir
+                            if (($produtos_apos_distribuicao[$produto_id]->getStockAtual() - $quantidade) > 0) {
+                                $produtos_apos_distribuicao[$produto_id]->setStockAtual($produtos_apos_distribuicao[$produto_id]->getStockAtual() - $quantidade);
+                                $produtos_atribuidos[$produto_id] = [$quantidade, $quantidade];
+                            } else if ($produtos_apos_distribuicao[$produto_id]->getStockAtual() > 0) {
+                                //Se nao for suficiente vamos atribuir o que ainda houver e colocar o stock a 0
+                                $produtos_atribuidos[$produto_id] = [$quantidade, $produtos_apos_distribuicao[$produto_id]->getStockAtual()];
+                                $produtos_apos_distribuicao[$produto_id]->setStockAtual(0);
+                            } else {
+                                $produtos_atribuidos[$produto_id] = [$quantidade, $produtos_apos_distribuicao[$produto_id]->getStockAtual()];
+                            }
+                        }
+                    }
+
+
+                    //Colocar os produtos do escalao no constituinte
+                    $constituinte->ProdtutosQuantidades = $produtos_atribuidos;
+
+                    $agregados_constituintes[$agregado->getNissConstituintePrincipal()][] = $constituinte;
+                }
+            }
+        }
+
+        return ["agregados_constituintes" => $agregados_constituintes, "produtos_apos_distribuicao" => $produtos_apos_distribuicao];
+    }
+
+    public function distribuicaoEquitativa($IdsAgregados, $TipoDistribuicao) {
+        // <editor-fold defaultstate="collapsed" desc="Obter os agregados selecionados">
+        $agregados_temp = (new Agregado_Familiar())->obtemElementos(['Estado' => ESTADO_ATIVO]);
+        $agregados = [];
+        foreach ($agregados_temp as $agregado) {
+            if (in_array($agregado->getId(), $IdsAgregados)) {
+                $agregados[] = $agregado;
+            }
+        }
+        // </editor-fold>
+
+        //Obter escalões
+        $escaloes_temp = (new Escalao())->obtemElementos(['Estado' => ESTADO_ATIVO]);
+
+        //organizar o array de escaloes por id
+        foreach ($escaloes_temp as $escalao) {
+            $escaloes[$escalao->getId()] = $escalao;
+        }
+
+        //Obter produtos
+        $produtos = (new Produto())->obtemElementos(['Estado' => ESTADO_ATIVO]);
+
+        $this->produtos = $produtos; // Para poder ser usado nos proximos passos
+
+        //Vamos mexer nesta variavel removendo logo stock à medida que é atribuido
+        $produtos_apos_distribuicao = $produtos;
+
+        //Obter constituintes - São todos obtidos de uma unica vez para que seja mais rápido e eficiente
+        $constituintes = (new Constituinte())->obtemElementos(['Estado' => ESTADO_ATIVO]);
+
+
+        /** @var Agregado_Familiar $agregado */
+        /** @var Escalao $escalao */
+
+        foreach ($agregados as $agregado) {
+            //Ir a cada constituinte do agregado e fazer os calculos da distribuicao
+            foreach ($constituintes as $constituinte) {
+                if ($constituinte->getIdAgregado() == $agregado->getId()) {
+                    if ($constituinte->getIdEscalao()) {
+                        $escalao = $escaloes[$constituinte->getIdEscalao()];
+                    }
+
+                    if ($escalao) {
+                        $produtos_escalao = json_decode($escalao->getProdutos());
+                    }
+
+                    //vai conter o id do produto como key e dentro [quantidade segundo o escalão, quantidade efetivamente atribuida]
+                    $produtos_atribuidos = [];
+
+                    foreach ($produtos_escalao as $produto_id => $quantidade) {
+                        if (array_key_exists($produto_id, $produtos_apos_distribuicao)) {
+                            //Aqui validamos que o stock atual é suficiente para atribuir
+                            if (($produtos_apos_distribuicao[$produto_id]->getStockAtual() - $quantidade) > 0) {
+                                $produtos_apos_distribuicao[$produto_id]->setStockAtual($produtos_apos_distribuicao[$produto_id]->getStockAtual() - $quantidade);
+                                $produtos_atribuidos[$produto_id] = [$quantidade, $quantidade];
+                            } else if ($produtos_apos_distribuicao[$produto_id]->getStockAtual() > 0) {
+                                //Se nao for suficiente vamos atribuir o que ainda houver e colocar o stock a 0
+                                $produtos_atribuidos[$produto_id] = [$quantidade, $produtos_apos_distribuicao[$produto_id]->getStockAtual()];
+                                $produtos_apos_distribuicao[$produto_id]->setStockAtual(0);
+                            } else {
+                                $produtos_atribuidos[$produto_id] = [$quantidade, $produtos_apos_distribuicao[$produto_id]->getStockAtual()];
+                            }
+                        }
+                    }
+
+
+                    //Colocar os produtos do escalao no constituinte
+                    $constituinte->ProdtutosQuantidades = $produtos_atribuidos;
+
+                    $agregados_constituintes[$agregado->getNissConstituintePrincipal()][] = $constituinte;
+                }
+            }
+        }
+
+        return ["agregados_constituintes" => $agregados_constituintes, "produtos_apos_distribuicao" => $produtos_apos_distribuicao];
     }
 }

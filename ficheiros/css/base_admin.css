@@ -4458,6 +4458,9 @@ th.hide-for-touch {
 .btn-style.button--success:hover, body #topbar .btn-style.trigger-modo-privacidade.trigger-modo-privacidade--lock:hover, .button.button--success:hover, body #topbar .button.trigger-modo-privacidade.trigger-modo-privacidade--lock:hover {
   background-color: #449d44;
 }
+.btn-style.small, .button.small {
+  padding: 0.5rem 1rem;
+}
 
 .btn-style-inverse {
   padding: 10px 20px;
@@ -5784,12 +5787,9 @@ body #Area-Lista-Distribuicoes-Data details[open] summary i, body #Area-Lista-Di
   transition: all 0.2s ease-in-out;
   margin-right: 1rem;
 }
-body #Area-Lista-Distribuicoes-Data details ul {
-  margin-left: 6rem;
-  padding-bottom: 1rem;
-}
-body #Area-Lista-Distribuicoes-Data details ul li {
-  margin-top: 5px;
+body #Area-Lista-Distribuicoes-Data details table a {
+  margin-left: 5px;
+  color: white;
 }
 body #Page-Not-Found {
   position: absolute;

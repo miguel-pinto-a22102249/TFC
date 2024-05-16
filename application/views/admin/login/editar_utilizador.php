@@ -60,7 +60,8 @@ $Utilizador ??= null;
                         <div class="input-group">
                             <label>Tipo Utilizador
                                 <select name="TipoUtilizador">
-                                    <option value="<?= Login::ADMIN ?>" <?= $Utilizador->getTipoUtilizador() == Login::ADMIN ? 'selected' : '' ?>>Admin</option>
+                                    <option value="<?= Login::SUPER_ADMIN ?>" <?= $Utilizador->getTipoUtilizador() == Login::SUPER_ADMIN ? 'selected' : '' ?>>Administrador</option>
+                                    <option value="<?= Login::TECNICO ?>" <?= $Utilizador->getTipoUtilizador() == Login::TECNICO ? 'selected' : '' ?>>Técnico</option>
                                     <option value="<?= Login::UTILIZADOR ?>" <?= $Utilizador->getTipoUtilizador() == Login::UTILIZADOR ? 'selected' : '' ?>>Utilizador</option>
                                 </select>
                             </label>

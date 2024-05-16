@@ -18,7 +18,7 @@ class Login extends Model_Base {
     public $ModoPrivacidade = false;
 
     const SUPER_ADMIN = 5;
-    const ADMIN = 4;
+    const TECNICO = 4;
     const UTILIZADOR = 3;
     const TABELA = 'utilizador';
 
@@ -92,6 +92,10 @@ class Login extends Model_Base {
     }
 
 
+    public function eTecnico() {
+        self::eAdmin();
+    }
+
     /**
      * Se o login atual for um admin a função devolve TRUE, caso contrário devolve FALSE
      *
@@ -99,7 +103,7 @@ class Login extends Model_Base {
      * @return boolean
      */
     public function eAdmin() {
-        if ($this->session->userdata('TipoUtilizador') == Login::ADMIN) {
+        if ($this->session->userdata('TipoUtilizador') == Login::TECNICO) {
             return true;
         }
         return false;

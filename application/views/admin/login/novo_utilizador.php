@@ -44,7 +44,8 @@
                         <div class="input-group">
                             <label>Tipo Utilizador
                                 <select name="TipoUtilizador">
-                                    <option value="<?= Login::ADMIN ?>">Admin</option>
+                                    <option value="<?= Login::SUPER_ADMIN ?>">Administrador</option>
+                                    <option value="<?= Login::TECNICO ?>">Técnico</option>
                                     <option value="<?= Login::UTILIZADOR ?>">Utilizador</option>
                                 </select>
                             </label>

@@ -5,6 +5,15 @@ const clearButton = document.getElementById('clearCanvasButton');
 const signatureImage = document.getElementById('signatureImage');
 const ctx = canvas.getContext('2d');
 
+const dpi = window.devicePixelRatio;
+// canvas.width = 400 * dpi;
+// canvas.height = 200 * dpi;
+canvas.style.width = 350 + 'px';
+canvas.style.height = 150 + 'px';
+
+// Define o tamanho da linha
+ctx.lineWidth = 0.1 * dpi;
+
 // Variável para controlar se está desenhando
 let isDrawing = false;
 // Variável para controlar se a rolagem está bloqueada durante a assinatura
@@ -66,6 +75,7 @@ canvas.addEventListener('mouseup', () => {
 saveButton.addEventListener('click', () => {
     const signatureDataURL = canvas.toDataURL(); // Obtém a imagem da assinatura como uma URL base64
     signatureImage.src = signatureDataURL; // Define a imagem da assinatura na tag img
+    signatureImage.style.display = 'block'; // Exibe a imagem da assinatura
 
     // Envie a assinatura para o servidor (por exemplo, via AJAX) e salve no banco de dados
     // Aqui você deve implementar a lógica para enviar a imagem para o servidor e armazená-la no banco de dados.

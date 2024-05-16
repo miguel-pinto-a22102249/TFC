@@ -10,6 +10,7 @@ if (count($Produtos) > 0) {
                     <thead>
                     <tr>
                         <th class="text-center">Nome</th>
+                        <th class="text-center">Categoria</th>
                         <th class="text-center">Detalhes</th>
                         <th class="text-center defaultSort">Stock Atual</th>
                         <th class="text-center">Estado</th>
@@ -24,6 +25,9 @@ if (count($Produtos) > 0) {
                         <tr class="tr-accordion">
                             <td class="text-center">
                                 <?= $produto->getNome(); ?>
+                            </td>
+                            <td class="text-center">
+                                <?= $produto->getDesignacaoCategoria(); ?>
                             </td>
                             <td class="text-center">
                                 <?= $produto->getDetalhes(); ?>

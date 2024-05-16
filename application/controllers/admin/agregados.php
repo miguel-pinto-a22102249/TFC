@@ -28,6 +28,8 @@ class Agregados extends CI_Controller {
         if ($this->session->userdata('login_efetuado') == false) {
             redirect(base_url('admin/login'));
         }
+
+        !eUtilizador() ? '' : redirect(base_url('dashboard'));
     }
 
     public function index() {
@@ -167,10 +169,10 @@ class Agregados extends CI_Controller {
                 $this->load->view('admin/template/footer');
             }
         } else {
-            if ($Agregado_Familiar->getNissConstituintePrincipal() != $NissConstituintePrincipal) {
-                $Agregado_Familiar->setNissConstituintePrincipal($NissConstituintePrincipal);
-                $Agregado_Familiar->setSegmento(url_title($NissConstituintePrincipal, 'dash', true) . '-' . time() . '-' . rand(0, 1000));
-            }
+//            if ($Agregado_Familiar->getNissConstituintePrincipal() != $NissConstituintePrincipal) {
+//                $Agregado_Familiar->setNissConstituintePrincipal($NissConstituintePrincipal);
+//                $Agregado_Familiar->setSegmento(url_title($NissConstituintePrincipal, 'dash', true) . '-' . time() . '-' . rand(0, 1000));
+//            }
             $Agregado_Familiar->setGrupo($Grupo);
 
 

@@ -8,7 +8,7 @@
                             <div class="column large-6 medium-6 small-12">
                                 <div class="input-group">
                                     <label for="NissConstituintePrincipal">Niss Constituinte Principal</label>
-                                    <input type="text" name="NissConstituintePrincipal" placeholder="NissConstituintePrincipal" value="<?= $Agregado->getNissConstituintePrincipal() ?>"/>
+                                    <input type="text" name="NissConstituintePrincipal" readonly placeholder="NissConstituintePrincipal" value="<?= $Agregado->getNissConstituintePrincipal() ?>"/>
                                 </div>
                             </div>
                         </div>
@@ -28,10 +28,22 @@
                             <?
 
                             $constituintes = (new Constituinte)->obtemElementos(null, ['IdAgregado' => $Agregado->getId()], null, false);
+                            if (count($constituintes) > 0) {
+                            foreach ($constituintes
 
-                            foreach ($constituintes as $constituinte) {
+                                     as $constituinte) {
                                 ?>
-                                <li><?= $constituinte->getNiss(); ?></li>
+                                <li>
+                                    <a class="btn-consultar-popup-ajax" style="text-decoration:none" href="<?= base_url() . 'admin/agregados/constituintes/consultarConstituinte/' . $constituinte->getId() ?>">
+                                        <i class="fas fa-search-plus fa-1x"></i> <?= $constituinte->getNiss(); ?>
+                                    </a>
+                                </li>
+                            <?
+                            }
+                            ?>
+                                <script>
+                                    triggerPopupAjaxConsultaEdicao();
+                                </script>
                                 <?
                             }
                             ?>

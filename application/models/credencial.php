@@ -9,11 +9,15 @@ class Credencial extends Model_Base {
     public $GrupoDistribuicao;
 
     public $Estado;
+    public $TipoCredencial;
     public $Descricao;
     public $CaminhoAssinatura;
 
 
     const TABELA = 'credencial';
+
+    const TIPO_CREDENCIAL_A = 'A';
+    const TIPO_CREDENCIAL_B = 'B';
 
     public function __construct() {
         parent::__construct();

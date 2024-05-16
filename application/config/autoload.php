@@ -94,7 +94,7 @@ $autoload['helper'][] = 'language';
   |
  */
 
-$autoload['config'] = ['config_base'];
+$autoload['config'] = ['config_base', 'config_editavel'];
 
 
 /*
@@ -123,8 +123,7 @@ $autoload['language'] = ["admin", "partilhado", "publico"];
   |
  */
 
-$autoload['model'] = ['log'];
-$autoload['model'] = ['Model_Base'];
+$autoload['model'] = ['log', 'Model_Base', 'Login'];
 
 $autoload['libraries'] = ['form_validation'];
 

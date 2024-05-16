@@ -23,14 +23,14 @@
         <link rel="icon" type="image/png" sizes="96x96" href="<?= base_url() . '/ficheiros/imagens/base/favicon' ?>/favicon-96x96.png">
         <link rel="icon" type="image/png" sizes="16x16" href="<?= base_url() . '/ficheiros/imagens/base/favicon' ?>/favicon-16x16.png">
 
-        <!--        <link rel="stylesheet" href="--><?php //= base_url() . '/ficheiros/css/foundation.min.css' . "?" . CACHE ?><!--">-->
-        <link rel="stylesheet" href="<?= base_url() . '/ficheiros/css/app.css' . "?" . CACHE ?>">
-        <link rel="stylesheet" href="<?= base_url() . '/ficheiros/plugins/fontawesome/css/all.css' . "?" . CACHE ?>">
-        <link rel="stylesheet" href="<?= base_url() . '/ficheiros/plugins/fontawesome/css/fontawesome.min.css' . "?" . CACHE ?>">
-        <link rel="stylesheet" href="<?= base_url() . '/ficheiros/plugins/fontawesome/css/brands.min.css' . "?" . CACHE ?>">
-        <link rel="stylesheet" type="text/css" href="<?= base_url() . '/ficheiros/plugins/DataTables/datatables.min.css' . "?" . CACHE ?>"/>
-        <link rel="stylesheet" href="<?= base_url() . '/ficheiros/css/admin/notie.min.css' . "?" . CACHE ?>">
-        <link rel="stylesheet" href="<?= base_url() . '/ficheiros/css/base_admin.css' . "?" . CACHE ?>">
+        <!--        <link rel="stylesheet" href="--><?php //= base_url() . '/ficheiros/css/foundation.min.css' . "?" . config_item('gestao.assets_version'); ?><!--">-->
+        <link rel="stylesheet" href="<?= base_url() . '/ficheiros/css/app.css' . "?" . config_item('gestao.assets_version'); ?>">
+        <link rel="stylesheet" href="<?= base_url() . '/ficheiros/plugins/fontawesome/css/all.css' . "?" . config_item('gestao.assets_version'); ?>">
+        <link rel="stylesheet" href="<?= base_url() . '/ficheiros/plugins/fontawesome/css/fontawesome.min.css' . "?" . config_item('gestao.assets_version'); ?>">
+        <link rel="stylesheet" href="<?= base_url() . '/ficheiros/plugins/fontawesome/css/brands.min.css' . "?" . config_item('gestao.assets_version'); ?>">
+        <link rel="stylesheet" type="text/css" href="<?= base_url() . '/ficheiros/plugins/DataTables/datatables.min.css' . "?" . config_item('gestao.assets_version'); ?>"/>
+        <link rel="stylesheet" href="<?= base_url() . '/ficheiros/css/admin/notie.min.css' . "?" . config_item('gestao.assets_version'); ?>">
+        <link rel="stylesheet" href="<?= base_url() . '/ficheiros/css/base_admin.css' . "?" . config_item('gestao.assets_version'); ?>">
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -88,12 +88,16 @@
                             <a class="text-right" href="javascript:;">
                                 <div class="topbar__wrapper-account__inner-wrapper__foto">
                                     <?
-                                    if (!empty($this->session->userdata('Foto'))) { ?>
-                                        <img width="50" class="menu-img-user" src="<?= base_url(CAMINHO_IMAGENS_DINAMICAS . 'fotos_utilizadores') . "/" . $this->session->userdata('Foto') ?>" alt="">
+                                    $img = base_url('/ficheiros/imagens/base/default-user.png');
+
+                                    if (!empty($this->session->userdata('Foto'))) {
+                                        $img = file_exists(base_url(CAMINHO_IMAGENS_DINAMICAS . 'fotos_utilizadores') . "/" . $this->session->userdata('Foto')) ? base_url(CAMINHO_IMAGENS_DINAMICAS . 'fotos_utilizadores') . "/" . $this->session->userdata('Foto') : $img;
+                                        ?>
+                                        <img width="50" class="menu-img-user" src="<?= $img ?>" alt="">
                                         <?
                                     } else {
                                         ?>
-                                        <img width="50" class="menu-img-user" src="<?= base_url('/ficheiros/imagens/base/default-user.png') ?>" alt="">
+                                        <img width="50" class="menu-img-user" src="<?= $img ?>" alt="">
                                     <? } ?>
                                     <label class="for-dropdown-sub" for="dropdown-sub"><?= $this->session->userdata('Nome') ?></label>
                                 </div>
@@ -121,43 +125,47 @@
                         <a href="<?= base_url() . "home_admin" ?>"><i class="fas fa-chart-line"></i> Dashboard</a>
                     </li>
                     <li>
-                        <a href="<?= base_url() . "admin/utilizadores" ?>"><i class="fas fa-users-cog"></i> Utilizadores</a>
+                        <? if (eSuperAdmin()) { ?>
+                            <a href="<?= base_url("admin/configuracoes") ?>"><i class="fas fa-wrench"></i>Configurações</a>
+                        <? } ?>
                     </li>
+                    <? if (!eUtilizador()) { ?>
+                        <li>
+                            <a href="<?= base_url() . "admin/utilizadores" ?>"><i class="fas fa-users-cog"></i> Utilizadores</a>
+                        </li>
 
-                    <li>
-                        <a href="<?= base_url() . "admin/escaloes" ?>"><i class="fas fa-layer-group"></i> Escalões</a>
-                    </li>
+                        <li>
+                            <a href="<?= base_url() . "admin/escaloes" ?>"><i class="fas fa-layer-group"></i> Escalões</a>
+                        </li>
 
-                    <li>
-                        <a class="dropdown-btn"><i class="fas fa-users"></i> Agregados
-                        </a>
-                        <div class="dropdown-container">
-                            <ul class="menu vertical">
-                                <? if ($this->session->userdata('login_efetuado') == true && $this->session->userdata('TipoUtilizador') == Login::ADMIN) { ?>
-                                    <li><a href="<?= base_url() . "admin/agregados/importacao" ?>"><i class="fas fa-file-excel"></i> Importar</a></li>
-                                <? } ?>
-                                <li><a href="<?= base_url() . "admin/agregados" ?>"><i class="fas fa-users"></i> Listar Agregados</a></li>
-                                <li><a href="<?= base_url() . "admin/agregados/constituintes/listar" ?>"><i class="fas fa-user"></i> Listar Constituintes</a></li>
-                            </ul>
-                        </div>
-                    </li>
+                        <li>
+                            <a class="dropdown-btn"><i class="fas fa-users"></i> Agregados
+                            </a>
+                            <div class="dropdown-container">
+                                <ul class="menu vertical">
+                                    <? if ($this->session->userdata('login_efetuado') == true && $this->session->userdata('TipoUtilizador') == Login::TECNICO) { ?>
+                                        <li><a href="<?= base_url() . "admin/agregados/importacao" ?>"><i class="fas fa-file-excel"></i> Importar</a></li>
+                                    <? } ?>
+                                    <li><a href="<?= base_url() . "admin/agregados" ?>"><i class="fas fa-users"></i> Listar Agregados</a></li>
+                                    <li><a href="<?= base_url() . "admin/agregados/constituintes/listar" ?>"><i class="fas fa-user"></i> Listar Constituintes</a></li>
+                                </ul>
+                            </div>
+                        </li>
 
-                    <li>
-                        <a href="<?= base_url() . "admin/produtos" ?>"><i class="fas fa-apple-alt"></i> Produtos</a>
-                    </li>
+                        <li>
+                            <a href="<?= base_url() . "admin/produtos" ?>"><i class="fas fa-apple-alt"></i> Produtos</a>
+                        </li>
+                    <? } ?>
 
                     <li>
                         <a class="dropdown-btn"><i class="fas fa-stream"></i> Distribuições
                         </a>
                         <div class="dropdown-container">
                             <ul class="menu vertical">
-                                <? if ($this->session->userdata('login_efetuado') == true && $this->session->userdata('TipoUtilizador') == Login::ADMIN) { ?>
+                                <? if (!eUtilizador()) { ?>
                                     <li><a href="<?= base_url() . "admin/distribuicoes/distribuicaoPasso1" ?>"><i class="fas fa-cubes"></i> Iniciar Distribuição</a></li>
                                 <? } ?>
-
                                 <li><a href="<?= base_url() . "admin/distribuicoes/" ?>"><i class="fas fa-calendar"></i> Listar Datas Distribuições</a></li>
-                                <!--                                <li><a href="--><?php //= base_url() . "admin/distribuicoes/constituinte" ?><!--"><i class="fas fa-user"></i> Listar Ativas por Constituinte</a></li>-->
-                                <!--                                <li><a href="--><?php //= base_url() . "admin/distribuicoes/agregado" ?><!--"><i class="fas fa-users"></i> Listar Ativas por Agregado</a></li>-->
                             </ul>
                         </div>
                     </li>

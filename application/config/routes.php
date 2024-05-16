@@ -48,6 +48,7 @@ $route['404_override'] = 'error404';
 
 $route['admin/home_admin'] = 'admin/home';
 $route['home_admin'] = 'admin/home';
+$route['dashboard'] = 'admin/home';
 $route[''] = 'admin/logins/index';
 $route['/'] = 'admin/logins/index';
 $route['default-style'] = 'site/testes';
@@ -138,12 +139,15 @@ $route['admin/distribuicoes/distribuicaoPasso3'] = 'admin/distribuicoes/distribu
 
 /* * ****************** Credenciais ********************* */
 $route['admin/credenciais/gerarCredencialA/(:num)'] = 'admin/credenciais/gerarCredencialA/$1';
+$route['admin/credenciais/gravarCredencial/(:num)'] = 'admin/credenciais/gravarCredencials/$1';
 /* * ********************************************************** */
 
 /* * ********************** GENERICO ************************** */
 
 $route['admin/backup-bd'] = 'admin/generico/AJAXbackupBD';
 $route['admin/gera-sitemap'] = 'admin/generico/geraSiteMapAJAX';
+$route['admin/configuracoes'] = 'admin/configuracoes/consultarConfigs';
+$route['admin/configuracoes/gravar'] = 'admin/configuracoes/gravarConfigs';
 
 /* * ********************************************************** */
 

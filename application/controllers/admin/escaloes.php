@@ -30,6 +30,9 @@ class Escaloes extends CI_Controller {
     }
 
     public function listar() {
+        !eUtilizador() ? '' : redirect(base_url('dashboard'));
+
+
         $Escaloes = (new Escalao)->obtemElementos();
 
         $this->load->view('admin/template/header', ["tituloArea" => "Escalões", "subtituloArea" => "Listar", "acoes" => [
@@ -48,6 +51,8 @@ class Escaloes extends CI_Controller {
         if ($this->session->userdata('login_efetuado') == false) {
             redirect(base_url('admin/login'));
         }
+
+        !eUtilizador() ? '' : redirect(base_url('dashboard'));
 
         $this->load->helper('form');
         $this->load->library('form_validation');
@@ -128,6 +133,8 @@ class Escaloes extends CI_Controller {
         if ($this->session->userdata('login_efetuado') == false) {
             redirect(base_url('admin/login'));
         }
+
+        !eUtilizador() ? '' : redirect(base_url('dashboard'));
 
         $this->load->helper('form');
         $this->load->library('form_validation');
@@ -217,10 +224,12 @@ class Escaloes extends CI_Controller {
         }
     }
 
-    public function viewEditar($id,$soConsulta = false) {
+    public function viewEditar($id, $soConsulta = false) {
         if ($this->session->userdata('login_efetuado') == false) {
             redirect(base_url('admin/login'));
         }
+
+        !eUtilizador() ? '' : redirect(base_url('dashboard'));
 
         $log = new Log();
         $Escalao = new Escalao();
@@ -247,6 +256,8 @@ class Escaloes extends CI_Controller {
         if ($this->session->userdata('login_efetuado') == false) {
             redirect(base_url('admin/login'));
         }
+
+        !eUtilizador() ? '' : redirect(base_url('dashboard'));
 
         $Escalao = new Escalao();
         $Escalao->carregaPorId($id);

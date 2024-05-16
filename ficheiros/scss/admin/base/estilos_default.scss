@@ -33,6 +33,10 @@ $scrollhide-nav-transition-speed: 0.6s;
             background-color: darken(#5cb85c, 10%);
         }
     }
+
+    &.small {
+        padding: 0.5rem 1rem;
+    }
 }
 
 .btn-style-inverse {
@@ -494,7 +498,7 @@ body {
         color: $cor-preto;
         border-radius: 0 0 5px 5px;
 
-        &.active{
+        &.active {
             background-color: $cor-verde;
             color: white;
         }

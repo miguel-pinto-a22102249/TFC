@@ -1,4 +1,4 @@
-<script src="<?= base_url() . '/ficheiros/js/admin/distribuicao.js' . "?" . CACHE ?>"></script>
+<script src="<?= base_url() . '/ficheiros/js/admin/distribuicao.js' . "?" . config_item('gestao.assets_version'); ?>"></script>
 
 <?
 /** @var Agregado_Familiar $agregado */
@@ -41,6 +41,8 @@
                         </tbody>
                     </table>
 
+                    <input type="radio" name="TipoDistribuicao" value="1" checked> Distribuição por Totais<br>
+                    <input type="radio" name="TipoDistribuicao" value="2" checked> Distribuição Equitativa<br>
                     <button class="bottom btn-style" type="submit">Adicionar</button>
                 </form>
             </div>

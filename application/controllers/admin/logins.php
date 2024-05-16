@@ -28,7 +28,10 @@ class Logins extends CI_Controller {
     }
 
     public function consultar($id) {
-//consultar utilizador por password e id
+        //Teste para ver se é super admin, apenas os super admins podem efetuar esta ação
+        !eUtilizador() ? '' : redirect(base_url('dashboard'));
+
+        //consultar utilizador por password e id
         $Data['utilizador'] = $this->Login->carregaPorIdPass($id);
 
         if (empty($Data['utilizador'])) {
@@ -178,6 +181,9 @@ class Logins extends CI_Controller {
     }
 
     public function eliminar($id) {
+        //Teste para ver se é super admin, apenas os super admins podem efetuar esta ação
+        !eUtilizador() ? '' : redirect(base_url('dashboard'));
+
         if ($this->session->userdata('login_efetuado') == false) {
             redirect(base_url('admin/login'));
         }
@@ -209,9 +215,15 @@ class Logins extends CI_Controller {
     }
 
     public function editar($id) {
+        //Teste para ver se é super admin, apenas os super admins podem efetuar esta ação
+
+        if (eUtilizador() && $id != $this->session->userdata('Id')) {
+            redirect(base_url('dashboard'));
+        }
+
+
         /* Verifica se o login atual é de um ADMIN */
         $Utilizador = new Login;
-        $Utilizador->eAdmin() != true ? redirect(base_url('admin/login')) : '';
 
         $log = new Log();
         $Utilizador->carregaPorId($id);
@@ -328,10 +340,11 @@ class Logins extends CI_Controller {
         }
     }
 
-    public function viewEditar($id,$soConsulta = false) {
+    public function viewEditar($id, $soConsulta = false) {
         /* Verifica se o login atual é de um ADMIN */
         $Utilizador = new Login;
-        $Utilizador->eAdmin() != true ? redirect(base_url('admin/login')) : '';
+        !eUtilizador() ? '' : redirect(base_url('dashboard'));
+
 
         $log = new Log();
         $Utilizador->carregaPorId($id);
@@ -354,6 +367,9 @@ class Logins extends CI_Controller {
     }
 
     public function criar() {
+        //Teste para ver se é super admin, apenas os super admins podem efetuar esta ação
+        !eUtilizador() ? '' : redirect(base_url('dashboard'));
+
         if ($this->session->userdata('login_efetuado') == false) {
             redirect(base_url('admin/login'));
         }
@@ -458,6 +474,9 @@ class Logins extends CI_Controller {
     }
 
     public function listarUtilizadores($campoOrdenacao = null, $sentidoOrdenacao = null, $pagina = 1) {
+        //Teste para ver se é super admin, apenas os super admins podem efetuar esta ação
+        !eUtilizador() ? '' : redirect(base_url('dashboard'));
+
         $Utilizadores = (new Login)->obtemElementos(null, null);
 
         $this->load->view('admin/template/header', ["tituloArea" => "Utilizadores", "subtituloArea" => "Listar", "acoes" => [
@@ -473,6 +492,9 @@ class Logins extends CI_Controller {
     }
 
     public function ativaModoPrivacidade() {
+        //Teste para ver se não é um utilizador normal, apenas os super admins podem efetuar esta ação
+        !eUtilizador() ? '' : redirect(base_url('dashboard'));
+
         if ($this->session->userdata('login_efetuado') == false) {
             redirect(base_url('admin/login'));
         }
@@ -502,6 +524,9 @@ class Logins extends CI_Controller {
     }
 
     public function desativaModoPrivacidade() {
+        //Teste para ver se não é um utilizador normal, apenas os super admins podem efetuar esta ação
+        !eUtilizador() ? '' : redirect(base_url('dashboard'));
+
         if ($this->session->userdata('login_efetuado') == false) {
             redirect(base_url('admin/login'));
         }
