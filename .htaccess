@@ -128,7 +128,7 @@ Header set Pragma "no-cache"
  </IfModule>
 <IfModule mod_rewrite.c>
 #Enables access to specific folders, and the robots.txt file
-RewriteCond $1 !^(index\.php|ficheiros|sitemaps|bd_teste\.php|robots\.txt|sitemap\.xml|verificaRequisitosServer\.php|site\.webmanifest|design|img_emails|phpinfo\.php)
+RewriteCond $1 !^(index\.php|ficheiros|sitemaps|bd_teste\.php|robots\.txt|sitemap\.xml|verificaRequisitosServer\.php|site\.webmanifest|design|phpinfo\.php)
 RewriteRule ^(.*)$ index.php/$1 [L]
 </IfModule>
 <IfModule !mod_rewrite.c>

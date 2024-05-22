@@ -129,6 +129,11 @@
                             <a href="<?= base_url("admin/configuracoes") ?>"><i class="fas fa-wrench"></i>Configurações</a>
                         <? } ?>
                     </li>
+                    <li>
+                        <? if (eSuperAdmin()) { ?>
+                            <a href="<?= base_url("admin/entidadesDistribuidoras") ?>"><i class="fas fa-building"></i>Entidades Distribuidoras</a>
+                        <? } ?>
+                    </li>
                     <? if (!eUtilizador()) { ?>
                         <li>
                             <a href="<?= base_url() . "admin/utilizadores" ?>"><i class="fas fa-users-cog"></i> Utilizadores</a>

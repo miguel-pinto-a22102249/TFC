@@ -95,6 +95,16 @@ $route['admin/escaloes/viewEditar/(:num)'] = 'admin/escaloes/viewEditar/$1';
 $route['admin/escaloes/eliminar/(:num)'] = 'admin/escaloes/eliminar/$1';
 /* * ********************************************************** */
 
+/* * ****************** Entidades Distribuidoras ********************* */
+$route['admin/entidadesDistribuidoras'] = 'admin/entidades_distribuidoras/listar';
+$route['admin/entidadesDistribuidoras/adicionar'] = 'admin/entidades_distribuidoras/adicionar';
+$route['admin/entidadesDistribuidoras/editar/(:num)'] = 'admin/entidades_distribuidoras/editar/$1';
+$route['admin/entidadesDistribuidoras/consultar/(:num)'] = 'admin/entidades_distribuidoras/viewEditar/$1/1';
+$route['admin/entidadesDistribuidoras/viewEditar/(:num)'] = 'admin/entidades_distribuidoras/viewEditar/$1';
+
+$route['admin/entidadesDistribuidoras/eliminar/(:num)'] = 'admin/entidades_distribuidoras/eliminar/$1';
+/* * ************************************************************** */
+
 /* * ****************** Produtos ********************* */
 $route['admin/produtos'] = 'admin/produtos/listar';
 $route['admin/produtos/adicionar'] = 'admin/produtos/adicionar';
