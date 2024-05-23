@@ -53,7 +53,7 @@
             </div>
             <?
             $this->load->model('login');
-            if ($this->session->userdata('login_efetuado') == TRUE) {
+            if ($this->session->userdata('login_efetuado') == true) {
                 ?>
                 <meta http-equiv="refresh" content="0.1; <?= base_url() ?>home_admin">
             <? } ?>
@@ -61,13 +61,13 @@
                 <div class="large-4 medium-8 small-10 cell form-login-wrapper">
                     <div class="titulo-login">
                         <h3><i class="fas fa-sign-in-alt"></i> Login</h3></div>
-                    <form class="form-login" action="<?= base_url() ?>admin/login" method="POST">
+                    <form class="form-login" action="<?= base_url() ?>admin/login" method="POST" autocomplete="true">
                         <div style="margin-bottom: -10px;">
-                            <? if (isset($erro) && $erro == TRUE) { ?>
+                            <? if (isset($erro) && $erro == true) { ?>
                                 <div class="error-box margin-bottom-25">
                                     A conta indicada não existe. <br>Por favor introduza uma conta diferente.
                                 </div>
-                            <? } else if (isset($erro) && $erro == FALSE) { ?>
+                            <? } else if (isset($erro) && $erro == false) { ?>
                                 <div class="success-box margin-bottom-25">
                                     Login efectuado com sucesso!
                                 </div>
@@ -78,12 +78,12 @@
                             <?= form_error() ? form_error('Password', '<div class="error">', '</div>') : ""; ?>
                         </div>
                         <div class="text-left padding-bottom-20">
-                            <a href="#popup-reset-password"class="open-popup-reset-password">Reset password</a>
+                            <a href="#popup-reset-password" class="open-popup-reset-password">Reset password</a>
                         </div>
                         <button class="bottom btn-style" type="submit">Login</button>
                     </form>
                 </div>
-                <p class="margin-top-15 margin-bottom-100 color-white" style="width: 100%; font-size: 12px;"><?= date("Y")?> - power by André Carvalho & Miguel Pinto </p>
+                <p class="margin-top-15 margin-bottom-100 color-white" style="width: 100%; font-size: 12px;"><?= date("Y") ?> - power by André Carvalho & Miguel Pinto </p>
             </div>
             <div id="popup-reset-password" class="white-popup parent-container" style="display:none">
                 <div class="titulo-popup">
@@ -99,7 +99,7 @@
                                 <p><?= lang("admin.login.reset_password.texto") ?></p>
                                 <div class="input-group">
                                     <span class="input-group-label"><i class="fas fa-user"></i></span>
-                                    <input class="input-group-field input-icon" type="text"  id="UsernameResetPassword" name="UsernameResetPassword"/>
+                                    <input class="input-group-field input-icon" type="text" id="UsernameResetPassword" name="UsernameResetPassword"/>
                                     <?= form_error() ? form_error('UsernameResetPassword', '<div class="error">', '</div>') : ""; ?>
                                 </div>
                             </div>
@@ -113,7 +113,6 @@
                 </div>
             </div>
         </div>
-
 
 
     </body>

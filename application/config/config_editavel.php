@@ -13,5 +13,5 @@ $config['email_charset'] = "utf-8";
 $config['email_newline'] = "\r\n";
 $config['email_wordwrap'] = "true";
 $config['email_rececao_form_contacto'] = "info@fomezero.pt";
-$config['produtos_classificacao'] = "[higiene: Higiene, alimentacao: Alimentação, outros: Outros]";
+$config['produtos.classificacao'] = "[higiene: Higiene, alimentacao: Alimentação, outros: Outros]";
 $config['gestao.assets_version'] = "130520224";

@@ -9,6 +9,27 @@
                             <input type="text" name="Nome" placeholder="Nome" value="<?= $Produto->getNome() ?>"/>
                         </div>
                     </div>
+                    <div class="column large-6 medium-6 small-12">
+                        <div class="input-group">
+                            <label for="IdEntidadeDistribuidora">Entidade Distribuidora</label>
+                            <?
+
+                            $this->load->model('Entidade_Distribuidora');
+                            $EntidadesDistribuidoras = (new Entidade_Distribuidora())->obtemElementos(null, ['Estado' => ESTADO_ATIVO]);
+                            ?>
+
+                            <select name="IdEntidadeDistribuidora">
+                                <option value="">Selecione uma entidade distribuidora</option>
+                                <?
+                                foreach ($EntidadesDistribuidoras as $EntidadeDistribuidora) {
+                                    $selected = $Produto->getIdEntidadeDistribuidora() == $EntidadeDistribuidora->getId() ? 'selected' : '';
+
+                                    echo "<option {$selected} value='{$EntidadeDistribuidora->getId()}'>{$EntidadeDistribuidora->getNome()}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="row">
@@ -33,6 +54,12 @@
                             </select>
                         </div>
                     </div>
+                    <div class="column large-6 medium-6 small-12">
+                        <div class="input-group">
+                            <label for="StockAtual">Stock Atual</label>
+                            <input type="number" step="1" name="StockAtual" placeholder="Stock Atual" value="<?= $Produto->getStockAtual() ?>"/>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="row">
@@ -44,14 +71,6 @@
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="column large-6 medium-6 small-12">
-                        <div class="input-group">
-                            <label for="StockAtual">Stock Atual</label>
-                            <input type="number" step="1" name="StockAtual" placeholder="Stock Atual" value="<?= $Produto->getStockAtual() ?>"/>
-                        </div>
-                    </div>
-                </div>
                 <button class="bottom btn-style" type="submit">Gravar</button>
             </form>
         </div>

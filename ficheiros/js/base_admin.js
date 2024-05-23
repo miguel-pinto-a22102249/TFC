@@ -206,6 +206,16 @@ $(document).ready(function() {
                 }
             },
         });
+        $(document).on("dblclick", ".dataTable tr", function() {
+            if ($(this).hasClass('no-clickable')) {
+                return;
+            }
+
+            if ($(this).find('.btn-consultar-popup-ajax').length > 0) { //Se existir um botão de consultar
+                $(this).find('.btn-consultar-popup-ajax').click();
+            }
+        });
+
     }, 100);
     $("div.toolbar").html('<b>Custom tool bar! Text/images etc.</b>');
     // </editor-fold>

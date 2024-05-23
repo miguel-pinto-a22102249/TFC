@@ -1,6 +1,10 @@
 <?php
 
 if (count($Produtos) > 0) {
+    $this->load->model('Entidade_Distribuidora');
+
+    $EntidadesDistribuidoras = (new Entidade_Distribuidora())->obtemElementos(null, ['Estado' => ESTADO_ATIVO]);
+
     ?>
     <div id="Area-Lista-Escaloes" class="area-listagem">
         <div class="row">
@@ -10,6 +14,7 @@ if (count($Produtos) > 0) {
                     <thead>
                     <tr>
                         <th class="text-center">Nome</th>
+                        <th class="text-center">Entidade Distribuidora</th>
                         <th class="text-center">Categoria</th>
                         <th class="text-center">Detalhes</th>
                         <th class="text-center defaultSort">Stock Atual</th>
@@ -25,6 +30,12 @@ if (count($Produtos) > 0) {
                         <tr class="tr-accordion">
                             <td class="text-center">
                                 <?= $produto->getNome(); ?>
+                            </td>
+                            <td class="text-center">
+                                <?
+                                if ($produto->getIdEntidadeDistribuidora() != null) {
+                                    echo $EntidadesDistribuidoras[$produto->getIdEntidadeDistribuidora()]->getNome();
+                                } ?>
                             </td>
                             <td class="text-center">
                                 <?= $produto->getDesignacaoCategoria(); ?>

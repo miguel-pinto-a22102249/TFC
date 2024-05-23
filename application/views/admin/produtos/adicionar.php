@@ -9,6 +9,25 @@
                             <input type="text" id="Nome" name="Nome" placeholder="Nome"/>
                         </div>
                     </div>
+                    <div class="column large-6 medium-6 small-12">
+                        <div class="input-group">
+                            <label for="IdEntidadeDistribuidora">Entidade Distribuidora</label>
+                            <?
+
+                            $this->load->model('Entidade_Distribuidora');
+                            $EntidadesDistribuidoras = (new Entidade_Distribuidora())->obtemElementos(null, ['Estado' => ESTADO_ATIVO]);
+                            ?>
+
+                            <select name="IdEntidadeDistribuidora">
+                                <option value="">Selecione uma entidade distribuidora</option>
+                                <?
+                                foreach ($EntidadesDistribuidoras as $EntidadeDistribuidora) {
+                                    echo "<option value='{$EntidadeDistribuidora->getId()}'>{$EntidadeDistribuidora->getNome()}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="column large-6 medium-6 small-12">
@@ -28,6 +47,13 @@
                             </select>
                         </div>
                     </div>
+
+                    <div class="column large-6 medium-6 small-12">
+                        <div class="input-group">
+                            <label for="StockAtual">Stock Atual</label>
+                            <input type="number" step="1" id="StockAtual" name="StockAtual" placeholder="Stock Atual"/>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="row">
@@ -39,14 +65,7 @@
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="column large-6 medium-6 small-12">
-                        <div class="input-group">
-                            <label for="StockAtual">Stock Atual</label>
-                            <input type="number" step="1" id="StockAtual" name="StockAtual" placeholder="Stock Atual"/>
-                        </div>
-                    </div>
-                </div>
+
                 <button class="bottom btn-style" type="submit">Adicionar</button>
             </form>
         </div>

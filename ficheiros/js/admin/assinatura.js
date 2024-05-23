@@ -1,11 +1,11 @@
 // Referências aos elementos HTML
-const canvas = document.getElementById('signatureCanvas');
-const saveButton = document.getElementById('saveButton');
-const clearButton = document.getElementById('clearCanvasButton');
-const signatureImage = document.getElementById('signatureImage');
-const ctx = canvas.getContext('2d');
+canvas = document.getElementById('signatureCanvas');
+saveButton = document.getElementById('saveButton');
+clearButton = document.getElementById('clearCanvasButton');
+signatureImage = document.getElementById('signatureImage');
+ctx = canvas.getContext('2d');
 
-const dpi = window.devicePixelRatio;
+dpi = window.devicePixelRatio;
 // canvas.width = 400 * dpi;
 // canvas.height = 200 * dpi;
 canvas.style.width = 350 + 'px';
@@ -15,9 +15,9 @@ canvas.style.height = 150 + 'px';
 ctx.lineWidth = 0.1 * dpi;
 
 // Variável para controlar se está desenhando
-let isDrawing = false;
+isDrawing = false;
 // Variável para controlar se a rolagem está bloqueada durante a assinatura
-let isScrollBlocked = false;
+isScrollBlocked = false;
 
 // Evento de toque no canvas para dispositivos móveis
 canvas.addEventListener('touchstart', (event) => {
@@ -72,7 +72,10 @@ canvas.addEventListener('mouseup', () => {
 });
 
 // Evento de clique no botão de salvar
-saveButton.addEventListener('click', () => {
+saveButton.addEventListener('click', (eve) => {
+    eve.preventDefault();
+    eve.stopPropagation();
+    eve.stopImmediatePropagation();
     const signatureDataURL = canvas.toDataURL(); // Obtém a imagem da assinatura como uma URL base64
     signatureImage.src = signatureDataURL; // Define a imagem da assinatura na tag img
     signatureImage.style.display = 'block'; // Exibe a imagem da assinatura
@@ -86,7 +89,10 @@ saveButton.addEventListener('click', () => {
 });
 
 // Função para limpar o canvas
-function clearCanvas() {
+function clearCanvas(eve) {
+    eve.preventDefault();
+    eve.stopPropagation();
+    eve.stopImmediatePropagation();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 

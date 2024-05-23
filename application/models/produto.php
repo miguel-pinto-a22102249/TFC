@@ -30,6 +30,11 @@ class Produto extends Model_Base {
      */
     public $StockAtual;
 
+    /*
+     * @var Int
+     */
+    public $IdEntidadeDistribuidora;
+
 
     const TABELA = 'produto';
 
@@ -108,6 +113,7 @@ class Produto extends Model_Base {
     public function getDesignacaoCategoria() {
         $categorias = explode(',',
             str_replace(["[", "]"], "", config_item("produtos.classificacao")));
+
         foreach ($categorias as $categoria) {
             $codigo = explode(':', $categoria)[0];
             $nome = explode(':', $categoria)[1];
@@ -123,6 +129,20 @@ class Produto extends Model_Base {
      */
     public function setCategoria($Categoria): void {
         $this->Categoria = $Categoria;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIdEntidadeDistribuidora() {
+        return $this->IdEntidadeDistribuidora;
+    }
+
+    /**
+     * @param mixed $IdEntidadeDistribuidora
+     */
+    public function setIdEntidadeDistribuidora($IdEntidadeDistribuidora): void {
+        $this->IdEntidadeDistribuidora = $IdEntidadeDistribuidora;
     }
 
 

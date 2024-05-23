@@ -155,22 +155,27 @@ class Distribuicoes extends CI_Controller {
         $this->load->model('escalao');
         $this->load->model('produto');
         $this->load->model('constituinte');
+        $this->load->model('entidade_distribuidora');
         $CI = &get_instance();
 
         $IdsAgregados = $this->input->post('agregados');
         $TipoDistribuicao = $this->input->post('TipoDistribuicao');
+        $IdEntidadeDistribuidora = $this->input->post('IdEntidadeDistribuidora');
 
         $dados = [];
 
         switch ($TipoDistribuicao) {
             case 1:
-                $dados = $this->distribuicaoPorTotais($IdsAgregados, $TipoDistribuicao);
+                $dados = $this->distribuicaoPorTotais($IdsAgregados, $TipoDistribuicao, $IdEntidadeDistribuidora);
                 break;
             case 2:
-                $dados = $this->distribuicaoEquitativa($IdsAgregados, $TipoDistribuicao);
+                $dados = $this->distribuicaoEquitativa($IdsAgregados, $TipoDistribuicao, $IdEntidadeDistribuidora);
                 break;
         }
 
+        $EntidadeDistribuidoras = (new Entidade_Distribuidora())->obtemElementos(null, ['Estado' => ESTADO_ATIVO]);
+
+        $dados['EntidadeDistribuidora'] = $EntidadeDistribuidoras[$IdEntidadeDistribuidora];
 
         header('Content-Type: application/json');
         echo json_encode(['success' => true, 'message' => 'Dados Importados com sucesso',
@@ -333,7 +338,7 @@ class Distribuicoes extends CI_Controller {
         return;
     }
 
-    public function distribuicaoPorTotais($IdsAgregados, $TipoDistribuicao) {
+    public function distribuicaoPorTotais($IdsAgregados, $TipoDistribuicao, $IdEntidadeDistribuidora) {
         // <editor-fold defaultstate="collapsed" desc="Obter os agregados selecionados">
         $agregados_temp = (new Agregado_Familiar())->obtemElementos(['Estado' => ESTADO_ATIVO]);
         $agregados = [];
@@ -353,7 +358,7 @@ class Distribuicoes extends CI_Controller {
         }
 
         //Obter produtos
-        $produtos = (new Produto())->obtemElementos(['Estado' => ESTADO_ATIVO]);
+        $produtos = (new Produto())->obtemElementos(null, ['Estado' => ESTADO_ATIVO, 'IdEntidadeDistribuidora' => $IdEntidadeDistribuidora]);
 
         $this->produtos = $produtos; // Para poder ser usado nos proximos passos
 
@@ -410,7 +415,7 @@ class Distribuicoes extends CI_Controller {
         return ["agregados_constituintes" => $agregados_constituintes, "produtos_apos_distribuicao" => $produtos_apos_distribuicao];
     }
 
-    public function distribuicaoEquitativa($IdsAgregados, $TipoDistribuicao) {
+    public function distribuicaoEquitativa($IdsAgregados, $TipoDistribuicao, $IdEntidadeDistribuidora) {
         // <editor-fold defaultstate="collapsed" desc="Obter os agregados selecionados">
         $agregados_temp = (new Agregado_Familiar())->obtemElementos(['Estado' => ESTADO_ATIVO]);
         $agregados = [];
@@ -430,7 +435,7 @@ class Distribuicoes extends CI_Controller {
         }
 
         //Obter produtos
-        $produtos = (new Produto())->obtemElementos(['Estado' => ESTADO_ATIVO]);
+        $produtos = (new Produto())->obtemElementos(null, ['Estado' => ESTADO_ATIVO, 'IdEntidadeDistribuidora' => $IdEntidadeDistribuidora]);
 
         $this->produtos = $produtos; // Para poder ser usado nos proximos passos
 

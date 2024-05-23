@@ -15,6 +15,24 @@ $totaisProdutosNecessarios = [];
     <form action="<?= base_url("/admin/distribuicoes/distribuicaoPasso3") ?>" method="POST"
           class="no-ajax form-distribuicao-passo2" enctype="multipart/form-data">
         <section>
+
+            <div class="row margin-bottom-40ss">
+                <div class="column large-6 medium-6 small-6">
+                    <h4>Detalhes da Distribuição</h4>
+                    <?= $EntidadeDistribuidora->getNome() ?>
+                </div>
+                <?
+                if (trim($EntidadeDistribuidora->getLogo()) == "" || $EntidadeDistribuidora->getLogo() == null) {
+                    $urlImg = base_url('ficheiros/imagens/base/default.png');
+                } else {
+                    $urlImg = base_url(CAMINHO_IMAGENS_DINAMICAS . 'logos_entidades/' . $EntidadeDistribuidora->getLogo());
+                }
+                ?>
+                <div class="column large-6 medium-6 small-6">
+                    <img loading="lazy" height="50px" style="max-width: 150px" src="<?= $urlImg ?>">
+                </div>
+            </div>
+
             <div class="row">
                 <div class="column large-12 medium-12 small-12" style="overflow-x: auto">
 

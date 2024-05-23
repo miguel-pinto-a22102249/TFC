@@ -59,10 +59,12 @@ class Produtos extends CI_Controller {
         $Categoria = $this->input->post('Categoria');
         $Detalhes = $this->input->post('Detalhes');
         $StockAtual = $this->input->post('StockAtual');
+        $IdEntidadeDistribuidora = $this->input->post('IdEntidadeDistribuidora');
 
         $this->form_validation->set_rules('Nome', 'Nome', 'required');
         $this->form_validation->set_rules('Categoria', 'Categoria', 'required');
         $this->form_validation->set_rules('StockAtual', 'StockAtual', 'required|numeric');
+        $this->form_validation->set_rules('IdEntidadeDistribuidora', 'IdEntidadeDistribuidora', 'required|numeric');
 
         $this->form_validation->set_message('required', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
         $this->form_validation->set_message('numeric', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
@@ -71,7 +73,7 @@ class Produtos extends CI_Controller {
             $errors = [];
 
             // Construa um array de erros associados aos campos
-            $fields = ['Nome', 'Categoria', 'Detalhes', 'StockAtual'];
+            $fields = ['Nome', 'Categoria', 'Detalhes', 'StockAtual', 'IdEntidadeDistribuidora'];
 
             foreach ($fields as $field) {
                 $error = form_error($field);
@@ -97,6 +99,7 @@ class Produtos extends CI_Controller {
                 'StockInicial' => $StockAtual,
                 'StockAtual' => $StockAtual,
                 'Detalhes' => $Detalhes,
+                'IdEntidadeDistribuidora' => $IdEntidadeDistribuidora,
                 'Segmento' => url_title($Nome, 'dash', true) . '-' . time() . '-' . rand(0, 1000),
             ]);
 
@@ -136,11 +139,14 @@ class Produtos extends CI_Controller {
         $Detalhes = $this->input->post('Detalhes');
         $StockAtual = $this->input->post('StockAtual');
         $Categoria = $this->input->post('Categoria');
+        $IdEntidadeDistribuidora = $this->input->post('IdEntidadeDistribuidora');
+
 
         $this->form_validation->set_rules('Nome', 'Nome', 'required');
         $this->form_validation->set_rules('Categoria', 'Categoria', 'required');
         $this->form_validation->set_rules('Detalhes', 'Detalhes', 'required');
         $this->form_validation->set_rules('StockAtual', 'StockAtual', 'required|numeric');
+        $this->form_validation->set_rules('IdEntidadeDistribuidora', 'IdEntidadeDistribuidora', 'required|numeric');
 
         $this->form_validation->set_message('required', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
         $this->form_validation->set_message('numeric', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
@@ -149,7 +155,7 @@ class Produtos extends CI_Controller {
             $errors = [];
 
             // Construa um array de erros associados aos campos
-            $fields = ['Nome', 'Categoria', 'Detalhes', 'StockAtual'];
+            $fields = ['Nome', 'Categoria', 'Detalhes', 'StockAtual','IdEntidadeDistribuidora'];
 
             foreach ($fields as $field) {
                 $error = form_error($field);
@@ -177,6 +183,7 @@ class Produtos extends CI_Controller {
             $Produto->setDetalhes($Detalhes);
             $Produto->setStockAtual($StockAtual);
             $Produto->setStockInicial($StockAtual);
+            $Produto->setIdEntidadeDistribuidora($IdEntidadeDistribuidora);
 
 
             if ($Produto->edita($id)) {
