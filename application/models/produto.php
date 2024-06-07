@@ -112,7 +112,7 @@ class Produto extends Model_Base {
 
     public function getDesignacaoCategoria() {
         $categorias = explode(',',
-            str_replace(["[", "]"], "", config_item("produtos.classificacao")));
+            str_replace(["[", "]"], "", config_item("produtos_classificacao")));
 
         foreach ($categorias as $categoria) {
             $codigo = explode(':', $categoria)[0];

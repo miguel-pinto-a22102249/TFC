@@ -4647,6 +4647,10 @@ p {
   color: #ff4f4f;
 }
 
+.label--warning {
+  color: #ffce24;
+}
+
 .label--correct {
   color: #00a000;
 }
@@ -5444,8 +5448,9 @@ form .input-group.input-group--produtos-quantidades .add-product {
 form .error {
   text-align: left;
   color: #ff4f4f;
-  font-size: 12px;
+  font-size: 11px;
   display: inline-block;
+  margin-top: 5px;
 }
 form .error svg {
   margin-right: 5px;
@@ -5453,6 +5458,9 @@ form .error svg {
 form .error * {
   font-size: 12px;
   margin-bottom: 0;
+}
+form .error p {
+  font-size: 11px;
 }
 form .success {
   color: #00a000;
@@ -5699,6 +5707,7 @@ body #Area-Login .titulo-wrapper {
   background-color: white;
   padding: 0px 20px 20px 20px;
   border-radius: 0px 0px 10px 10px;
+  max-width: 415px;
 }
 body #Area-Login .titulo-wrapper .titulo-border {
   border-bottom: 10px;
@@ -5721,6 +5730,7 @@ body #Area-Login .form-login-wrapper {
   box-shadow: 0 2px 20px 5px rgba(0, 0, 0, 0.04);
   margin-top: 100px;
   background-color: white;
+  max-width: 415px;
 }
 body #Area-Login .form-login-wrapper .titulo-login {
   padding: 5px 0px;

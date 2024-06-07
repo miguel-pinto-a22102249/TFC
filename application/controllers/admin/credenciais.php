@@ -83,4 +83,63 @@ class Credenciais extends CI_Controller {
             $this->load->view('admin/template/footer');
         }
     }
+
+    public function gerarCredencialB($NumeroGrupoDistribuicao,$IdAgregado) {
+        $this->load->model('produto');
+        $this->load->model('distribuicao');
+        $this->load->model('distribuicao_individual_constituinte');
+        $this->load->model('entrega');
+        $this->load->model('agregado_familiar');
+
+        $distribuicoes = (new Distribuicao())->obtemElementos(null, ['Estado' => ESTADO_ATIVO, 'NumeroGrupoDistribuicao' => $NumeroGrupoDistribuicao, 'IdAgregado' => $IdAgregado]);
+        $IDSEntregas = [];
+        foreach ($distribuicoes as $distribuicao) {
+            $IDSEntregas = array_merge($IDSEntregas, json_decode($distribuicao->getIdsEntregas()));
+        }
+
+        $entregas = (new Entrega())->obtemElementos(null, ['Estado' => ESTADO_ATIVO, 'Id' => [$IDSEntregas, 'where_in']]);
+
+        $IDSDistribuicoesIndividuais = [];
+        foreach ($entregas as $entrega) {
+            $IDSDistribuicoesIndividuais = array_merge($IDSDistribuicoesIndividuais, json_decode($entrega->getIdsDistribuicoesIndividuais()));
+        }
+        $distribuicoes_individuais = (new Distribuicao_Individual_Constituinte())->obtemElementos(null, ['Estado' => ESTADO_ATIVO, 'Id' => [$IDSDistribuicoesIndividuais, 'where_in']]);
+
+
+        $agregados = (new Agregado_Familiar())->obtemElementos(null, ['Estado' => ESTADO_ATIVO]);
+        $produtos = (new Produto())->obtemElementos(null, ['Estado' => ESTADO_ATIVO]);
+
+
+        if ($this->input->is_ajax_request()) {
+            $html = $this->load->view('admin/credenciais/gerar_credencial_b', ['distribuicoes' => $distribuicoes,
+                                                                               'distribuicoes_individuais' => $distribuicoes_individuais,
+                                                                               'entregas' => $entregas, 'agregados' => $agregados,
+                                                                               'produtos' => $produtos], true);
+            $html = $this->load->view('admin/popup/default_popup', ['titulo' => "Gerar Credencial B: " . reset($distribuicoes)->getData(),
+                                                                    'soConsulta' => false,
+                                                                    'html' => $html, 'URLNewWindow' => base_url("admin/credenciais/gerarCredencialB/{$NumeroGrupoDistribuicao}")], true);
+            header('Content-Type: application/json');
+            echo json_encode(['success' => true, 'message' => '', 'view' => $html]);
+            return;
+        } else {
+            $this->load->view('admin/template/header',
+                ["tituloArea" => "Credencial B",
+                 "subtituloArea" => "Gerar Credencial B: " . reset($distribuicoes)->getData(),
+                 "acoes" => [
+//                 [
+////                     "titulo" => "Adicionar",
+////                     "link" => base_url('admin/distribuicoes/distribuicaoPasso1'),
+////                     "icone" => "fas fa-plus",
+////                     'class' => 'button--add button--success'
+//                 ]
+                 ]
+                ]);
+            $this->load->view('admin/credenciais/gerar_credencial_b',
+                ['distribuicoes' => $distribuicoes,
+                 'distribuicoes_individuais' => $distribuicoes_individuais,
+                 'entregas' => $entregas, 'agregados' => $agregados,
+                 'produtos' => $produtos]);
+            $this->load->view('admin/template/footer');
+        }
+    }
 }

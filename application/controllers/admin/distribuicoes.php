@@ -161,26 +161,56 @@ class Distribuicoes extends CI_Controller {
         $IdsAgregados = $this->input->post('agregados');
         $TipoDistribuicao = $this->input->post('TipoDistribuicao');
         $IdEntidadeDistribuidora = $this->input->post('IdEntidadeDistribuidora');
+        $EsgotarStock = $this->input->post('EsgotarStock');
 
-        $dados = [];
+        $this->form_validation->set_rules('agregados', 'agregados', 'required');
+        $this->form_validation->set_rules('EsgotarStock', 'EsgotarStock', 'required');
+        $this->form_validation->set_rules('TipoDistribuicao', 'TipoDistribuicao', 'required');
+        //vamos validar se existem produtos e que tenham stock da entidade distribuidora selecionada
+        $this->form_validation->set_rules('IdEntidadeDistribuidora', 'IdEntidadeDistribuidora', 'required|callback_validaProdutosEntidadeDistribuidora');
 
-        switch ($TipoDistribuicao) {
-            case 1:
-                $dados = $this->distribuicaoPorTotais($IdsAgregados, $TipoDistribuicao, $IdEntidadeDistribuidora);
-                break;
-            case 2:
-                $dados = $this->distribuicaoEquitativa($IdsAgregados, $TipoDistribuicao, $IdEntidadeDistribuidora);
-                break;
+        $this->form_validation->set_message('required', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
+
+
+        if ($this->form_validation->run() === false) {
+            $errors = [];
+
+            // Construa um array de erros associados aos campos
+            $fields = ['agregados', 'TipoDistribuicao', 'IdEntidadeDistribuidora', 'EsgotarStock'];
+
+            foreach ($fields as $field) {
+                $error = form_error($field);
+                if (!empty($error)) {
+                    $errors[] = ['field' => $field, 'message' => $error];
+                }
+            }
+            if ($this->input->is_ajax_request()) {
+                // Se for uma requisição AJAX, envie os erros como resposta JSON
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'errors' => $errors, 'message' => 'Erro ao criar agregado']);
+                return;
+            }
+        } else {
+            $dados = [];
+
+            switch ($TipoDistribuicao) {
+                case 1:
+                    $dados = $this->distribuicaoPorTotais($IdsAgregados, $TipoDistribuicao, $IdEntidadeDistribuidora, $EsgotarStock);
+                    break;
+                case 2:
+                    $dados = $this->distribuicaoEquitativa($IdsAgregados, $TipoDistribuicao, $IdEntidadeDistribuidora, $EsgotarStock);
+                    break;
+            }
+
+            $EntidadeDistribuidoras = (new Entidade_Distribuidora())->obtemElementos(null, ['Estado' => ESTADO_ATIVO]);
+
+            $dados['EntidadeDistribuidora'] = $EntidadeDistribuidoras[$IdEntidadeDistribuidora];
+
+            header('Content-Type: application/json');
+            echo json_encode(['success' => true, 'message' => 'Dados Importados com sucesso',
+                              'view' => $this->load->view('admin/distribuicao/area_distribuicao_passo_2', $dados, true)]);
+            return;
         }
-
-        $EntidadeDistribuidoras = (new Entidade_Distribuidora())->obtemElementos(null, ['Estado' => ESTADO_ATIVO]);
-
-        $dados['EntidadeDistribuidora'] = $EntidadeDistribuidoras[$IdEntidadeDistribuidora];
-
-        header('Content-Type: application/json');
-        echo json_encode(['success' => true, 'message' => 'Dados Importados com sucesso',
-                          'view' => $this->load->view('admin/distribuicao/area_distribuicao_passo_2', $dados, true)]);
-        return;
     }
 
     public function distribuicaoPasso3() {
@@ -338,7 +368,7 @@ class Distribuicoes extends CI_Controller {
         return;
     }
 
-    public function distribuicaoPorTotais($IdsAgregados, $TipoDistribuicao, $IdEntidadeDistribuidora) {
+    public function distribuicaoPorTotais($IdsAgregados, $TipoDistribuicao, $IdEntidadeDistribuidora, $EsgotarStock) {
         // <editor-fold defaultstate="collapsed" desc="Obter os agregados selecionados">
         $agregados_temp = (new Agregado_Familiar())->obtemElementos(['Estado' => ESTADO_ATIVO]);
         $agregados = [];
@@ -349,6 +379,7 @@ class Distribuicoes extends CI_Controller {
         }
         // </editor-fold>
 
+        $CI = &get_instance();
         //Obter escalões
         $escaloes_temp = (new Escalao())->obtemElementos(['Estado' => ESTADO_ATIVO]);
 
@@ -362,11 +393,33 @@ class Distribuicoes extends CI_Controller {
 
         $this->produtos = $produtos; // Para poder ser usado nos proximos passos
 
-        //Vamos mexer nesta variavel removendo logo stock à medida que é atribuido
-        $produtos_apos_distribuicao = $produtos;
-
         //Obter constituintes - São todos obtidos de uma unica vez para que seja mais rápido e eficiente
-        $constituintes = (new Constituinte())->obtemElementos(['Estado' => ESTADO_ATIVO]);
+        $constituintes = (new Constituinte())->obtemElementos(null, ['Estado' => ESTADO_ATIVO]);
+
+
+        //Vamos guardar os produtos que são necessários
+        $produtos_necessarios = [];
+        foreach ($agregados as $agregado) {
+            //Ir a cada constituinte do agregado e fazer os calculos da distribuicao
+            foreach ($constituintes as $constituinte) {
+                if ($constituinte->getIdAgregado() == $agregado->getId()) {
+                    if ($constituinte->getIdEscalao()) {
+                        $escalao = $escaloes[$constituinte->getIdEscalao()];
+                    }
+
+                    if ($escalao) {
+                        $produtos_escalao = json_decode($escalao->getProdutos());
+                    } else {
+                        continue;
+                    }
+
+                    foreach ($produtos_escalao as $produto_id => $quantidade) {
+                        $produtos_necessarios[$produto_id] = $produtos[$produto_id];
+                    }
+                }
+            }
+        }
+        $produtos_apos_distribuicao = $produtos_necessarios;
 
 
         /** @var Agregado_Familiar $agregado */
@@ -410,12 +463,44 @@ class Distribuicoes extends CI_Controller {
                     $agregados_constituintes[$agregado->getNissConstituintePrincipal()][] = $constituinte;
                 }
             }
+        }
+
+        //Vamos distribuir 1 unidade de cada produto que ainda tenha stock até esgotar o stock
+        if ($EsgotarStock == 1) {
+            do {
+                //Vamos criar um array com os produtos que ainda têm stock
+                $produtos_com_stock = [];
+                $existeStocks = false;
+                foreach ($produtos_apos_distribuicao as $produto) {
+                    if ($produto->getStockAtual() > 0) {
+                        $produtos_com_stock[] = $produto;
+                        $existeStocks = true;
+                    }
+                }
+
+                //Vamos distribuir 1 unidade de cada produto que ainda tenha stock até esgotar o stock
+                foreach ($agregados_constituintes as $nissAgregado => $constituintes) {
+                    foreach ($constituintes as $constituinte) {
+                        foreach ($produtos_com_stock as $produto) {
+                            if (array_key_exists($produto->getId(), $constituinte->ProdtutosQuantidades)) {
+                                if ($produto->getStockAtual() > 0) {
+                                    $constituinte->ProdtutosQuantidades[$produto->getId()][1]++;
+                                    $stock_temp = $produto->getStockAtual() - 1;
+                                    $produto->setStockAtual($stock_temp);
+                                    $produtos_apos_distribuicao[$produto->getId()]->setStockAtual($stock_temp);
+                                }
+                            }
+                        }
+                    }
+                }
+            } while ($existeStocks);
         }
 
         return ["agregados_constituintes" => $agregados_constituintes, "produtos_apos_distribuicao" => $produtos_apos_distribuicao];
     }
 
-    public function distribuicaoEquitativa($IdsAgregados, $TipoDistribuicao, $IdEntidadeDistribuidora) {
+    public function distribuicaoEquitativa($IdsAgregados, $TipoDistribuicao, $IdEntidadeDistribuidora, $EsgotarStock) {
+        $CI = &get_instance();
         // <editor-fold defaultstate="collapsed" desc="Obter os agregados selecionados">
         $agregados_temp = (new Agregado_Familiar())->obtemElementos(['Estado' => ESTADO_ATIVO]);
         $agregados = [];
@@ -426,29 +511,28 @@ class Distribuicoes extends CI_Controller {
         }
         // </editor-fold>
 
+
         //Obter escalões
-        $escaloes_temp = (new Escalao())->obtemElementos(['Estado' => ESTADO_ATIVO]);
+        $escaloes = (new Escalao())->obtemElementos(null, ['Estado' => ESTADO_ATIVO]);
 
-        //organizar o array de escaloes por id
-        foreach ($escaloes_temp as $escalao) {
-            $escaloes[$escalao->getId()] = $escalao;
-        }
-
-        //Obter produtos
+        //Obter Produtos
         $produtos = (new Produto())->obtemElementos(null, ['Estado' => ESTADO_ATIVO, 'IdEntidadeDistribuidora' => $IdEntidadeDistribuidora]);
-
-        $this->produtos = $produtos; // Para poder ser usado nos proximos passos
-
-        //Vamos mexer nesta variavel removendo logo stock à medida que é atribuido
-        $produtos_apos_distribuicao = $produtos;
+        $this->produtos = $produtos;                                  // Para poder ser usado nos proximos passos
 
         //Obter constituintes - São todos obtidos de uma unica vez para que seja mais rápido e eficiente
-        $constituintes = (new Constituinte())->obtemElementos(['Estado' => ESTADO_ATIVO]);
+        $constituintes = (new Constituinte())->obtemElementos(null, ['Estado' => ESTADO_ATIVO]);
+        //Vamos guardar apenas os constituintes que pertencem aos agregados selecionados para a distribuicao
+        foreach ($constituintes as $constituinte) {
+            $constituinte->Idade = $constituinte->getIdade();
+            if (!in_array($constituinte->getIdAgregado(), $IdsAgregados)) {
+                unset($constituintes[$constituinte->getId()]);
+            }
+        }
 
+        $produtos_apos_distribuicao = [];
 
-        /** @var Agregado_Familiar $agregado */
-        /** @var Escalao $escalao */
-
+        //Obter os totais que vamos necessitar
+        $totais_produtos_necessarios = [];                            //Vai conter o id do produto como key e dentro [quantidade segundo o escalão, numero de constituintes que necessitam deste produto]
         foreach ($agregados as $agregado) {
             //Ir a cada constituinte do agregado e fazer os calculos da distribuicao
             foreach ($constituintes as $constituinte) {
@@ -459,36 +543,157 @@ class Distribuicoes extends CI_Controller {
 
                     if ($escalao) {
                         $produtos_escalao = json_decode($escalao->getProdutos());
+                    } else {
+                        continue;
                     }
-
-                    //vai conter o id do produto como key e dentro [quantidade segundo o escalão, quantidade efetivamente atribuida]
-                    $produtos_atribuidos = [];
 
                     foreach ($produtos_escalao as $produto_id => $quantidade) {
-                        if (array_key_exists($produto_id, $produtos_apos_distribuicao)) {
-                            //Aqui validamos que o stock atual é suficiente para atribuir
-                            if (($produtos_apos_distribuicao[$produto_id]->getStockAtual() - $quantidade) > 0) {
-                                $produtos_apos_distribuicao[$produto_id]->setStockAtual($produtos_apos_distribuicao[$produto_id]->getStockAtual() - $quantidade);
-                                $produtos_atribuidos[$produto_id] = [$quantidade, $quantidade];
-                            } else if ($produtos_apos_distribuicao[$produto_id]->getStockAtual() > 0) {
-                                //Se nao for suficiente vamos atribuir o que ainda houver e colocar o stock a 0
-                                $produtos_atribuidos[$produto_id] = [$quantidade, $produtos_apos_distribuicao[$produto_id]->getStockAtual()];
-                                $produtos_apos_distribuicao[$produto_id]->setStockAtual(0);
-                            } else {
-                                $produtos_atribuidos[$produto_id] = [$quantidade, $produtos_apos_distribuicao[$produto_id]->getStockAtual()];
-                            }
+                        if (array_key_exists($produto_id, $totais_produtos_necessarios)) {
+                            $totais_produtos_necessarios[$produto_id]["quantidadeTotal"] += $quantidade;
+                            $totais_produtos_necessarios[$produto_id]["numeroConstituintes"]++;
+                        } else {
+                            $totais_produtos_necessarios[$produto_id] = ["quantidadeTotal" => $quantidade, "numeroConstituintes" => 1];
                         }
+
+                        $produtos_apos_distribuicao[$produto_id] = $produtos[$produto_id];
                     }
-
-
-                    //Colocar os produtos do escalao no constituinte
-                    $constituinte->ProdtutosQuantidades = $produtos_atribuidos;
-
-                    $agregados_constituintes[$agregado->getNissConstituintePrincipal()][] = $constituinte;
                 }
             }
         }
 
+
+        $produtos_quantidades_a_distribuir = [];
+        //Agora vamos fazer o calculo do que é possivel distribuir para cada constituinte
+        foreach ($totais_produtos_necessarios as $IdProduto => $total_produto_necessario) {
+            $stockAtual = $produtos[$IdProduto]->getStockAtual();
+
+
+            //floor para arredondar para baixo (ex.: 1.5 = 1)
+            //ceil para arredondar para cima   (ex.: 1.5 = 2)
+            //Usamos a função intdiv($Nprodutos, $Npessoas) para calcular a divisão inteira (quociente).
+            $quantidadeADistribuir = floor($stockAtual / $total_produto_necessario["numeroConstituintes"]);
+
+            if ($quantidadeADistribuir == 0 || $quantidadeADistribuir == false) {
+                $quantidadeADistribuir = 1;
+            }
+
+            $produtos_quantidades_a_distribuir[$IdProduto] = $quantidadeADistribuir;
+        }
+
+
+        //Vamos obter o metodo para a distribuicao (ex.: idade) - Se for por idade quem tem prioridade são os mais novos
+        $value = substr(config_item('distribuicao_variavel'), 1, -1); //Futuramente isto deveria estar numa bd
+        $opcao_de_distribuicao = explode(',', $value)[0];
+
+
+        //Se for por idade vamos ordenar os constituintes por idade para depois fazer a distribuicao
+        $constituintes = array_values($constituintes);
+        if ($opcao_de_distribuicao == "Idade") {
+//          vamos ordenar por idades
+            usort($constituintes, function($a, $b) {
+                return $a->Idade <=> $b->Idade;
+            });
+        }
+
+        //Agora que já temos o calculo e a ordenação de cosntituintes vamos atribuir aos constituintes os produtos
+        $agregados_constituintes = [];
+
+
+        //Depois de ordenado vamos então fazer a distribuição
+        foreach ($constituintes as $constituinte) {
+            if ($constituinte->getIdEscalao()) {
+                $escalao = $escaloes[$constituinte->getIdEscalao()];
+            }
+
+            if ($escalao) {
+                $produtos_escalao = json_decode($escalao->getProdutos());
+            }
+
+            //vai conter o id do produto como key e dentro [quantidade segundo o escalão, quantidade efetivamente atribuida]
+            $produtos_atribuidos = [];
+
+
+            //Estrotura do array $produtos_quantidades_a_distribuir
+            //$produtos_quantidades_a_distribuir[$IdProduto] = $quantidadeADistribuir;
+
+            foreach ($produtos_escalao as $produto_id => $quantidade) {
+                if (array_key_exists($produto_id, $produtos_apos_distribuicao)) {
+                    $quantidadeADistribuir = $produtos_quantidades_a_distribuir[$produto_id];
+
+                    //Se não for para esgotar sotck, vamos apenas distribuir até ao valor de stock estipulado no escalão
+                    if ($EsgotarStock == 0 && $quantidadeADistribuir > $quantidade) {
+                        $quantidadeADistribuir = $quantidade;
+                    }
+
+                    $stockAtualProduto = $produtos_apos_distribuicao[$produto_id]->getStockAtual();
+
+                    //Aqui validamos que o stock atual é suficiente para atribuir a quantidade calculada
+                    if (($stockAtualProduto - $quantidadeADistribuir) > 0) {
+                        $produtos_apos_distribuicao[$produto_id]->setStockAtual($produtos_apos_distribuicao[$produto_id]->getStockAtual() - $quantidadeADistribuir);
+                        $produtos_atribuidos[$produto_id] = [$quantidade, $quantidadeADistribuir];
+                    } else if ($stockAtualProduto > 0) {
+                        //Se nao for suficiente vamos atribuir o que ainda houver e colocar o stock a 0
+                        $produtos_atribuidos[$produto_id] = [$quantidade, $stockAtualProduto];
+                        $produtos_apos_distribuicao[$produto_id]->setStockAtual(0);
+                    } else {
+                        $produtos_atribuidos[$produto_id] = [$quantidade, $stockAtualProduto];
+                    }
+                }
+            }
+
+            //Colocar os produtos do escalao no constituinte
+            $constituinte->ProdtutosQuantidades = $produtos_atribuidos;
+
+            $agregados_constituintes[$agregado->getNissConstituintePrincipal()][] = $constituinte;
+        }
+
+
+        //Vamos distribuir 1 unidade de cada produto que ainda tenha stock até esgotar o stock
+        if ($EsgotarStock == 1) {
+            do {
+                //Vamos criar um array com os produtos que ainda têm stock
+                $produtos_com_stock = [];
+                $existeStocks = false;
+                foreach ($produtos_apos_distribuicao as $produto) {
+                    if ($produto->getStockAtual() > 0) {
+                        $produtos_com_stock[] = $produto;
+                        $existeStocks = true;
+                    }
+                }
+
+                //Vamos distribuir 1 unidade de cada produto que ainda tenha stock até esgotar o stock
+                foreach ($agregados_constituintes as $nissAgregado => $constituintes) {
+                    foreach ($constituintes as $constituinte) {
+                        foreach ($produtos_com_stock as $produto) {
+                            if (array_key_exists($produto->getId(), $constituinte->ProdtutosQuantidades)) {
+                                if ($produto->getStockAtual() > 0) {
+                                    $constituinte->ProdtutosQuantidades[$produto->getId()][1]++;
+                                    $produto->setStockAtual($produto->getStockAtual() - 1);
+                                    $produtos_apos_distribuicao[$produto->getId()]->setStockAtual($produto->getStockAtual());
+                                }
+                            }
+                        }
+                    }
+                }
+            } while ($existeStocks);
+        }
+
         return ["agregados_constituintes" => $agregados_constituintes, "produtos_apos_distribuicao" => $produtos_apos_distribuicao];
+    }
+
+    /**
+     * Função que valida se existem produtos para a entidade distribuidora selecionada para a distribuicao
+     *
+     * @param $IdEntidadeDistribuidora
+     *
+     * @return bool
+     */
+    public function validaProdutosEntidadeDistribuidora($IdEntidadeDistribuidora) {
+        $produtos = (new Produto())->obtemElementos(null, ['Estado' => ESTADO_ATIVO, 'IdEntidadeDistribuidora' => $IdEntidadeDistribuidora]);
+        if (empty($produtos)) {
+            $this->form_validation->set_message('validaProdutosEntidadeDistribuidora', '<i class="fas fa-exclamation-triangle"></i> Não existem produtos para a entidade distribuidora selecionada. Por favor adicione produtos à entidade distribuidora selecionada.');
+            return false;
+        }
+        return true;
     }
 }

@@ -21,6 +21,11 @@ class Agregado_Familiar extends Model_Base {
      */
     public $Segmento;
 
+    /*
+ * @var String
+ */
+    public $IdsEntidadesDistribuidoras;
+
     /* Estado */
 
     const TABELA = 'agregado_familiar';
@@ -29,7 +34,6 @@ class Agregado_Familiar extends Model_Base {
         parent::__construct();
         $this->load->database('default');
     }
-
 
 
     /**
@@ -87,6 +91,21 @@ class Agregado_Familiar extends Model_Base {
     public function setSegmento($Segmento): void {
         $this->Segmento = $Segmento;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getIdsEntidadesDistribuidoras() {
+        return $this->IdsEntidadesDistribuidoras;
+    }
+
+    /**
+     * @param mixed $IdsEntidadesDistribuidoras
+     */
+    public function setIdsEntidadesDistribuidoras($IdsEntidadesDistribuidoras): void {
+        $this->IdsEntidadesDistribuidoras = $IdsEntidadesDistribuidoras;
+    }
+
 
 
 }

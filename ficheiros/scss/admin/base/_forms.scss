@@ -68,8 +68,9 @@ form {
     .error {
         text-align: left;
         color: $cor-vermelho;
-        font-size: 12px;
+        font-size: 11px;
         display: inline-block;
+        margin-top: 5px;
 
         svg {
             margin-right: 5px;
@@ -78,6 +79,10 @@ form {
         * {
             font-size: 12px;
             margin-bottom: 0;
+        }
+
+        p{
+            font-size: 11px;
         }
     }
 

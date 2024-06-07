@@ -148,7 +148,7 @@
                             </a>
                             <div class="dropdown-container">
                                 <ul class="menu vertical">
-                                    <? if ($this->session->userdata('login_efetuado') == true && $this->session->userdata('TipoUtilizador') == Login::TECNICO) { ?>
+                                    <? if ($this->session->userdata('login_efetuado') == true && $this->session->userdata('TipoUtilizador') == Login::SUPER_ADMIN) { ?>
                                         <li><a href="<?= base_url() . "admin/agregados/importacao" ?>"><i class="fas fa-file-excel"></i> Importar</a></li>
                                     <? } ?>
                                     <li><a href="<?= base_url() . "admin/agregados" ?>"><i class="fas fa-users"></i> Listar Agregados</a></li>

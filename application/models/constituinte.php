@@ -70,6 +70,7 @@ class Constituinte extends Model_Base {
         }
     }
 
+
     public function organizaPorNiss($constituintes) {
         $constituintesOrganizados = [];
         foreach ($constituintes as $constituinte) {
@@ -215,6 +216,18 @@ class Constituinte extends Model_Base {
      */
     public function setNome($Nome): void {
         $this->Nome = $Nome;
+    }
+
+    public function getIdade() {
+        // Se $this->Idade não estiver definido, calcular a idade a partir da data de nascimento
+        if (!isset($this->Idade) && isset($this->DataNascimento)) {
+            $dataNascimento = new DateTime($this->DataNascimento);
+            $hoje = new DateTime();
+            $idade = $hoje->diff($dataNascimento)->y; // Calcula a diferença em anos
+        } else {
+            $idade = $this->Idade;
+        }
+        return $idade;
     }
 
 

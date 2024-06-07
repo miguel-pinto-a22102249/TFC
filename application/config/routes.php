@@ -150,6 +150,7 @@ $route['admin/distribuicoes/distribuicaoPasso3'] = 'admin/distribuicoes/distribu
 /* * ****************** Credenciais ********************* */
 $route['admin/credenciais/gerarCredencialA/(:num)'] = 'admin/credenciais/gerarCredencialA/$1';
 $route['admin/credenciais/gravarCredencial/(:num)'] = 'admin/credenciais/gravarCredencials/$1';
+$route['admin/credenciais/gerarCredencialB/(:num)/(:num)'] = 'admin/credenciais/gerarCredencialB/$1/$2';
 /* * ********************************************************** */
 
 /* * ********************** GENERICO ************************** */

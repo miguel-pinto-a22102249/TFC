@@ -1,4 +1,5 @@
 <?php
+$this->load->model('Entidade_Distribuidora');
 
 if (count($Agregados) > 0) {
     ?>
@@ -9,6 +10,7 @@ if (count($Agregados) > 0) {
                     <thead>
                     <tr>
                         <th class="text-center">NISS Constituinte Principal</th>
+                        <th class="text-center defaultSort">Entidade Distribuidora</th>
                         <th class="text-center defaultSort">Grupo</th>
                         <th class="text-center">Estado</th>
                         <th class="th-opcoes" data-orderable='false'></th>
@@ -28,6 +30,21 @@ if (count($Agregados) > 0) {
                                         echo $agregado->getNissConstituintePrincipal();
                                     } ?>
                                 </a>
+                            </td>
+                            <td class="text-center">
+                                <?
+                                $IdsEntidadesDistribuidoras = json_decode($agregado->getIdsEntidadesDistribuidoras());
+                                if ($IdsEntidadesDistribuidoras != null) {
+                                    $EntidadesDistribuidoras = (new Entidade_Distribuidora())->obtemElementos(null, ['Estado' => ESTADO_ATIVO]);
+                                    $entidades = '';
+                                    foreach ($EntidadesDistribuidoras as $EntidadeDistribuidora) {
+                                        if (in_array($EntidadeDistribuidora->getId(), $IdsEntidadesDistribuidoras)) {
+                                            $entidades .= $EntidadeDistribuidora->getNome() . ', ';
+                                        }
+                                    }
+                                    echo substr($entidades, 0, -2);
+                                }
+                                ?>
                             </td>
                             <td class="text-center">
                                 <?= $agregado->getGrupo(); ?>

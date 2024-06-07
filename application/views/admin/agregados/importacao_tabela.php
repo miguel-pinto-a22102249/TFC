@@ -73,6 +73,29 @@ $coresSofts = [
                     } ?>
                     </tbody>
                 </table>
+
+                <div class="row text-center ">
+                    <div class="column large-6 medium-6 small-12 large-centered margin-bottom-30 margin-top-30">
+                        <div class="input-group">
+                            <label for="IdsEntidadesDistribuidoras">Entidades Distribuidoras</label>
+                            <?
+
+                            $this->load->model('Entidade_Distribuidora');
+                            $EntidadesDistribuidoras = (new Entidade_Distribuidora())->obtemElementos(null, ['Estado' => ESTADO_ATIVO]);
+                            ?>
+
+                            <select name="IdsEntidadesDistribuidoras" id="IdsEntidadesDistribuidoras" multiple>
+                                <?
+                                foreach ($EntidadesDistribuidoras as $EntidadeDistribuidora) {
+                                    echo "<option value='{$EntidadeDistribuidora->getId()}'>{$EntidadeDistribuidora->getNome()}</option>";
+                                }
+                                ?>
+                            </select>
+                            <a href="javascript:;" onclick="selecionarTodos()" style="margin-top: -5px;display: block;"><small><u>Selecionar Todos</u></small></a>
+                        </div>
+                    </div>
+                </div>
+
                 <center><p>Todas a linhas com erros, não serão importadas.</p></center>
             </div>
         <? } ?>
@@ -102,11 +125,16 @@ $(document).ready(function() {
         }
 
         var agregados = <?php echo json_encode($agregados); ?>;
+        var entidadesSelecionadas = $('select[name="IdsEntidadesDistribuidoras"]').val();
+        // console.log(entidadesSelecionadas);
         // Enviar os dados via AJAX para o controlador PHP
         $.ajax({
             url: '<?php echo base_url('admin/agregados/guardarImportacao'); ?>',
             type: 'POST',
-            data: {dados: JSON.stringify(agregados)}, // Envie os dados como JSON
+            data: {
+                dados: JSON.stringify(agregados),
+                entidadesDistribuidoras: entidadesSelecionadas
+            }, // Envie os dados como JSON
             success: function(response) {
 
                 $('.is-active').removeClass('is-active');
@@ -124,14 +152,23 @@ $(document).ready(function() {
 
 
                     notie.alert({type: 1, text: response.message, stay: true});
-                    if (!form.hasClass('no-reset')) {
-                        form[0].reset(); // Limpa os campos do formulário
-                    }
+                    // if (!form.hasClass('no-reset')) {
+                    //     form[0].reset(); // Limpa os campos do formulário
+                    // }
                 }
             }
         });
     });
 });
+
+function selecionarTodos() {
+    var select = document.getElementById("IdsEntidadesDistribuidoras");
+    for (var i = 0; i < select.options.length; i++) {
+        select.options[i].selected = true;
+    }
+}
+
+
 </script>
 
 

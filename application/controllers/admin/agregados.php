@@ -64,9 +64,11 @@ class Agregados extends CI_Controller {
 
         $NissConstituintePrincipal = $this->input->post('NissConstituintePrincipal');
         $Grupo = $this->input->post('Grupo');
+        $IdsEntidadesDistribuidoras = $this->input->post('IdsEntidadesDistribuidoras');
 
         $this->form_validation->set_rules('NissConstituintePrincipal', 'NissConstituintePrincipal', 'required|is_unique[' . Agregado_Familiar::TABELA . '.NissConstituintePrincipal]');
         $this->form_validation->set_rules('Grupo', 'Grupo', 'required|is_unique[' . Agregado_Familiar::TABELA . '.Grupo]');
+        $this->form_validation->set_rules('IdsEntidadesDistribuidoras', 'IdsEntidadesDistribuidoras', 'required');
 
         $this->form_validation->set_message('required', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
         $this->form_validation->set_message('numeric', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
@@ -76,7 +78,7 @@ class Agregados extends CI_Controller {
             $errors = [];
 
             // Construa um array de erros associados aos campos
-            $fields = ['NissConstituintePrincipal', 'Grupo'];
+            $fields = ['NissConstituintePrincipal', 'Grupo', 'IdsEntidadesDistribuidoras'];
 
             foreach ($fields as $field) {
                 $error = form_error($field);
@@ -99,6 +101,7 @@ class Agregados extends CI_Controller {
             $Agregado->define([
                 'NissConstituintePrincipal' => $NissConstituintePrincipal,
                 'Grupo' => $Grupo,
+                'IdsEntidadesDistribuidoras' => $IdsEntidadesDistribuidoras,
                 'Segmento' => url_title($NissConstituintePrincipal, 'dash', true) . '-' . time() . '-' . rand(0, 1000),
             ]);
 
@@ -138,9 +141,12 @@ class Agregados extends CI_Controller {
 
         $NissConstituintePrincipal = $this->input->post('NissConstituintePrincipal');
         $Grupo = $this->input->post('Grupo');
+        $IdsEntidadesDistribuidoras = $this->input->post('IdsEntidadesDistribuidoras');
+
 
         $this->form_validation->set_rules('NissConstituintePrincipal', 'NissConstituintePrincipal', 'required');
         $this->form_validation->set_rules('Grupo', 'Grupo', 'numeric');
+        $this->form_validation->set_rules('IdsEntidadesDistribuidoras', 'IdsEntidadesDistribuidoras', 'required');
 
         $this->form_validation->set_message('required', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
         $this->form_validation->set_message('numeric', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
@@ -149,7 +155,7 @@ class Agregados extends CI_Controller {
             $errors = [];
 
             // Construa um array de erros associados aos campos
-            $fields = ['NissConstituintePrincipal', 'Grupo'];
+            $fields = ['NissConstituintePrincipal', 'Grupo', 'IdsEntidadesDistribuidoras'];
 
             foreach ($fields as $field) {
                 $error = form_error($field);
@@ -173,6 +179,7 @@ class Agregados extends CI_Controller {
 //                $Agregado_Familiar->setNissConstituintePrincipal($NissConstituintePrincipal);
 //                $Agregado_Familiar->setSegmento(url_title($NissConstituintePrincipal, 'dash', true) . '-' . time() . '-' . rand(0, 1000));
 //            }
+            $Agregado_Familiar->setIdsEntidadesDistribuidoras(json_encode($IdsEntidadesDistribuidoras));
             $Agregado_Familiar->setGrupo($Grupo);
 
 
@@ -584,6 +591,7 @@ class Agregados extends CI_Controller {
 
         if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['dados'])) {
             $dados = json_decode($_POST['dados'], true);
+            $IdsEntidadesSelecionadas = json_encode($_POST['entidadesDistribuidoras'], true);
 
             $CI = &get_instance();
 
@@ -603,6 +611,7 @@ class Agregados extends CI_Controller {
                     $agregado = new Agregado_Familiar();
                     $agregado->define([
                         'NissConstituintePrincipal' => $IdAgregado,
+                        'IdsEntidadesDistribuidoras' => $IdsEntidadesSelecionadas,
                         'Grupo' => null,
                         'Segmento' => url_title($IdAgregado, 'dash', true) . '-' . time() . '-' . rand(0, 1000),
                         'Estado' => 1

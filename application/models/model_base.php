@@ -44,7 +44,15 @@ class Model_Base extends CI_Model {
             if (property_exists($this, $campo)) {
                 // Verifica se o campo é diferente de 'Id' antes de atribuir o valor
                 if ($campo !== 'Id' || (isset($campo['Id']) && !empty($valor))) {
-                    $this->$campo = $valor;
+                    if (is_numeric($valor)) {
+                        if (strpos($valor, '.') !== false) {
+                            $this->$campo = (float)$valor;
+                        } else {
+                            $this->$campo = (int)$valor;
+                        }
+                    } else {
+                        $this->$campo = $valor;
+                    }
                 }
             }
 
@@ -206,12 +214,11 @@ class Model_Base extends CI_Model {
 
 
         $CI = &get_instance();
-//        $CI->firephp->log($filtragem);
         //FILTRAGEM
         foreach ($filtragem as $campo_filtragem => $filtro) {
             if (is_array($filtro)) {
-                $condicao = (String)$filtro[1];
-                $this->db->$condicao($campo_filtragem,$filtro[0]);
+                $condicao = (string)$filtro[1];
+                $this->db->$condicao($campo_filtragem, $filtro[0]);
             } else {
                 $this->db->like($campo_filtragem, $filtro);
             }
@@ -242,6 +249,7 @@ class Model_Base extends CI_Model {
         foreach ($array_dados_obj as $dados_obj) {
             $obj = new $nome_class;
             $obj->define($dados_obj);
+            //Aqui coloca no array de objs na posição do id do objeto
             $array_objs[$obj->getId()] = $obj;
         }
 
