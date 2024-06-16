@@ -735,9 +735,15 @@ class Distribuicoes extends CI_Controller {
         $this->db->select('*, (SELECT MAX(NumeroGrupoDistribuicao) FROM distribuicao) AS MaxNumeroGrupoDistribuicao');
         $this->db->from('distribuicao');
         $query = $this->db->get();
-        $row = $query->row();
-        // Esta variavel serve para colocarmos todas as distribuicoes no mesmo grupo (num foturo podemos ter um obj acima deste para agrupar)
-        $MaxNumeroGrupoDistribuicao = $row->MaxNumeroGrupoDistribuicao + 1;
+        if ($query->num_rows() > 0) {
+            $row = $query->row();
+            // Esta variavel serve para colocarmos todas as distribuicoes no mesmo grupo (num foturo podemos ter um obj acima deste para agrupar)
+            $MaxNumeroGrupoDistribuicao = $row->MaxNumeroGrupoDistribuicao + 1;
+        } else {
+            // Esta variavel serve para colocarmos todas as distribuicoes no mesmo grupo (num foturo podemos ter um obj acima deste para agrupar)
+            $MaxNumeroGrupoDistribuicao = 0;
+        }
+
 
         foreach ($entregasPorAgregado as $IdAgregado => $entregas) {
             $ids_entregas = [];

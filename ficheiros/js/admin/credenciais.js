@@ -20,27 +20,53 @@ setTimeout(function() {
             clearCanvas();
         });
 
-        $canvas.on('mousedown', function(event) {
+        function getTouchPos(canvas, touchEvent) {
+            const rect = canvas.getBoundingClientRect();
+            return {
+                x: touchEvent.touches[0].clientX - rect.left,
+                y: touchEvent.touches[0].clientY - rect.top
+            };
+        }
+
+        $canvas.on('mousedown touchstart', function(event) {
             isDrawing = true;
             ctx.beginPath();
-            ctx.moveTo(event.clientX - $canvas[0].getBoundingClientRect().left, event.clientY - $canvas[0].getBoundingClientRect().top);
+            const pos = event.type === 'touchstart' ? getTouchPos($canvas[0], event) : { x: event.clientX - $canvas[0].getBoundingClientRect().left, y: event.clientY - $canvas[0].getBoundingClientRect().top };
+            ctx.moveTo(pos.x, pos.y);
+            event.preventDefault();
         });
 
-        $canvas.on('mousemove', function(event) {
+        $canvas.on('mousemove touchmove', function(event) {
             if (isDrawing) {
-                ctx.lineTo(event.clientX - $canvas[0].getBoundingClientRect().left, event.clientY - $canvas[0].getBoundingClientRect().top);
+                const pos = event.type === 'touchmove' ? getTouchPos($canvas[0], event) : { x: event.clientX - $canvas[0].getBoundingClientRect().left, y: event.clientY - $canvas[0].getBoundingClientRect().top };
+                ctx.lineTo(pos.x, pos.y);
                 ctx.stroke();
             }
+            event.preventDefault();
         });
 
-        $canvas.on('mouseup', function() {
+        $canvas.on('mouseup touchend touchcancel', function(event) {
             isDrawing = false;
+            event.preventDefault();
         });
 
         function clearCanvas() {
             ctx.clearRect(0, 0, $canvas[0].width, $canvas[0].height);
         }
     });
+
+    document.addEventListener("touchstart", function(event) {
+        if (event.target === document.querySelector('.signatureCanvas')) {
+            event.preventDefault();
+        }
+    }, { passive: false });
+
+    document.addEventListener("touchmove", function(event) {
+        if (event.target === document.querySelector('.signatureCanvas')) {
+            event.preventDefault();
+        }
+    }, { passive: false });
+
 
 
     $('#btn-gerar-credencial').on('click', function() {

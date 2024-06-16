@@ -61,8 +61,14 @@ class Distribuicao extends Model_Base {
             $query = $this->db->get();
             $row = $query->row();
         }
-        // Esta variavel serve para colocarmos todas as distribuicoes no mesmo grupo (num foturo podemos ter um obj acima deste para agrupar)
-        return $row->MaxNumeroGrupoDistribuicao;
+
+
+        if ($query->num_rows() > 0) {
+            $row = $query->row();
+            // Esta variavel serve para colocarmos todas as distribuicoes no mesmo grupo (num foturo podemos ter um obj acima deste para agrupar)
+            return $row->MaxNumeroGrupoDistribuicao + 1;
+        }
+        return 0;
     }
 
     /**
