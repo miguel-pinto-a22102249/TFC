@@ -9,13 +9,15 @@ $distribuicoes_individuais ??= [];
 $produtos ??= [];
 $agregados ??= [];
 $distribuicoes ??= [];
-
+$credenciais ??= [];
 $CI = &get_instance();
+
 //Organizar as distruicoes por agregado
 $distribuicoesPorAgregado = [];
 foreach ($distribuicoes as $distribuicao) {
     $distribuicoesPorAgregado[$distribuicao->getIdAgregado()][] = $distribuicao;
 }
+
 
 //$CI = &get_instance();
 //$CI->firephp->log($distribuicoesPorAgregado, 'distribuicoesPorAgregado');
@@ -28,6 +30,7 @@ if (count($distribuicoesPorAgregado) > 0) { ?>
                 <table class="display dataTable responsive">
                     <thead>
                     <tr>
+                        <th class="text-center"></th>
                         <th class="text-center defaultSort">NISS Constituinte Principal</th>
                         <th class="text-center">Estado</th>
                         <th class="text-center">Entregas</th>
@@ -36,12 +39,34 @@ if (count($distribuicoesPorAgregado) > 0) { ?>
                     </thead>
                     <tbody>
                     <? foreach ($distribuicoesPorAgregado as $IdAgregado => $distribuicaoAgregado) {
+
                         $numeroGrupoDistribuicao = $distribuicaoAgregado[0]->getNumeroGrupoDistribuicao();
+
+                        $credencialB = false;
+                        foreach ($credenciais as $credencial) {
+                            if ($credencial->getGrupoDistribuicao() == $numeroGrupoDistribuicao
+                                && json_decode($credencial->getIdsObjetosAssociados()) == $distribuicaoAgregado[0]->getId()) {
+                                $credencialB = $credencial;
+                                break;
+                            }
+                        }
+
                         ?>
                         <tr class="tr-accordion">
                             <td class="trigger">
-                                <a title="Gerar Credencial B" class="btn-style small btn-assinar-credencial"
-                                   href="<?= base_url('admin/credenciais/gerarCredencialB/' . $numeroGrupoDistribuicao . '/' . $IdAgregado) ?>"><i class="fas fa-file"></i></a>
+                                <? if (!$credencialB) { ?>
+                                    <a title="Gerar / Assinar Credencial B" class="btn-style small btn-assinar-credencial"
+                                       href="<?= base_url('admin/credenciais/gerarCredencialB/' . $numeroGrupoDistribuicao . '/' . $IdAgregado) ?>"><i class="fas fa-file"></i></a>
+                                <? } else { ?>
+                                    <a title="Consultar Credencial B" class="btn-style small btn-consultar-credencial-b"
+                                       href="<?= base_url('admin/credenciais/consultarCredencialB/' . $credencialB->getId()) ?>">
+                                        <i class="fas fa-file"></i>
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                <? } ?>
+                            </td>
+                            <td class="trigger">
+
                                 <? if ($this->session->userdata('ModoPrivacidade') == false) { ?>
                                     xxx xxx <?= substr($agregados[$IdAgregado]->getNissConstituintePrincipal(), 6, 9); ?>
                                     <?
@@ -50,7 +75,7 @@ if (count($distribuicoesPorAgregado) > 0) { ?>
                                 } ?>
                             </td>
                             <td>
-                                <?= $agregados[$IdAgregado]->getDesignacaoEstado() ?>
+                                <?= $distribuicaoAgregado[0]->getDesignacaoEstado() ?>
                             </td>
                             <td>
                                 <?

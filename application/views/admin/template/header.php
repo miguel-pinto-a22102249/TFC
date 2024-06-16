@@ -174,6 +174,11 @@
                             </ul>
                         </div>
                     </li>
+                    <li>
+                        <? if (eSuperAdmin()) { ?>
+                            <a href="<?= base_url("admin/tutoriais") ?>"><i class="fas fa-info-circle"></i>Tutoriais</a>
+                        <? } ?>
+                    </li>
                 </ul>
             </div>
             <div id="content">
@@ -192,7 +197,8 @@
                                             if (isset($acoes) && count($acoes) > 0) {
                                                 foreach ($acoes as $acao) {
                                                     ?>
-                                                    <a href="<?= $acao['link'] ?>" class="button <?= $acao['class'] ?>"><i class="<?= $acao['icone'] ?>"></i><?= $acao['titulo'] ?></a>
+                                                    <a href="<?= $acao['link'] ?>"
+                                                        <?= key_exists('id', $acao) ? $acao['id'] : '' ?> class="button <?= $acao['class'] ?>"><i class="<?= $acao['icone'] ?>"></i><?= $acao['titulo'] ?></a>
                                                     <?
                                                 }
                                             }

@@ -20,6 +20,7 @@ $totaisProdutosNecessarios = [];
                 <div class="column large-6 medium-6 small-6">
                     <h4>Detalhes da Distribuição</h4>
                     <?= $EntidadeDistribuidora->getNome() ?>
+                    <input type="hidden" name="IdEntidadeDistribuidora" value="<?= $EntidadeDistribuidora->getId() ?>">
                 </div>
                 <?
                 if (trim($EntidadeDistribuidora->getLogo()) == "" || $EntidadeDistribuidora->getLogo() == null) {
@@ -99,8 +100,8 @@ $totaisProdutosNecessarios = [];
                                                         <table>
                                                             <thead>
                                                             <tr>
-                                                                <th>Quant. a Atribuir</th>
-                                                                <th>Quant. Atribuida</th>
+                                                                <th>A Atribuir</th>
+                                                                <th>Atribuida</th>
                                                             </tr>
                                                             </thead>
                                                             <tr>
@@ -110,6 +111,12 @@ $totaisProdutosNecessarios = [];
                                                                            name="QuantidadeAjustada[<?= $agregado_constituinte->getId() ?>][<?= $produto_id ?>]" value="<?= $quantidade[1] ?>" min="0">
                                                                 </td>
                                                             </tr>
+                                                            <? if (isset($quantidade[2])) { ?>
+                                                                <tr>
+                                                                    <td colspan="2">Quantidade última distribuição: <?=$quantidade[2]?></td>
+                                                                </tr>
+                                                            <?
+                                                            } ?>
                                                         </table>
                                                     </td>
                                                     <?
@@ -133,7 +140,7 @@ $totaisProdutosNecessarios = [];
                     <thead>
                     <tr>
                         <th>Produto</th>
-                        <th>Quantidade</th>
+                        <th>Quantidade Necessária</th>
                         <th>Stock Atual</th>
                     </tr>
                     </thead>

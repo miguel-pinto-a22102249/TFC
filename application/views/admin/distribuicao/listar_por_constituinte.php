@@ -162,7 +162,7 @@ if (count(distribuicoesPorAgregado) > 0) {
                                             </li>
                                             <li>
                                                 <a class="Editar" href="<?= base_url() . 'admin/agregados/editar/' . $agregado->getId() ?>">
-                                                    <i class="fas fa-edit fa-1x"></i> Ediar
+                                                    <i class="fas fa-edit fa-1x"></i> Editar
                                                 </a>
                                             </li>
                                             <li>

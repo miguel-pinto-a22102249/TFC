@@ -26,6 +26,8 @@ class Agregado_Familiar extends Model_Base {
  */
     public $IdsEntidadesDistribuidoras;
 
+    public $Morada;
+
     /* Estado */
 
     const TABELA = 'agregado_familiar';
@@ -33,6 +35,17 @@ class Agregado_Familiar extends Model_Base {
     public function __construct() {
         parent::__construct();
         $this->load->database('default');
+    }
+
+
+    public function getNumeroTotalConstituintesAgregado() {
+        $this->load->model('constituinte');
+        $numeroTotalConstituintesAgregado = (new Constituinte())->obtemElementos(null,
+            ['Estado' => self::ESTADO_ATIVO, 'IdAgregado' => $this->getId()],
+            null,
+            true);
+
+        return $numeroTotalConstituintesAgregado;
     }
 
 
@@ -106,6 +119,19 @@ class Agregado_Familiar extends Model_Base {
         $this->IdsEntidadesDistribuidoras = $IdsEntidadesDistribuidoras;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getMorada() {
+        return $this->Morada;
+    }
+
+    /**
+     * @param mixed $Morada
+     */
+    public function setMorada($Morada): void {
+        $this->Morada = $Morada;
+    }
 
 
 }

@@ -13,6 +13,16 @@ class Entidade_Distribuidora extends Model_Base {
     /*
      * @var String
      */
+    public $NomeCompleto;
+
+    /*
+    * @var String
+    */
+    public $TipoOperacao;
+
+    /*
+     * @var String
+     */
     public $NIF;
 
     /*
@@ -94,6 +104,36 @@ class Entidade_Distribuidora extends Model_Base {
     public function setLogo($logo): void {
         $this->Logo = $logo;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getNomeCompleto() {
+        return $this->NomeCompleto;
+    }
+
+    /**
+     * @param mixed $NomeCompleto
+     */
+    public function setNomeCompleto($NomeCompleto): void {
+        $this->NomeCompleto = $NomeCompleto;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTipoOperacao() {
+        return $this->TipoOperacao;
+    }
+
+    /**
+     * @param mixed $TipoOperacao
+     */
+    public function setTipoOperacao($TipoOperacao): void {
+        $this->TipoOperacao = $TipoOperacao;
+    }
+
+
 //</editor-fold>
 
 

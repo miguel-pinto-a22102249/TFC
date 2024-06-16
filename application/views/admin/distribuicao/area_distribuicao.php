@@ -12,6 +12,12 @@ $this->load->model('Entidade_Distribuidora');
                 <form action="<?= base_url("/admin/distribuicoes/distribuicaoPasso2") ?>" method="POST" class="no-ajax form-distribuicao" enctype="multipart/form-data">
 
                     <div class="row">
+                        <div class="column large-4 medium-12 small-12 margin-bottom-15">
+                            <label>Variável de Distribuição: <?= explode(',', substr(config_item('distribuicao_variavel'), 1, -1))[0];?></label>
+                        </div>
+                    </div>
+
+                    <div class="row">
                         <div class="column large-4 medium-12 small-12">
                             <div class="input-group">
                                 <label for="TipoDistribuicao">Tipo de Distribuição</label>
@@ -75,7 +81,9 @@ $this->load->model('Entidade_Distribuidora');
                                     $IdsEntidadesDistribuidoras = "";
                                     if ($agregado->getIdsEntidadesDistribuidoras() != null) {
                                         $IdsEntidadesDistribuidoras = json_decode($agregado->getIdsEntidadesDistribuidoras());
-                                        $IdsEntidadesDistribuidoras = implode(',', $IdsEntidadesDistribuidoras);
+                                        if (is_array($IdsEntidadesDistribuidoras)) {
+                                            $IdsEntidadesDistribuidoras = implode(',', $IdsEntidadesDistribuidoras);
+                                        }
                                     }
                                     ?>
                                     <tr data-entidades-distribuidoras="<?= $IdsEntidadesDistribuidoras ?>">
@@ -98,13 +106,18 @@ $this->load->model('Entidade_Distribuidora');
                                                 $IdsEntidadesDistribuidoras = json_decode($agregado->getIdsEntidadesDistribuidoras());
                                                 if ($IdsEntidadesDistribuidoras != null) {
                                                     $EntidadesDistribuidoras = (new Entidade_Distribuidora())->obtemElementos(null, ['Estado' => ESTADO_ATIVO]);
-                                                    $entidades = '';
-                                                    foreach ($EntidadesDistribuidoras as $EntidadeDistribuidora) {
-                                                        if (in_array($EntidadeDistribuidora->getId(), $IdsEntidadesDistribuidoras)) {
-                                                            $entidades .= $EntidadeDistribuidora->getNome() . ', ';
+
+                                                    if (is_array($IdsEntidadesDistribuidoras)) {
+                                                        $entidades = '';
+                                                        foreach ($EntidadesDistribuidoras as $EntidadeDistribuidora) {
+                                                            if (in_array($EntidadeDistribuidora->getId(), $IdsEntidadesDistribuidoras)) {
+                                                                $entidades .= $EntidadeDistribuidora->getNome() . ', ';
+                                                            }
                                                         }
+                                                        echo substr($entidades, 0, -2);
+                                                    } else {
+                                                        echo $EntidadesDistribuidoras[$IdsEntidadesDistribuidoras]->getNome();
                                                     }
-                                                    echo substr($entidades, 0, -2);
                                                 }
                                                 ?>
                                             </label>

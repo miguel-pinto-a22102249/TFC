@@ -50,7 +50,7 @@ if (count($EntidadesDistribuidoras) > 0) {
                                             </li>
                                             <li>
                                                 <a class="Editar btn-editar-popup-ajax" href="<?= base_url() . 'admin/entidadesDistribuidoras/viewEditar/' . $EntidadeDistribuidora->getId() ?>">
-                                                    <i class="fas fa-edit fa-1x"></i> Ediar
+                                                    <i class="fas fa-edit fa-1x"></i> Editar
                                                 </a>
                                             </li>
                                             <li>

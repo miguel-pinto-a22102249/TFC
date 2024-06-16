@@ -60,12 +60,16 @@ class Entidades_Distribuidoras extends CI_Controller {
 
 
         $Nome = $this->input->post('Nome');
+        $NomeCompleto = $this->input->post('NomeCompleto');
+        $TipoOperacao = $this->input->post('TipoOperacao');
         $NIF = $this->input->post('NIF');
         $Morada = $this->input->post('Morada');
 
         $this->form_validation->set_rules('Nome', 'Nome', 'required|is_unique[entidade_distribuidora.Nome]');
         $this->form_validation->set_rules('NIF', 'NIF', 'required');
         $this->form_validation->set_rules('Morada', 'Morada', 'required');
+        $this->form_validation->set_rules('NomeCompleto', 'NomeCompleto', 'required');
+        $this->form_validation->set_rules('TipoOperacao', 'TipoOperacao', 'required');
 
 
         $this->form_validation->set_message('required', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
@@ -77,7 +81,7 @@ class Entidades_Distribuidoras extends CI_Controller {
             $errors = [];
 
             // Construa um array de erros associados aos campos
-            $fields = ['Nome', 'NIF', 'Morada'];
+            $fields = ['Nome', 'NIF', 'Morada', 'NomeCompleto', 'TipoOperacao'];
 
             foreach ($fields as $field) {
                 $error = form_error($field);
@@ -99,6 +103,8 @@ class Entidades_Distribuidoras extends CI_Controller {
         } else {
             $EntidadeDistribuidora->define([
                 'Nome' => $Nome,
+                'NomeCompleto' => $NomeCompleto,
+                'TipoOperacao' => $TipoOperacao,
                 'NIF' => $NIF,
                 'Morada' => $Morada,
                 'Logo' => 'default-user.png',
@@ -155,10 +161,14 @@ class Entidades_Distribuidoras extends CI_Controller {
 
 
         $Nome = $this->input->post('Nome');
+        $NomeCompleto = $this->input->post('NomeCompleto');
+        $TipoOperacao = $this->input->post('TipoOperacao');
         $NIF = $this->input->post('NIF');
         $Morada = $this->input->post('Morada');
 
-//        $this->form_validation->set_rules('Nome', 'Nome', 'required|is_unique[entidade_distribuidora.Nome]');
+
+        $this->form_validation->set_rules('NomeCompleto', 'NomeCompleto', 'required');
+        $this->form_validation->set_rules('TipoOperacao', 'TipoOperacao', 'required');
         $this->form_validation->set_rules('NIF', 'NIF', 'required');
         $this->form_validation->set_rules('Morada', 'Morada', 'required');
 
@@ -176,7 +186,7 @@ class Entidades_Distribuidoras extends CI_Controller {
             $errors = [];
 
             // Construa um array de erros associados aos campos
-            $fields = ['Nome', 'NIF', 'Morada'];
+            $fields = ['Nome', 'NIF', 'Morada', 'NomeCompleto', 'TipoOperacao'];
 
             foreach ($fields as $field) {
                 $error = form_error($field);
@@ -200,6 +210,8 @@ class Entidades_Distribuidoras extends CI_Controller {
                 $EntidadeDistribuidora->setNome($Nome);
                 $EntidadeDistribuidora->setSegmento(url_title($Nome, 'dash', true) . '-' . time() . '-' . rand(0, 1000));
             }
+            $EntidadeDistribuidora->setNomeCompleto($NomeCompleto);
+            $EntidadeDistribuidora->setTipoOperacao($TipoOperacao);
             $EntidadeDistribuidora->setNIF($NIF);
             $EntidadeDistribuidora->setMorada($Morada);
             //Se tiver logo
@@ -238,7 +250,7 @@ class Entidades_Distribuidoras extends CI_Controller {
 
         if ($this->input->is_ajax_request()) {
             $html = $this->load->view('admin/entidades_distribuidoras/editar', ['EntidadeDistribuidora' => $EntidadeDistribuidora], true);
-            $html = $this->load->view('admin/popup/default_popup', ['titulo' => 'Editar Escalão',
+            $html = $this->load->view('admin/popup/default_popup', ['titulo' => 'Editar Entidade Distribuidora',
                                                                     'soConsulta' => $soConsulta,
                                                                     'html' => $html, 'URLNewWindow' => base_url("admin/entidades_distribuidoras/editar/{$id}")], true);
             header('Content-Type: application/json');

@@ -64,6 +64,7 @@ class Agregados extends CI_Controller {
 
         $NissConstituintePrincipal = $this->input->post('NissConstituintePrincipal');
         $Grupo = $this->input->post('Grupo');
+        $Morada = $this->input->post('Morada');
         $IdsEntidadesDistribuidoras = $this->input->post('IdsEntidadesDistribuidoras');
 
         $this->form_validation->set_rules('NissConstituintePrincipal', 'NissConstituintePrincipal', 'required|is_unique[' . Agregado_Familiar::TABELA . '.NissConstituintePrincipal]');
@@ -101,6 +102,7 @@ class Agregados extends CI_Controller {
             $Agregado->define([
                 'NissConstituintePrincipal' => $NissConstituintePrincipal,
                 'Grupo' => $Grupo,
+                'Morada' => $Morada,
                 'IdsEntidadesDistribuidoras' => $IdsEntidadesDistribuidoras,
                 'Segmento' => url_title($NissConstituintePrincipal, 'dash', true) . '-' . time() . '-' . rand(0, 1000),
             ]);
@@ -140,11 +142,13 @@ class Agregados extends CI_Controller {
 
 
         $NissConstituintePrincipal = $this->input->post('NissConstituintePrincipal');
+        $Morada = $this->input->post('Morada');
         $Grupo = $this->input->post('Grupo');
         $IdsEntidadesDistribuidoras = $this->input->post('IdsEntidadesDistribuidoras');
 
 
         $this->form_validation->set_rules('NissConstituintePrincipal', 'NissConstituintePrincipal', 'required');
+        $this->form_validation->set_rules('Morada', 'Morada', 'required');
         $this->form_validation->set_rules('Grupo', 'Grupo', 'numeric');
         $this->form_validation->set_rules('IdsEntidadesDistribuidoras', 'IdsEntidadesDistribuidoras', 'required');
 
@@ -155,7 +159,7 @@ class Agregados extends CI_Controller {
             $errors = [];
 
             // Construa um array de erros associados aos campos
-            $fields = ['NissConstituintePrincipal', 'Grupo', 'IdsEntidadesDistribuidoras'];
+            $fields = ['NissConstituintePrincipal', 'Grupo', 'IdsEntidadesDistribuidoras','Morada'];
 
             foreach ($fields as $field) {
                 $error = form_error($field);
@@ -181,6 +185,7 @@ class Agregados extends CI_Controller {
 //            }
             $Agregado_Familiar->setIdsEntidadesDistribuidoras(json_encode($IdsEntidadesDistribuidoras));
             $Agregado_Familiar->setGrupo($Grupo);
+            $Agregado_Familiar->setMorada($Morada);
 
 
             if ($Agregado_Familiar->edita($id)) {

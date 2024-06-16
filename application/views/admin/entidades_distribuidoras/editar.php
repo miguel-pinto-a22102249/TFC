@@ -9,10 +9,6 @@
                             <input type="text" name="Nome" placeholder="Nome" value="<?= $EntidadeDistribuidora->getNome() ?>"/>
                         </div>
                     </div>
-
-                </div>
-
-                <div class="row">
                     <div class="column large-6 medium-6 small-12">
                         <div class="input-group">
                             <label for="NIF">Nif</label>
@@ -22,13 +18,33 @@
                 </div>
 
                 <div class="row">
-                    <div class="column large-6 medium-6 small-12">
+                    <div class="column large-10 small-12">
+                        <div class="input-group">
+                            <label for="NomeCompleto">Nome Completo da Entidade</label>
+                            <input type="text" name="NomeCompleto" value="<?= $EntidadeDistribuidora->getNomeCompleto(); ?>" placeholder="Nome utilizado para emissão de Credenciais"/>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="column large-10 small-12">
                         <div class="input-group">
                             <label for="Morada">Morada</label>
                             <input type="text" step="1" name="Morada" id="Morada" value="<?= $EntidadeDistribuidora->getMorada() ?>" placeholder="Morada"/>
                         </div>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="column large-10 medium-8 small-12">
+                        <div class="input-group">
+                            <label for="TipoOperacao">Tipo de Operação</label>
+                            <input type="text" name="TipoOperacao" value="<?= $EntidadeDistribuidora->getTipoOperacao() ?>"/>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="column large-12 medium-12 small-12 input-group">
                         <div class="input-group">

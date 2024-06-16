@@ -11,13 +11,17 @@ class Credencial extends Model_Base {
     public $Estado;
     public $TipoCredencial;
     public $Descricao;
-    public $CaminhoAssinatura;
+    public $CaminhoAssinaturaResponsavel;
+    public $CaminhoAssinaturaResponsavelAgregado;
+    public $Html;
 
 
     const TABELA = 'credencial';
 
-    const TIPO_CREDENCIAL_A = 'A';
-    const TIPO_CREDENCIAL_B = 'B';
+    const TIPO_CREDENCIAL_A = 11;
+    const TIPO_CREDENCIAL_B = 10;
+
+    const ESTADO_ASSINADA = 5;
 
     public function __construct() {
         parent::__construct();
@@ -83,16 +87,62 @@ class Credencial extends Model_Base {
     /**
      * @return mixed
      */
-    public function getCaminhoAssinatura() {
-        return $this->CaminhoAssinatura;
+    public function getTipoCredencial() {
+        return $this->TipoCredencial;
     }
 
     /**
-     * @param mixed $CaminhoAssinatura
+     * @param mixed $TipoCredencial
      */
-    public function setCaminhoAssinatura($CaminhoAssinatura): void {
-        $this->CaminhoAssinatura = $CaminhoAssinatura;
+    public function setTipoCredencial($TipoCredencial): void {
+        $this->TipoCredencial = $TipoCredencial;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getCaminhoAssinaturaResponsavel() {
+        return $this->CaminhoAssinaturaResponsavel;
+    }
+
+    /**
+     * @param mixed $CaminhoAssinaturaResponsavel
+     */
+    public function setCaminhoAssinaturaResponsavel($CaminhoAssinaturaResponsavel): void {
+        $this->CaminhoAssinaturaResponsavel = $CaminhoAssinaturaResponsavel;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCaminhoAssinaturaResponsavelAgregado() {
+        return $this->CaminhoAssinaturaResponsavelAgregado;
+    }
+
+    /**
+     * @param mixed $CaminhoAssinaturaResponsavelAgregado
+     */
+    public function setCaminhoAssinaturaResponsavelAgregado($CaminhoAssinaturaResponsavelAgregado): void {
+        $this->CaminhoAssinaturaResponsavelAgregado = $CaminhoAssinaturaResponsavelAgregado;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHtml() {
+        return $this->Html;
+    }
+
+    /**
+     * @param mixed $Html
+     */
+    public function setHtml($Html): void {
+        $this->Html = $Html;
+    }
+
+
+
+
 
 
 }

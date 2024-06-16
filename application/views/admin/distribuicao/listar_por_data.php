@@ -36,7 +36,7 @@
                                 <td>
                                     <a title="Listar distribuição por Constituinte" class="btn-style small" href="<?= base_url('admin/distruibuicoes/listarPorConstituinte/' . $D[1]) ?>"><i class="fas fa-user"></i></a>
                                     <a title="Listar distribuição por Agregado" class="btn-style small" href="<?= base_url('admin/distruibuicoes/listarPorAgregado/' . $D[1]) ?>"><i class="fas fa-users"></i></a>
-                                    <a title="Gerar Credencial A" class="btn-style small btn-assinar-credencial" href="<?= base_url('admin/credenciais/gerarCredencialA/' . $D[1]) ?>"><i class="fas fa-file"></i></a>
+                                    <a title="Gerar Credencial A" class="btn-style small btn-assinar-credencial btn-assinar-credencial-a" href="<?= base_url('admin/credenciais/gerarCredencialA/' . $D[1]) ?>"><i class="fas fa-file"></i></a>
                                 </td>
                             </tr>
                             <?

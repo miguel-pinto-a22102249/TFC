@@ -49,6 +49,7 @@ $route['404_override'] = 'error404';
 $route['admin/home_admin'] = 'admin/home';
 $route['home_admin'] = 'admin/home';
 $route['dashboard'] = 'admin/home';
+
 $route[''] = 'admin/logins/index';
 $route['/'] = 'admin/logins/index';
 $route['default-style'] = 'site/testes';
@@ -151,6 +152,7 @@ $route['admin/distribuicoes/distribuicaoPasso3'] = 'admin/distribuicoes/distribu
 $route['admin/credenciais/gerarCredencialA/(:num)'] = 'admin/credenciais/gerarCredencialA/$1';
 $route['admin/credenciais/gravarCredencial/(:num)'] = 'admin/credenciais/gravarCredencials/$1';
 $route['admin/credenciais/gerarCredencialB/(:num)/(:num)'] = 'admin/credenciais/gerarCredencialB/$1/$2';
+$route['admin/credenciais/consultarCredencialB/(:num)'] = 'admin/credenciais/consultarCredencialB/$1';
 /* * ********************************************************** */
 
 /* * ********************** GENERICO ************************** */
@@ -165,6 +167,8 @@ $route['admin/configuracoes/gravar'] = 'admin/configuracoes/gravarConfigs';
 // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="Routes site">
 $route['admin/utilizador/consultar/(:any)'] = 'admin/logins/consultar/$1';
+$route['tutoriais'] = 'admin/home/tutoriais';
+$route['admin/tutoriais'] = 'admin/home/tutoriais';
 // </editor-fold>
 
 

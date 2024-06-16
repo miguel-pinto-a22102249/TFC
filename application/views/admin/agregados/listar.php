@@ -34,15 +34,20 @@ if (count($Agregados) > 0) {
                             <td class="text-center">
                                 <?
                                 $IdsEntidadesDistribuidoras = json_decode($agregado->getIdsEntidadesDistribuidoras());
+                                //                                var_dump($IdsEntidadesDistribuidoras);
                                 if ($IdsEntidadesDistribuidoras != null) {
                                     $EntidadesDistribuidoras = (new Entidade_Distribuidora())->obtemElementos(null, ['Estado' => ESTADO_ATIVO]);
-                                    $entidades = '';
-                                    foreach ($EntidadesDistribuidoras as $EntidadeDistribuidora) {
-                                        if (in_array($EntidadeDistribuidora->getId(), $IdsEntidadesDistribuidoras)) {
-                                            $entidades .= $EntidadeDistribuidora->getNome() . ', ';
+                                    if (is_array($IdsEntidadesDistribuidoras)) {
+                                        $entidades = '';
+                                        foreach ($EntidadesDistribuidoras as $EntidadeDistribuidora) {
+                                            if (in_array($EntidadeDistribuidora->getId(), $IdsEntidadesDistribuidoras)) {
+                                                $entidades .= $EntidadeDistribuidora->getNome() . ', ';
+                                            }
                                         }
+                                        echo substr($entidades, 0, -2);
+                                    } else {
+                                        echo $EntidadesDistribuidoras[$IdsEntidadesDistribuidoras]->getNome();
                                     }
-                                    echo substr($entidades, 0, -2);
                                 }
                                 ?>
                             </td>
@@ -64,7 +69,7 @@ if (count($Agregados) > 0) {
                                             </li>
                                             <li>
                                                 <a class="Editar btn-editar-popup-ajax" href="<?= base_url() . 'admin/agregados/viewEditarAgregado/' . $agregado->getId() ?>">
-                                                    <i class="fas fa-edit fa-1x"></i> Ediar
+                                                    <i class="fas fa-edit fa-1x"></i> Editar
                                                 </a>
                                             </li>
                                             <li>

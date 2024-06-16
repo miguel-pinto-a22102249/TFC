@@ -4,7 +4,7 @@
 </div>
 </body>
 <footer class="">
-    <p class="texto-footer"> <?= date("Y")?> - power by André Carvalho & Miguel Pinto </p>
+    <p class="texto-footer"> <?= date("Y") ?> - <?= config_item('copyright') ?></p>
     <script type="text/javascript" src="<?= base_url() . '/ficheiros/plugins/DataTables/datatables.min.js' . "?" . config_item('gestao.assets_version'); ?>"></script>
     <script src="<?= base_url() . './ficheiros/js/vendor/what-input.js' . "?" . config_item('gestao.assets_version'); ?>"></script>
     <script src="<?= base_url() . '/ficheiros/js/vendor/foundation.js' . "?" . config_item('gestao.assets_version'); ?>"></script>

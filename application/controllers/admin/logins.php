@@ -315,8 +315,8 @@ class Logins extends CI_Controller {
             }
         } else {
             if (empty($_FILES["Foto"]["name"])) {
-                $Utilizador->setFoto(null);
-                $Utilizador->setUsername($Username);
+//                $Utilizador->setFoto(null);
+//                $Utilizador->setUsername($Username);
             } else {
                 $name = mt_rand(0, 99) . "_" . date('Y-m-d_H-i-s') . "_" . $_FILES["Foto"]["name"];
                 if ($name != $Utilizador->getFoto()) {

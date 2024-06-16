@@ -124,7 +124,7 @@ if (count($distribuicoesPorAgregado) > 0) { ?>
     </div>
     <?
 } ?>
-<script src="<?= base_url() . '/ficheiros/js/admin/assinatura.js' . "?" . config_item('gestao.assets_version'); ?>"></script>
+<script src="<?= base_url() . '/ficheiros/js/admin/credenciais.js' . "?" . config_item('gestao.assets_version'); ?>"></script>
 
 
 
