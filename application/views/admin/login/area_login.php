@@ -83,7 +83,7 @@
                         <button class="bottom btn-style" type="submit">Login</button>
                     </form>
                 </div>
-                <p class="margin-top-15 margin-bottom-100 color-white" style="width: 100%; font-size: 12px;"><?= date("Y") ?> - power by André Carvalho & Miguel Pinto </p>
+                <p class="margin-top-15 margin-bottom-100 color-white" style="width: 100%; font-size: 12px;"><?= date("Y") ?> - <?= config_item('copyright') ?></p>
             </div>
             <div id="popup-reset-password" class="white-popup parent-container" style="display:none">
                 <div class="titulo-popup">

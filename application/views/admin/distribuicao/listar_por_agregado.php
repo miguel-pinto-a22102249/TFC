@@ -39,7 +39,6 @@ if (count($distribuicoesPorAgregado) > 0) { ?>
                     </thead>
                     <tbody>
                     <? foreach ($distribuicoesPorAgregado as $IdAgregado => $distribuicaoAgregado) {
-
                         $numeroGrupoDistribuicao = $distribuicaoAgregado[0]->getNumeroGrupoDistribuicao();
 
                         $credencialB = false;
@@ -75,7 +74,11 @@ if (count($distribuicoesPorAgregado) > 0) { ?>
                                 } ?>
                             </td>
                             <td>
-                                <?= $distribuicaoAgregado[0]->getDesignacaoEstado() ?>
+                                <? if ($distribuicaoAgregado[0]->getEstado() == Distribuicao::ESTADO_TERMINADA) { ?>
+                                    <span class="tag-estado-sucesso"><?= $distribuicaoAgregado[0]->getDesignacaoEstado() ?></span>
+                                <? } else { ?>
+                                    <span class="tag-estado-aviso"><?= $distribuicaoAgregado[0]->getDesignacaoEstado() ?></span>
+                                <? } ?>
                             </td>
                             <td>
                                 <?
@@ -100,30 +103,33 @@ if (count($distribuicoesPorAgregado) > 0) { ?>
                                     <?
                                 }
                                 ?>
-                                <table class="responsive">
-                                    <thead>
-                                    <tr>
-                                        <th>Produto</th>
-                                        <th>Quantidade</th>
-                                    </tr>
-                                    </thead>
-                                    <? foreach ($ProdutosQuantidadesAgregado as $IdProduto => $Quantidade) {
-                                        $produto = $produtos[$IdProduto];
-                                        if ($Quantidade == 0) {
-                                            continue;
-                                        }
-                                        ?>
+                                <details>
+                                    <summary>Ver produtos atribuidos</summary>
+                                    <table class="responsive">
+                                        <thead>
                                         <tr>
-                                            <td>
-                                                <?= $produto->getNome() ?>
-                                            </td>
-                                            <td>
-                                                <?= $Quantidade ?>
-                                            </td>
+                                            <th>Produto</th>
+                                            <th>Quantidade</th>
                                         </tr>
-                                        <?
-                                    } ?>
-                                </table>
+                                        </thead>
+                                        <? foreach ($ProdutosQuantidadesAgregado as $IdProduto => $Quantidade) {
+                                            $produto = $produtos[$IdProduto];
+                                            if ($Quantidade == 0) {
+                                                continue;
+                                            }
+                                            ?>
+                                            <tr>
+                                                <td>
+                                                    <?= $produto->getNome() ?>
+                                                </td>
+                                                <td>
+                                                    <?= $Quantidade ?>
+                                                </td>
+                                            </tr>
+                                            <?
+                                        } ?>
+                                    </table>
+                                </details>
                             </td>
                         </tr>
                         <?

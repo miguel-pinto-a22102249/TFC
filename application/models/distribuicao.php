@@ -133,7 +133,7 @@ class Distribuicao extends Model_Base {
                 echo "Terminada";
                 break;
             case self::ESTADO_ATIVO:
-                echo "Ativa";
+                echo "Por Assinar";
                 break;
             case self::ESTADO_INATIVO:
                 echo "Inativo";

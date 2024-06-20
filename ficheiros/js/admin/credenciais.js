@@ -31,14 +31,14 @@ setTimeout(function() {
         $canvas.on('mousedown touchstart', function(event) {
             isDrawing = true;
             ctx.beginPath();
-            const pos = event.type === 'touchstart' ? getTouchPos($canvas[0], event) : { x: event.clientX - $canvas[0].getBoundingClientRect().left, y: event.clientY - $canvas[0].getBoundingClientRect().top };
+            const pos = event.type === 'touchstart' ? getTouchPos($canvas[0], event) : {x: event.clientX - $canvas[0].getBoundingClientRect().left, y: event.clientY - $canvas[0].getBoundingClientRect().top};
             ctx.moveTo(pos.x, pos.y);
             event.preventDefault();
         });
 
         $canvas.on('mousemove touchmove', function(event) {
             if (isDrawing) {
-                const pos = event.type === 'touchmove' ? getTouchPos($canvas[0], event) : { x: event.clientX - $canvas[0].getBoundingClientRect().left, y: event.clientY - $canvas[0].getBoundingClientRect().top };
+                const pos = event.type === 'touchmove' ? getTouchPos($canvas[0], event) : {x: event.clientX - $canvas[0].getBoundingClientRect().left, y: event.clientY - $canvas[0].getBoundingClientRect().top};
                 ctx.lineTo(pos.x, pos.y);
                 ctx.stroke();
             }
@@ -59,14 +59,13 @@ setTimeout(function() {
         if (event.target === document.querySelector('.signatureCanvas')) {
             event.preventDefault();
         }
-    }, { passive: false });
+    }, {passive: false});
 
     document.addEventListener("touchmove", function(event) {
         if (event.target === document.querySelector('.signatureCanvas')) {
             event.preventDefault();
         }
-    }, { passive: false });
-
+    }, {passive: false});
 
 
     $('#btn-gerar-credencial').on('click', function() {
@@ -74,11 +73,12 @@ setTimeout(function() {
         let htmlContent = $('.html-credencial').clone();
         htmlContent.find('.remover').remove();
 
+        var url = $(this).data('url');
+
         htmlContent.find('textarea').each(function() {
             let originalValue = $(this).val();
             $(this).text(originalValue);
         });
-
 
         let data = {
             'html': htmlContent.html()
@@ -87,34 +87,84 @@ setTimeout(function() {
         data.GrupoDistribuicao = $('#GrupoDistribuicao').val();
         data.TipoCredencial = $('#TipoCredencial').val();
 
-        var canvas = document.getElementsByClassName('signatureCanvas');
-        var signatureImages = document.getElementsByClassName('signatureImage');
+        var signatureCanvases = document.getElementsByClassName('signatureCanvas');
         var signatures = [];
-        for (var i = 0; i < canvas.length; i++) {
-            var ctx = canvas[i].getContext('2d');
-            var dataURL = canvas[i].toDataURL();
-            signatures.push(dataURL);
-        }
-        data.signatures = signatures;
+        var isValid = true;
+        var currentUrl = window.location.href;
+        // var baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
 
-        $.ajax({
-            url: $(this).data('url'),
-            type: 'POST',
-            data: data,
-            success: function(response) {
-                if (response.success == true || response.success == true) {
-                    notie.alert({type: 1, text: response.message})
-                } else {
-                    notie.alert({type: 3, text: response.message})
-                }
-                setTimeout(function() {
-                    location.reload();
-                }, 1000);
-            },
-            error: function() {
-                notie.alert({type: 3, text: "Erro", stay: true})
+        //Validar as assinaturas
+        for (var i = 0; i < signatureCanvases.length; i++) {
+            var canvas = signatureCanvases[i];
+            let img = canvas.parentElement.parentElement.querySelector('.signatureImage');
+
+            if (img.src === currentUrl) {
+                isValid = false;
+                break;
             }
-        });
+
+            // Verifica se a imagem é vazia
+            if (isImageEmpty(img)) {
+                isValid = false;
+                break;
+            } else {
+                // Cria um canvas temporário para desenhar a imagem e obter a representação base64
+                var tempCanvas = document.createElement('canvas');
+                var ctx = tempCanvas.getContext('2d');
+                tempCanvas.width = img.width;
+                tempCanvas.height = img.height;
+                ctx.drawImage(img, 0, 0, img.width, img.height);
+                var dataURL = tempCanvas.toDataURL(); // Obtém a representação base64 da imagem
+                signatures.push(dataURL);
+            }
+        }
+
+        if (!isValid) {
+            $('.signature-container').find('.label--error').remove();
+            // alert('A assinatura é obrigatória e não pode estar vazia.');
+            $('.signature-container').append('<div class="label--error remover" role="alert">A assinatura é obrigatória e não pode estar vazia.</div>');
+
+        } else {
+            // Proceed with form submission
+            data.signatures = signatures;
+
+            notie.confirm({
+                text: "Tem certeza que deseja gerar esta credencial?<br><small>Esta ação é irreversível.</small>",
+                submitText: 'Sim',
+                cancelText: 'Não'
+            }, function() {
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: data,
+                    success: function(response) {
+                        if (response.success) {
+                            notie.alert({type: 1, text: response.message});
+                        } else {
+                            notie.alert({type: 3, text: response.message});
+                        }
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000);
+                    },
+                    error: function() {
+                        notie.alert({type: 3, text: "Erro", stay: true});
+                    }
+                });
+            });
+        }
     });
+
+    // Função para verificar se a imagem é vazia
+    function isImageEmpty(imgElement) {
+        var canvas = document.createElement('canvas');
+        var ctx = canvas.getContext('2d');
+        canvas.width = imgElement.width;
+        canvas.height = imgElement.height;
+        ctx.drawImage(imgElement, 0, 0, imgElement.width, imgElement.height);
+        var pixelBuffer = new Uint32Array(ctx.getImageData(0, 0, canvas.width, canvas.height).data.buffer);
+        return !pixelBuffer.some(color => color !== 0);
+    }
+
 }, 2000);
 

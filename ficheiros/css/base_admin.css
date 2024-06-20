@@ -4655,6 +4655,27 @@ p {
   color: #00a000;
 }
 
+.tag-estado-sucesso {
+  background-color: #00a000;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.tag-estado-aviso {
+  background-color: #d58b0a;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.tag-estado-erro {
+  background-color: #ff4f4f;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
 /* The container */
 .container-checkbox {
   display: block;
@@ -4969,6 +4990,10 @@ body {
   max-width: 1400px;
   margin-left: auto;
   margin-right: auto;
+}
+
+summary {
+  cursor: pointer;
 }
 
 /* Small only */
@@ -5601,6 +5626,10 @@ form .loading:after, .form-mask .loading:after {
 .dialog-credencial-b .credencial-b__logo-entidade, .consultar-credencial .credencial-b__logo-entidade {
   opacity: 0.8;
   margin-bottom: 1rem;
+}
+.dialog-credencial-b .signatureCanvas, .consultar-credencial .signatureCanvas {
+  border: 1px solid black;
+  margin-top: 1rem;
 }
 .dialog-credencial-b .observations, .consultar-credencial .observations {
   margin-top: 20px;

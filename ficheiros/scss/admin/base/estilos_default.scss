@@ -252,6 +252,27 @@ p {
     color: $cor-verde;
 }
 
+.tag-estado-sucesso {
+    background-color: $cor-verde;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.tag-estado-aviso {
+    background-color: $cor-laranja;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.tag-estado-erro {
+    background-color: $cor-vermelho;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
 /* The container */
 .container-checkbox {
     display: block;
@@ -597,6 +618,12 @@ body {
     max-width: 1400px;
     margin-left: auto;
     margin-right: auto;
+}
+
+
+summary {
+    cursor: pointer;
+
 }
 
 /* Small only */

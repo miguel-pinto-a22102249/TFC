@@ -94,7 +94,7 @@ class Credenciais extends CI_Controller {
         $this->load->model('agregado_familiar');
         $this->load->model('entidade_distribuidora');
 
-        $distribuicoes = (new Distribuicao())->obtemElementos(null, ['Estado' => ESTADO_ATIVO, 'NumeroGrupoDistribuicao' => $NumeroGrupoDistribuicao, 'IdAgregado' => $IdAgregado]);
+        $distribuicoes = (new Distribuicao())->obtemElementos(null, ['NumeroGrupoDistribuicao' => $NumeroGrupoDistribuicao, 'IdAgregado' => $IdAgregado]);
         $IDSEntregas = [];
         foreach ($distribuicoes as $distribuicao) {
             $IDSEntregas = array_merge($IDSEntregas, json_decode($distribuicao->getIdsEntregas()));
@@ -206,4 +206,5 @@ class Credenciais extends CI_Controller {
             ['credencial' => $credencial]);
         $this->load->view('admin/template/footer');
     }
+
 }

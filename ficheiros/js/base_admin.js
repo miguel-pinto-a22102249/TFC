@@ -304,7 +304,8 @@ function triggerPopupAjaxConsultaEdicao() {
                     items: {
                         src: response.view,
                         type: 'inline'
-                    }
+                    },
+                    closeOnBgClick: false, // Impede que o popup feche ao clicar fora dele
                 });
                 triggerFormAjax();
 
