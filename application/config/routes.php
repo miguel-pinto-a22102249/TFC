@@ -108,6 +108,7 @@ $route['admin/entidadesDistribuidoras/eliminar/(:num)'] = 'admin/entidades_distr
 
 /* * ****************** Produtos ********************* */
 $route['admin/produtos'] = 'admin/produtos/listar';
+$route['admin/produtos/logsEntradas'] = 'admin/produtos/listarLogsEntradas';
 $route['admin/produtos/adicionar'] = 'admin/produtos/adicionar';
 $route['admin/produtos/editar/(:num)'] = 'admin/produtos/editar/$1';
 $route['admin/produtos/consultar/(:num)'] = 'admin/produtos/viewEditar/$1/1';
@@ -153,6 +154,7 @@ $route['admin/credenciais/gerarCredencialA/(:num)'] = 'admin/credenciais/gerarCr
 $route['admin/credenciais/gravarCredencial/(:num)'] = 'admin/credenciais/gravarCredencials/$1';
 $route['admin/credenciais/gerarCredencialB/(:num)/(:num)'] = 'admin/credenciais/gerarCredencialB/$1/$2';
 $route['admin/credenciais/consultarCredencialB/(:num)'] = 'admin/credenciais/consultarCredencialB/$1';
+$route['admin/credenciais/consultarCredencialA/(:num)'] = 'admin/credenciais/consultarCredencialA/$1';
 /* * ********************************************************** */
 
 /* * ********************** GENERICO ************************** */

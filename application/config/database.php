@@ -54,7 +54,7 @@ $active_record = true;
 $USA_BD_PRODUTIVO = false;
 
 if ($USA_BD_PRODUTIVO) {
-    $db['default']['hostname'] = 'dockerbd-mysql-1';
+    $db['default']['hostname'] = 'mysql';
     $db['default']['username'] = 'root';
     $db['default']['password'] = 'sk78dshi93jh:hs!';
     $db['default']['database'] = 'FomeZer0'; // The database name you specified in MYSQL_DATABASE

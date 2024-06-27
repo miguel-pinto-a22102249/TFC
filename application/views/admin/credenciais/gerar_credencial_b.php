@@ -30,10 +30,6 @@ $agregado = $agregados[reset($distribuicoes)->getIdAgregado()];
 $EntidadeDistribuidora = $entidades_distribuidoras[reset($distribuicoes)->getIdEntidadeDistribuidora()];
 
 if (count($distribuicoesPorAgregado) > 0) { ?>
-    <!--    <div id="Area-Lista-Distribuicoes" class="area-listagem">-->
-    <!--        <form action="--><?php //= base_url("/admin/credenciais/gravarCredencial") ?><!--" method="POST" class="form-ajax" enctype="multipart/form-data">-->
-    <!--        </form>-->
-    <!--    </div>-->
 
     <script src="<?= base_url() . '/ficheiros/js/admin/credenciais.js' . "?" . config_item('gestao.assets_version'); ?>"></script>
 

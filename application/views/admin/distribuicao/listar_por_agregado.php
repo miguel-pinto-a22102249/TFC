@@ -105,7 +105,7 @@ if (count($distribuicoesPorAgregado) > 0) { ?>
                                 ?>
                                 <details>
                                     <summary>Ver produtos atribuidos</summary>
-                                    <table class="responsive">
+                                    <table class="display dataTable responsive">
                                         <thead>
                                         <tr>
                                             <th>Produto</th>

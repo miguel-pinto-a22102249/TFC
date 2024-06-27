@@ -175,7 +175,7 @@
                         </div>
                     </li>
                     <li>
-                        <? if (eSuperAdmin()) { ?>
+                        <? if (!eUtilizador()) { ?>
                             <a href="<?= base_url("admin/tutoriais") ?>"><i class="fas fa-info-circle"></i>Tutoriais</a>
                         <? } ?>
                     </li>

@@ -4,9 +4,14 @@
             <div class="wrapper-print">
                 <?= $credencial->getHtml(); ?>
                 <style>
-                    p, div, a, td, th, li {
-                        font-size: 12px;
-                        font-family: 'Calibri', sans-serif;
+                    @media print,.wrapper-print {
+                        p, div, a, td, th, li {
+                            font-size: 12px;
+                            font-family: 'Calibri', sans-serif;
+                        }
+                        img.credencial-b__logo-entidade {
+                            max-width: 100px!important;
+                        }
                     }
 
                     table {
@@ -32,6 +37,7 @@
                         margin-bottom: 1rem;
                         display: block;
                     }
+
 
 
                     .observations {

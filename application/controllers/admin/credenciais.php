@@ -17,6 +17,7 @@ class Credenciais extends CI_Controller {
         $this->load->model('escalao');
         $this->load->model('credencial');
         $this->load->model('distribuicao');
+        $this->load->model('entidade_distribuidora');
         $this->load->model('log');
         $this->load->helper('form');
         $this->load->library('form_validation');
@@ -34,13 +35,13 @@ class Credenciais extends CI_Controller {
         $this->load->model('entrega');
         $this->load->model('agregado_familiar');
 
-        $distribuicoes = (new Distribuicao())->obtemElementos(null, ['Estado' => ESTADO_ATIVO, 'NumeroGrupoDistribuicao' => $NumeroGrupoDistribuicao]);
+        $distribuicoes = (new Distribuicao())->obtemElementos(null, ['NumeroGrupoDistribuicao' => $NumeroGrupoDistribuicao]);
         $IDSEntregas = [];
         foreach ($distribuicoes as $distribuicao) {
             $IDSEntregas = array_merge($IDSEntregas, json_decode($distribuicao->getIdsEntregas()));
         }
 
-        $entregas = (new Entrega())->obtemElementos(null, ['Estado' => ESTADO_ATIVO, 'Id' => [$IDSEntregas, 'where_in']]);
+        $entregas = (new Entrega())->obtemElementos(null, ['Id' => [$IDSEntregas, 'where_in']]);
 
         $IDSDistribuicoesIndividuais = [];
         foreach ($entregas as $entrega) {
@@ -51,17 +52,20 @@ class Credenciais extends CI_Controller {
 
         $agregados = (new Agregado_Familiar())->obtemElementos(null, ['Estado' => ESTADO_ATIVO]);
         $produtos = (new Produto())->obtemElementos(null, ['Estado' => ESTADO_ATIVO]);
+        $entidades_distribuidoras = (new Entidade_Distribuidora())->obtemElementos(null, ['Estado' => ESTADO_ATIVO]);
 
 
         if ($this->input->is_ajax_request()) {
             $html = $this->load->view('admin/credenciais/gerar_credencial_a', ['distribuicoes' => $distribuicoes,
                                                                                'distribuicoes_individuais' => $distribuicoes_individuais,
                                                                                'entregas' => $entregas, 'agregados' => $agregados,
-                                                                               'produtos' => $produtos], true);
+                                                                               'produtos' => $produtos,
+                                                                               'entidades_distribuidoras' => $entidades_distribuidoras], true);
             $html = $this->load->view('admin/popup/default_popup', ['titulo' => "Gerar Credencial A: " . reset($distribuicoes)->getData(),
                                                                     'soConsulta' => false,
                                                                     'html' => $html, 'URLNewWindow' => base_url("admin/credenciais/gerarCredencialA/{$NumeroGrupoDistribuicao}")], true);
             header('Content-Type: application/json');
+            $html = '<div class="dialog-credencial-a">' . $html . '</div>';
             echo json_encode(['success' => true, 'message' => '', 'view' => $html]);
             return;
         } else {
@@ -81,7 +85,8 @@ class Credenciais extends CI_Controller {
                 ['distribuicoes' => $distribuicoes,
                  'distribuicoes_individuais' => $distribuicoes_individuais,
                  'entregas' => $entregas, 'agregados' => $agregados,
-                 'produtos' => $produtos]);
+                 'produtos' => $produtos,
+                 'entidades_distribuidoras' => $entidades_distribuidoras]);
             $this->load->view('admin/template/footer');
         }
     }
@@ -92,7 +97,6 @@ class Credenciais extends CI_Controller {
         $this->load->model('distribuicao_individual_constituinte');
         $this->load->model('entrega');
         $this->load->model('agregado_familiar');
-        $this->load->model('entidade_distribuidora');
 
         $distribuicoes = (new Distribuicao())->obtemElementos(null, ['NumeroGrupoDistribuicao' => $NumeroGrupoDistribuicao, 'IdAgregado' => $IdAgregado]);
         $IDSEntregas = [];
@@ -166,12 +170,13 @@ class Credenciais extends CI_Controller {
             'Estado' => Credencial::ESTADO_ASSINADA,
             'Descricao' => "Credencial gerada automaticamente pelo sistema",
             'CaminhoAssinaturaResponsavel' => $Signatures[0],
-            'CaminhoAssinaturaResponsavelAgregado' => $Signatures[1]
+            'CaminhoAssinaturaResponsavelAgregado' => $TipoCredencial == Credencial::TIPO_CREDENCIAL_B ? $Signatures[1] : null
         ]);
 
         $distribuicao = new Distribuicao();
         $distribuicao->carregaPorId($IdDistribuicao);
         $distribuicao->setEstado(Distribuicao::ESTADO_TERMINADA);
+        $distribuicao->setData(date('Y-m-d H:i:s'));
         $distribuicao->edita($IdDistribuicao);
 
         if ($credencial->grava()) {
@@ -192,6 +197,28 @@ class Credenciais extends CI_Controller {
 
         $this->load->view('admin/template/header',
             ["tituloArea" => "Credencial B",
+             "subtituloArea" => $credencial->getDataCriacao(),
+             "acoes" => [
+                 [
+                     "titulo" => "Imprimir",
+                     "link" => 'javascript:;',
+                     "icone" => "fas fa-print",
+                     'class' => 'button--add button--success printButton',
+                 ]
+             ]
+            ]);
+        $this->load->view('admin/credenciais/consultar_credencial',
+            ['credencial' => $credencial]);
+        $this->load->view('admin/template/footer');
+    }
+
+    public function consultarCredencialA($IdCredencial) {
+        $credencial = new Credencial();
+        $credencial->carregaPorId($IdCredencial);
+
+
+        $this->load->view('admin/template/header',
+            ["tituloArea" => "Credencial A",
              "subtituloArea" => $credencial->getDataCriacao(),
              "acoes" => [
                  [

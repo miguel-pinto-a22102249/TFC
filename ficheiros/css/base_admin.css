@@ -5325,6 +5325,9 @@ body.closed-menu #sidebar {
 body.closed-menu #sidebar .sidebar__mobile-close-button {
   display: none;
 }
+body.closed-menu #sidebar .vertical.menu * {
+  pointer-events: none !important;
+}
 body.closed-menu #topbar .topbar__wrapper-logo {
   min-width: 49px;
   width: 49px;
@@ -5593,45 +5596,45 @@ form .loading:after, .form-mask .loading:after {
   padding: 10px 20px;
 }
 
-.dialog-credencial-b, .consultar-credencial {
+.dialog-credencial-b, .dialog-credencial-a, .consultar-credencial {
   max-width: 1200px;
   margin: 1rem auto;
   position: relative;
   font-size: 12px;
 }
-.dialog-credencial-b p:not(.mfp-close), .dialog-credencial-b div:not(.mfp-close), .dialog-credencial-b a:not(.mfp-close), .consultar-credencial p:not(.mfp-close), .consultar-credencial div:not(.mfp-close), .consultar-credencial a:not(.mfp-close) {
+.dialog-credencial-b p:not(.mfp-close), .dialog-credencial-b div:not(.mfp-close), .dialog-credencial-b a:not(.mfp-close), .dialog-credencial-a p:not(.mfp-close), .dialog-credencial-a div:not(.mfp-close), .dialog-credencial-a a:not(.mfp-close), .consultar-credencial p:not(.mfp-close), .consultar-credencial div:not(.mfp-close), .consultar-credencial a:not(.mfp-close) {
   font-size: 12px;
 }
-.dialog-credencial-b .section-title, .consultar-credencial .section-title {
+.dialog-credencial-b .section-title, .dialog-credencial-a .section-title, .consultar-credencial .section-title {
   font-size: 16px;
   font-weight: 600;
 }
-.dialog-credencial-b .default-dialog, .consultar-credencial .default-dialog {
+.dialog-credencial-b .default-dialog, .dialog-credencial-a .default-dialog, .consultar-credencial .default-dialog {
   max-width: 1200px;
 }
-.dialog-credencial-b .mfp-close, .consultar-credencial .mfp-close {
+.dialog-credencial-b .mfp-close, .dialog-credencial-a .mfp-close, .consultar-credencial .mfp-close {
   line-height: 34px;
   height: 34px;
 }
-.dialog-credencial-b .credencial-b__header, .consultar-credencial .credencial-b__header {
+.dialog-credencial-b .credencial-b__header, .dialog-credencial-a .credencial-b__header, .consultar-credencial .credencial-b__header {
   border-top: 2px solid black;
   border-bottom: 2px solid black;
   margin-bottom: 2rem;
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
-.dialog-credencial-b .credencial-b__header p:last-child, .consultar-credencial .credencial-b__header p:last-child {
+.dialog-credencial-b .credencial-b__header p:last-child, .dialog-credencial-a .credencial-b__header p:last-child, .consultar-credencial .credencial-b__header p:last-child {
   margin-bottom: 0;
 }
-.dialog-credencial-b .credencial-b__logo-entidade, .consultar-credencial .credencial-b__logo-entidade {
+.dialog-credencial-b .credencial-b__logo-entidade, .dialog-credencial-a .credencial-b__logo-entidade, .consultar-credencial .credencial-b__logo-entidade {
   opacity: 0.8;
   margin-bottom: 1rem;
 }
-.dialog-credencial-b .signatureCanvas, .consultar-credencial .signatureCanvas {
+.dialog-credencial-b .signatureCanvas, .dialog-credencial-a .signatureCanvas, .consultar-credencial .signatureCanvas {
   border: 1px solid black;
   margin-top: 1rem;
 }
-.dialog-credencial-b .observations, .consultar-credencial .observations {
+.dialog-credencial-b .observations, .dialog-credencial-a .observations, .consultar-credencial .observations {
   margin-top: 20px;
   border: 1px solid #000;
   padding: 10px;
@@ -5998,28 +6001,28 @@ body .details__tabela-produtos-a-receber[open] summary i, body .details__tabela-
   transition: all 0.2s ease-in-out;
   margin-right: 1rem;
 }
-body .btn-assinar-credencial, body .btn-consultar-credencial-b, body .btn-assinar-credencial-a {
+body .btn-assinar-credencial, body .btn-consultar-credencial-b, body .btn-consultar-credencial-a, body .btn-assinar-credencial-a {
   color: white;
   position: relative;
   background-color: #d58b0a;
   border-color: #d58b0a;
 }
-body .btn-assinar-credencial:hover, body .btn-consultar-credencial-b:hover, body .btn-assinar-credencial-a:hover {
+body .btn-assinar-credencial:hover, body .btn-consultar-credencial-b:hover, body .btn-consultar-credencial-a:hover, body .btn-assinar-credencial-a:hover {
   background-color: #a46b08;
   border-color: #a46b08;
 }
-body .btn-assinar-credencial.btn-consultar-credencial-b, body .btn-consultar-credencial-b.btn-consultar-credencial-b, body .btn-assinar-credencial-a.btn-consultar-credencial-b {
+body .btn-assinar-credencial.btn-consultar-credencial-b, body .btn-assinar-credencial.btn-consultar-credencial-a, body .btn-consultar-credencial-b.btn-consultar-credencial-b, body .btn-consultar-credencial-b.btn-consultar-credencial-a, body .btn-consultar-credencial-a.btn-consultar-credencial-b, body .btn-consultar-credencial-a.btn-consultar-credencial-a, body .btn-assinar-credencial-a.btn-consultar-credencial-b, body .btn-assinar-credencial-a.btn-consultar-credencial-a {
   background-color: #00a000;
   border-color: #00a000;
 }
-body .btn-assinar-credencial.btn-consultar-credencial-b:hover, body .btn-consultar-credencial-b.btn-consultar-credencial-b:hover, body .btn-assinar-credencial-a.btn-consultar-credencial-b:hover {
+body .btn-assinar-credencial.btn-consultar-credencial-b:hover, body .btn-assinar-credencial.btn-consultar-credencial-a:hover, body .btn-consultar-credencial-b.btn-consultar-credencial-b:hover, body .btn-consultar-credencial-b.btn-consultar-credencial-a:hover, body .btn-consultar-credencial-a.btn-consultar-credencial-b:hover, body .btn-consultar-credencial-a.btn-consultar-credencial-a:hover, body .btn-assinar-credencial-a.btn-consultar-credencial-b:hover, body .btn-assinar-credencial-a.btn-consultar-credencial-a:hover {
   background-color: #006d00;
   border-color: #006d00;
 }
-body .btn-assinar-credencial.btn-consultar-credencial-b:after, body .btn-consultar-credencial-b.btn-consultar-credencial-b:after, body .btn-assinar-credencial-a.btn-consultar-credencial-b:after {
+body .btn-assinar-credencial.btn-consultar-credencial-b:after, body .btn-assinar-credencial.btn-consultar-credencial-a:after, body .btn-consultar-credencial-b.btn-consultar-credencial-b:after, body .btn-consultar-credencial-b.btn-consultar-credencial-a:after, body .btn-consultar-credencial-a.btn-consultar-credencial-b:after, body .btn-consultar-credencial-a.btn-consultar-credencial-a:after, body .btn-assinar-credencial-a.btn-consultar-credencial-b:after, body .btn-assinar-credencial-a.btn-consultar-credencial-a:after {
   content: "";
 }
-body .btn-assinar-credencial.btn-consultar-credencial-b svg:nth-child(2), body .btn-consultar-credencial-b.btn-consultar-credencial-b svg:nth-child(2), body .btn-assinar-credencial-a.btn-consultar-credencial-b svg:nth-child(2) {
+body .btn-assinar-credencial.btn-consultar-credencial-b svg:nth-child(2), body .btn-assinar-credencial.btn-consultar-credencial-a svg:nth-child(2), body .btn-consultar-credencial-b.btn-consultar-credencial-b svg:nth-child(2), body .btn-consultar-credencial-b.btn-consultar-credencial-a svg:nth-child(2), body .btn-consultar-credencial-a.btn-consultar-credencial-b svg:nth-child(2), body .btn-consultar-credencial-a.btn-consultar-credencial-a svg:nth-child(2), body .btn-assinar-credencial-a.btn-consultar-credencial-b svg:nth-child(2), body .btn-assinar-credencial-a.btn-consultar-credencial-a svg:nth-child(2) {
   font-size: 8px;
   margin-top: 1px;
   font-weight: 600;
@@ -6029,7 +6032,7 @@ body .btn-assinar-credencial.btn-consultar-credencial-b svg:nth-child(2), body .
   left: 50%;
   transform: translate(-50%, -50%);
 }
-body .btn-assinar-credencial:after, body .btn-consultar-credencial-b:after, body .btn-assinar-credencial-a:after {
+body .btn-assinar-credencial:after, body .btn-consultar-credencial-b:after, body .btn-consultar-credencial-a:after, body .btn-assinar-credencial-a:after {
   content: "B";
   font-size: 10px;
   margin-top: 1px;
@@ -6040,7 +6043,7 @@ body .btn-assinar-credencial:after, body .btn-consultar-credencial-b:after, body
   left: 50%;
   transform: translate(-50%, -50%);
 }
-body .btn-assinar-credencial.btn-assinar-credencial-a:after, body .btn-consultar-credencial-b.btn-assinar-credencial-a:after, body .btn-assinar-credencial-a.btn-assinar-credencial-a:after {
+body .btn-assinar-credencial.btn-assinar-credencial-a:after, body .btn-consultar-credencial-b.btn-assinar-credencial-a:after, body .btn-consultar-credencial-a.btn-assinar-credencial-a:after, body .btn-assinar-credencial-a.btn-assinar-credencial-a:after {
   content: "A";
 }
 
@@ -6075,43 +6078,57 @@ footer .texto-footer {
     text-align: center;
     display: block;
     position: relative;
-    width: 100%;
+    border-bottom: none !important;
+    overflow-x: scroll;
+    overflow-y: hidden;
   }
   table.responsive thead {
     display: block;
     float: left;
+    max-width: 35%;
   }
   table.responsive tbody {
     display: block;
     width: auto;
     position: relative;
-    overflow-x: auto;
     white-space: nowrap;
   }
   table.responsive th,
 table.responsive td {
     margin: 0;
     vertical-align: top;
+    font-size: 12px !important;
   }
   table.responsive thead tr {
     display: block;
   }
   table.responsive th {
-    display: block;
-    text-align: right;
+    display: flex;
+    align-items: center;
+    text-align: left !important;
   }
   table.responsive tbody tr {
     display: inline-block;
     vertical-align: top;
+    border: 1px solid #CCC;
   }
   table.responsive td {
-    max-height: 53px;
-    display: block;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  table.responsive td .btn-style {
+    padding: 5px 8px;
+  }
+  table.responsive tbody tr:first-child td {
+    border-bottom: 1px solid #CCC;
   }
   table.responsive .th-opcoes, table.responsive .td-opcoes {
     color: black;
     text-align: center;
+  }
+  table.responsive .th-opcoes ul.is-dropdown-submenu, table.responsive .td-opcoes ul.is-dropdown-submenu {
+    top: -9.8rem;
   }
   header .title-bar .title-bar-title {
     margin-left: -46px;
@@ -6139,8 +6156,27 @@ table.responsive td {
   body #Area-Login .form-login-wrapper form {
     padding: 20px;
   }
+  body #content .content-wrapper {
+    padding: 0.8rem;
+  }
+  body #content .content-wrapper .content__inner-wrapper {
+    padding: 1rem 0rem 2rem;
+  }
 }
 /* Medium and up */
+/* Medium Down */
+@media screen and (max-width: 1023px) {
+  body #content .content-wrapper {
+    padding: 0.8rem;
+  }
+  body #content .content-wrapper .content__inner-wrapper {
+    padding: 1rem 0rem 2rem;
+  }
+  body .content__inner-wrapper__header__wrapper {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+}
 /* Medium only */
 /* Large and up */
 /* Large only */

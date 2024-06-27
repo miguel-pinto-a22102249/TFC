@@ -44,7 +44,7 @@
                         <div class="row">
                             <div class="column large-10 medium-12 small-12">
                                 <div class="input-group">
-                                    <label for="Morada">Niss Constituinte Principal</label>
+                                    <label for="Morada">Morada do Agregado</label>
                                     <input type="text" name="Morada" placeholder="Morada" value="<?= $Agregado->getMorada() ?>"/>
                                 </div>
                             </div>

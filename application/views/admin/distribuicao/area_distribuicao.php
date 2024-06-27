@@ -63,11 +63,12 @@ $this->load->model('Entidade_Distribuidora');
                                 <tr>
                                     <th></th>
                                     <th>Niss Constituinte Principal</th>
+                                    <th>Grupo</th>
                                     <th>Entidade Distribuidora</th>
                                 </tr>
                                 <tr>
                                     <th><input disabled type="checkbox" id="selecionarTodos"></th>
-                                    <th colspan="2"><label for="selecionarTodos">Selecionar todos</label></th>
+                                    <th colspan="3"><label for="selecionarTodos">Selecionar todos</label></th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -100,6 +101,7 @@ $this->load->model('Entidade_Distribuidora');
                                                 } ?>
                                             </label>
                                         </td>
+                                        <td><?= $agregado->getGrupo() ? $agregado->getGrupo() : "-"?></td>
                                         <td>
                                             <label for="<?= $agregado->getId() ?>">
                                                 <?

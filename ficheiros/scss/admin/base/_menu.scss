@@ -293,6 +293,13 @@ body {
             .sidebar__mobile-close-button {
                 display: none;
             }
+
+            .vertical.menu {
+                * {
+                    pointer-events: none !important;
+                }
+            }
+
         }
 
         #topbar .topbar__wrapper-logo {

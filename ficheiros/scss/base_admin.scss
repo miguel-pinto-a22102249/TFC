@@ -10,7 +10,7 @@
     padding: 10px 20px;
 }
 
-.dialog-credencial-b, .consultar-credencial {
+.dialog-credencial-b, .dialog-credencial-a, .consultar-credencial {
     max-width: 1200px;
     margin: 1rem auto;
     position: relative;
@@ -55,7 +55,7 @@
         margin-bottom: 1rem;
     }
 
-    .signatureCanvas{
+    .signatureCanvas {
         border: 1px solid black;
         margin-top: 1rem;
     }
@@ -570,7 +570,7 @@ body {
         }
     }
 
-    .btn-assinar-credencial, .btn-consultar-credencial-b, .btn-assinar-credencial-a {
+    .btn-assinar-credencial, .btn-consultar-credencial-b, .btn-consultar-credencial-a, .btn-assinar-credencial-a {
         color: white;
         position: relative;
         //background-color: $cor-verde;
@@ -582,7 +582,7 @@ body {
             border-color: darken($cor-laranja, 10%);
         }
 
-        &.btn-consultar-credencial-b {
+        &.btn-consultar-credencial-b, &.btn-consultar-credencial-a {
             background-color: $cor-verde;
             border-color: $cor-verde;
 
@@ -664,18 +664,21 @@ footer {
         text-align: center;
         display: block;
         position: relative;
-        width: 100%;
+        border-bottom: none !important;
+        overflow-x: scroll;
+        overflow-y: hidden;
 
         thead {
             display: block;
             float: left;
+            max-width: 35%;
         }
 
         tbody {
             display: block;
             width: auto;
             position: relative;
-            overflow-x: auto;
+            //overflow-x: auto;
             white-space: nowrap;
         }
 
@@ -683,6 +686,7 @@ footer {
         td {
             margin: 0;
             vertical-align: top;
+            font-size: 12px !important;
         }
 
         thead tr {
@@ -690,24 +694,43 @@ footer {
         }
 
         th {
-            display: block;
-            text-align: right;
+            display: flex;
+            align-items: center;
+            text-align: left !important;
+            //justify-content: center;
         }
 
         tbody tr {
             display: inline-block;
             vertical-align: top;
+            border: 1px solid #CCC;
         }
 
         td {
-            max-height: 53px;
-            display: block;
-            text-align: center;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            //border-top: 1px solid #CCC;
+            //border-bottom: 1px solid #CCC;
+
+            .btn-style {
+                padding: 5px 8px;
+            }
         }
+
+        tbody tr:first-child td {
+            border-bottom: 1px solid #CCC;
+        }
+
 
         .th-opcoes, .td-opcoes {
             color: black;
             text-align: center;
+
+            ul.is-dropdown-submenu {
+                top: -9.8rem;
+            }
         }
     }
 
@@ -749,6 +772,19 @@ footer {
                 }
             }
         }
+
+
+        #content {
+            .content-wrapper {
+                padding: 0.8rem;
+
+                .content__inner-wrapper {
+                    padding: 1rem 0rem 2rem;
+
+                }
+            }
+        }
+
     }
     footer {
     }
@@ -761,6 +797,27 @@ footer {
     body {
     }
     footer {
+    }
+}
+
+/* Medium Down */
+@media screen and (max-width: 1023px) {
+    body {
+        #content {
+            .content-wrapper {
+                padding: 0.8rem;
+
+                .content__inner-wrapper {
+                    padding: 1rem 0rem 2rem;
+
+                }
+            }
+        }
+
+        .content__inner-wrapper__header__wrapper {
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
     }
 }
 

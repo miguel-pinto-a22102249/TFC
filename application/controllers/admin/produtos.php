@@ -39,9 +39,32 @@ class Produtos extends CI_Controller {
                 "link" => base_url('admin/produtos/adicionar'),
                 "icone" => "fas fa-plus",
                 'class' => 'button--add button--success'
+            ],
+            [
+                "titulo" => "Registos",
+                "link" => base_url('admin/produtos/logsEntradas'),
+                "icone" => "fas fa-eye",
+                'class' => 'button--add'
             ]
         ]]);
         $this->load->view('admin/produtos/listar', ['Produtos' => $Produtos]);
+        $this->load->view('admin/template/footer');
+    }
+
+    public function listarLogsEntradas() {
+        $Produtos = (new Produto)->obtemElementos();
+        $logs = (new Log)->obtemLogs(['DataCriacao' => 'Desc'], ['Objeto' => 'Produto']);
+        $utilizadores = (new Login)->obtemElementos();
+
+        $this->load->view('admin/template/header', ["tituloArea" => "Produtos", "subtituloArea" => "Registos de Stocks", "acoes" => [
+//            [
+////                "titulo" => "Adicionar",
+////                "link" => base_url('admin/produtos/adicionar'),
+////                "icone" => "fas fa-plus",
+////                'class' => 'button--add button--success'
+//            ]
+        ]]);
+        $this->load->view('admin/produtos/lista_logs_entradas', ['Produtos' => $Produtos, 'logs' => $logs, 'utilizadores' => $utilizadores]);
         $this->load->view('admin/template/footer');
     }
 
@@ -63,11 +86,12 @@ class Produtos extends CI_Controller {
 
         $this->form_validation->set_rules('Nome', 'Nome', 'required');
         $this->form_validation->set_rules('Categoria', 'Categoria', 'required');
-        $this->form_validation->set_rules('StockAtual', 'StockAtual', 'required|numeric');
+        $this->form_validation->set_rules('StockAtual', 'StockAtual', 'required|numeric|greater_than[-1]');
         $this->form_validation->set_rules('IdEntidadeDistribuidora', 'IdEntidadeDistribuidora', 'required|numeric');
 
         $this->form_validation->set_message('required', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
         $this->form_validation->set_message('numeric', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
+        $this->form_validation->set_message('greater_than', '<i class="fas fa-exclamation-triangle"></i> O valor tem de ser maior ou igual a 0.');
 
         if ($this->form_validation->run() === false) {
             $errors = [];
@@ -145,17 +169,19 @@ class Produtos extends CI_Controller {
         $this->form_validation->set_rules('Nome', 'Nome', 'required');
         $this->form_validation->set_rules('Categoria', 'Categoria', 'required');
         $this->form_validation->set_rules('Detalhes', 'Detalhes', 'required');
-        $this->form_validation->set_rules('StockAtual', 'StockAtual', 'required|numeric');
+        $this->form_validation->set_rules('StockAtual', 'StockAtual', 'required|numeric|greater_than[-1]');
         $this->form_validation->set_rules('IdEntidadeDistribuidora', 'IdEntidadeDistribuidora', 'required|numeric');
 
         $this->form_validation->set_message('required', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
         $this->form_validation->set_message('numeric', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
+        $this->form_validation->set_message('greater_than', '<i class="fas fa-exclamation-triangle"></i> O valor tem de ser maior ou igual a 0.');
+
 
         if ($this->form_validation->run() === false) {
             $errors = [];
 
             // Construa um array de erros associados aos campos
-            $fields = ['Nome', 'Categoria', 'Detalhes', 'StockAtual','IdEntidadeDistribuidora'];
+            $fields = ['Nome', 'Categoria', 'Detalhes', 'StockAtual', 'IdEntidadeDistribuidora'];
 
             foreach ($fields as $field) {
                 $error = form_error($field);

@@ -76,10 +76,17 @@ class Model_Base extends CI_Model {
         $this->load->model('log');
         $Log = new Log();
 
+        $dados = [];
+        foreach ($this as $key => $value) {
+            $dados[] = "$key: $value";
+        }
+        $dadosString = implode(", ", $dados);
+
+        // Configurar o log com os dados obtidos
         $Log->define([
             'Objeto' => $nome_class,
             'Acao' => 'Adicionar',
-            'Descricao' => $this->getDesignacaoDefault()
+            'Descricao' => $dadosString
         ]);
 
         $Log->grava();
@@ -98,16 +105,30 @@ class Model_Base extends CI_Model {
         $this->db->where('Id', $this->Id);
         $this->db->update($nome_class::TABELA, $this);
 
-        if ($idResponsavelAcao != 0) {
-            $Log = new Log();
+//        if ($idResponsavelAcao != 0) {
+        $Log = new Log();
 
-            $Log->define([
-                'Objeto' => $nome_class,
-                'Acao' => 'Editar',
-                'Descricao' => $this->getDesignacaoDefault()
-            ]);
-            $Log->grava();
+        $dados = [];
+        foreach ($this as $key => $value) {
+            $dados[] = "$key: $value";
         }
+        $dadosString = implode(", ", $dados);
+
+
+        $log_info = [
+            'Objeto' => $nome_class,
+            'Acao' => 'Editar',
+            'Descricao' => $dadosString
+        ];
+
+        if ($idResponsavelAcao == 0) {
+            $log_info['IdResponsavelAcao'] = 0;
+        }
+
+
+        $Log->define($log_info);
+        $Log->grava();
+
         return true;
     }
 

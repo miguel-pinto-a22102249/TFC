@@ -1,16 +1,17 @@
+<script src="<?= base_url() . './ficheiros/js/chart.js' . "?" . config_item('gestao.assets_version'); ?>"></script>
+
 <div id="Home">
+
+
     <div class="row">
         <div class="column large-6 medium-12 small-12">
-            <h3 class="">Entregas Finalizadas</h3>
-
+            <?= $this->load->view('admin/estatisticas/numero_total_distribuicoes_mes'); ?>
         </div>
         <div class="column large-6 medium-12 small-12">
             <div class="row">
                 <div class="column large-12">
-                    <h3 class="">Número de Agregados</h3>
-                </div>
-                <div class="column large-12">
-                    <h3 class="">Erros</h3>
+                    <h3 class="">Resumo</h3>
+                    <?= $this->load->view('admin/home/quadro_de_erros'); ?>
                 </div>
             </div>
         </div>
@@ -59,6 +60,4 @@
         </div>
     <? } ?>
 </div>
-
-
 

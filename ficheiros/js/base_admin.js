@@ -254,6 +254,45 @@ $(document).ready(function() {
 
     triggerPopupAjaxConsultaEdicao();
 
+    //Ajustar a altura das células das tabelas responsivas
+    if (window.innerWidth < 1024) {
+        $('table.responsive').each(function() {
+            var $table = $(this);
+            var $head = $table.find('thead');
+
+            // Array para armazenar as alturas máximas das células de cada coluna
+            var $alturasTh = [];
+
+            // Inicializa o array $alturasTh com as alturas das células do cabeçalho (thead)
+            $head.find('th').each(function(i) {
+                $alturasTh[i] = $(this).outerHeight();
+            });
+
+            // Itera sobre as linhas do corpo (tbody) para encontrar alturas máximas das células
+            $table.find('tbody tr').each(function() {
+                $(this).find('td').each(function(i) {
+                    var alturaCelula = $(this).outerHeight();
+                    if (alturaCelula > $alturasTh[i]) {
+                        $alturasTh[i] = alturaCelula;
+                    }
+                });
+            });
+
+            // Define a altura das células do cabeçalho (thead) com as alturas máximas encontradas
+            $head.find('th').each(function(i) {
+                $(this).css('height', $alturasTh[i]);
+            });
+
+            // Define a altura das células do corpo (tbody) com as alturas máximas encontradas
+            $table.find('tbody tr').each(function() {
+                $(this).find('td').each(function(i) {
+                    $(this).css('height', $alturasTh[i]);
+                });
+            });
+        });
+    }
+
+
 });
 
 function toggleEditMode() {

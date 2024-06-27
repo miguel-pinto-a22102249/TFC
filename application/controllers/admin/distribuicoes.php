@@ -18,6 +18,7 @@ class Distribuicoes extends CI_Controller {
         $this->load->model('distribuicao');
         $this->load->model('distribuicao_individual_constituinte');
         $this->load->model('entrega');
+        $this->load->model('credencial');
         $this->load->helper('form');
         $this->load->library('form_validation');
         parse_str($_SERVER['QUERY_STRING'], $_GET);
@@ -42,6 +43,9 @@ class Distribuicoes extends CI_Controller {
         $query = $this->db->get();
         $resultados = $query->result();
 
+        $credenciais = (new Credencial())->obtemElementos(null, null);
+
+
         $this->load->view('admin/template/header', ["tituloArea" => "Distribuições", "subtituloArea" => "Listar", "acoes" => [
             [
                 "titulo" => "Adicionar",
@@ -50,7 +54,7 @@ class Distribuicoes extends CI_Controller {
                 'class' => 'button--add button--success'
             ]
         ]]);
-        $this->load->view('admin/distribuicao/listar_por_data', ["Datas" => $resultados]);
+        $this->load->view('admin/distribuicao/listar_por_data', ["Datas" => $resultados, "credenciais" => $credenciais]);
         $this->load->view('admin/template/footer');
     }
 
@@ -104,7 +108,7 @@ class Distribuicoes extends CI_Controller {
         $this->load->model('produto');
 //        $this->load->model('constituinte');
         $this->load->model('distribuicao');
-        $this->load->model('credencial');
+
         $this->load->model('distribuicao_individual_constituinte');
         $this->load->model('entrega');
 
