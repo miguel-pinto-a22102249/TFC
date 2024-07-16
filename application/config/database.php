@@ -51,7 +51,7 @@ if (!defined('BASEPATH')) {
 
 $active_group = 'default';
 $active_record = true;
-$USA_BD_PRODUTIVO = false;
+$USA_BD_PRODUTIVO = true;
 
 if ($USA_BD_PRODUTIVO) {
     $db['default']['hostname'] = 'mysql';

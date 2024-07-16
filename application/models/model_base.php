@@ -70,7 +70,7 @@ class Model_Base extends CI_Model {
         }
     }
 
-    public function grava() {
+    public function grava($semLog = false) {
         $nome_class = get_class($this);
 
         $this->load->model('log');
@@ -81,15 +81,16 @@ class Model_Base extends CI_Model {
             $dados[] = "$key: $value";
         }
         $dadosString = implode(", ", $dados);
+        if (!$semLog) {
+            // Configurar o log com os dados obtidos
+            $Log->define([
+                'Objeto' => $nome_class,
+                'Acao' => 'Adicionar',
+                'Descricao' => $dadosString
+            ]);
 
-        // Configurar o log com os dados obtidos
-        $Log->define([
-            'Objeto' => $nome_class,
-            'Acao' => 'Adicionar',
-            'Descricao' => $dadosString
-        ]);
-
-        $Log->grava();
+            $Log->grava();
+        }
 
         return $this->db->insert($nome_class::TABELA, $this);
     }
@@ -99,7 +100,7 @@ class Model_Base extends CI_Model {
      *
      * @return true
      */
-    public function edita($idResponsavelAcao = 0) {
+    public function edita($idResponsavelAcao = 0, $semLog = false) {
         $nome_class = get_class($this);
 
         $this->db->where('Id', $this->Id);
@@ -125,9 +126,10 @@ class Model_Base extends CI_Model {
             $log_info['IdResponsavelAcao'] = 0;
         }
 
-
-        $Log->define($log_info);
-        $Log->grava();
+        if (!$semLog) {
+            $Log->define($log_info);
+            $Log->grava();
+        }
 
         return true;
     }

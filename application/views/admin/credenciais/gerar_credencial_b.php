@@ -113,12 +113,14 @@ if (count($distribuicoesPorAgregado) > 0) { ?>
                     </table>
 
                     <div class="section-title margin-top-30 margin-bottom-10">3. Nº de Levantamento e Lista de Produtos</div>
-                    <? foreach ($distribuicoesPorAgregado as $IdAgregado => $distribuicaoAgregado) { ?>
+                    <? $IdsEntregasAssinar = [];
+                    foreach ($distribuicoesPorAgregado as $IdAgregado => $distribuicaoAgregado) { ?>
                         <?
                         $ProdutosQuantidadesAgregado = [];
                         foreach ($distribuicaoAgregado as $distribuicao) { ?>
                             <?
                             $IdsEntregas = json_decode($distribuicao->getIdsEntregas());
+                            $IdsEntregasAssinar = array_merge($IdsEntregasAssinar, $IdsEntregas);
                             foreach ($IdsEntregas as $IdEntrega) {
                                 $entrega = $entregas[$IdEntrega];
                                 $IdsDistriIndividuais = json_decode($entrega->getIdsDistribuicoesIndividuais());
@@ -211,7 +213,7 @@ if (count($distribuicoesPorAgregado) > 0) { ?>
                 <?
                 //                $CI->firephp->log(reset($distribuicoes));
                 ?>
-                <input type="hidden" id="IdDistribuicao" name="IdDistribuicao" value="<?= reset($distribuicoes)->getId() ?>">
+                <input type="hidden" id="IdsObjetosAssociados" name="IdsObjetosAssociados" value="<?= implode(" ",$IdsEntregasAssinar) ?>">
                 <input type="hidden" id="GrupoDistribuicao" name="GrupoDistribuicao" value="<?= reset($distribuicoes)->getNumeroGrupoDistribuicao() ?>">
                 <input type="hidden" id="TipoCredencial" name="TipoCredencial" value="<?= Credencial::TIPO_CREDENCIAL_B ?>">
                 <div class="row">

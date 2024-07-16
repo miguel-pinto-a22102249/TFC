@@ -1,14 +1,14 @@
-<div id="Lista-Logs">	
+<div id="Lista-Logs">
     <h2 class="text-center">Logs</h2>
     <div class="grid-x align-center align-self-middle">
         <div class="large-10 medium-11 small-12 cell">
             <table class="text-center dataTable display responsive">
                 <thead>
-                    <tr>
-                        <th class="text-center defaultSort">Data de Criação</th>
-                        <th class="text-center">Utilizador</th>
-                        <th class="text-center">Descrição</th>
-                    </tr>
+                <tr>
+                    <th class="text-center defaultSort">Data de Criação</th>
+                    <th class="text-center">Utilizador</th>
+                    <th class="text-center">Descrição</th>
+                </tr>
                 </thead>
                 <? foreach ($logs as $log) { ?>
                     <tr class="accordion">
@@ -20,7 +20,7 @@
                             Id = <?= $log->getIdUtilizador(); ?>
                         </td>
                         <td>
-                            <?= $log->getDescricao(); ?>
+                            <?= substr($log->getDescricao(), 0, 255); ?>
                         </td>
                     </tr>
                 <? } ?>

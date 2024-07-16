@@ -506,7 +506,7 @@ class Logins extends CI_Controller {
             $this->session->set_userdata('ModoPrivacidade', false);
 
             $Utilizador->setModoPrivacidade(0);
-            $Utilizador->edita(0);
+            $Utilizador->edita(0,true);
             $Log = new Log();
 
             $Log->define([
@@ -539,7 +539,7 @@ class Logins extends CI_Controller {
             $this->session->set_userdata('ModoPrivacidade', true);
 
             $Utilizador->setModoPrivacidade(1);
-            $Utilizador->edita(0);
+            $Utilizador->edita(0,true);
             $Log = new Log();
 
             $Log->define([

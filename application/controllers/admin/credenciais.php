@@ -16,6 +16,7 @@ class Credenciais extends CI_Controller {
         parent::__construct();
         $this->load->model('escalao');
         $this->load->model('credencial');
+        $this->load->model('entrega');
         $this->load->model('distribuicao');
         $this->load->model('entidade_distribuidora');
         $this->load->model('log');
@@ -155,7 +156,7 @@ class Credenciais extends CI_Controller {
 
     public function gravarCredencial() {
         $Signatures = $this->input->post('signatures');
-        $IdDistribuicao = $this->input->post('IdDistribuicao');
+        $IdObjetosAssociado = $this->input->post('IdsObjetosAssociados');
         $GrupoDistribuicao = $this->input->post('GrupoDistribuicao');
         $TipoCredencial = $this->input->post('TipoCredencial');
         $Html = $this->input->post('html');
@@ -163,7 +164,7 @@ class Credenciais extends CI_Controller {
 
         $credencial = new Credencial();
         $credencial->define([
-            'IdsObjetosAssociados' => $IdDistribuicao,
+            'IdsObjetosAssociados' => $IdObjetosAssociado,
             'Html' => $Html,
             'GrupoDistribuicao' => $GrupoDistribuicao,
             'TipoCredencial' => $TipoCredencial,
@@ -173,11 +174,12 @@ class Credenciais extends CI_Controller {
             'CaminhoAssinaturaResponsavelAgregado' => $TipoCredencial == Credencial::TIPO_CREDENCIAL_B ? $Signatures[1] : null
         ]);
 
-        $distribuicao = new Distribuicao();
-        $distribuicao->carregaPorId($IdDistribuicao);
-        $distribuicao->setEstado(Distribuicao::ESTADO_TERMINADA);
-        $distribuicao->setData(date('Y-m-d H:i:s'));
-        $distribuicao->edita($IdDistribuicao);
+        if ($TipoCredencial == Credencial::TIPO_CREDENCIAL_B) {
+            $entrega = new Entrega();
+            $entrega->carregaPorId($IdObjetosAssociado);
+            $entrega->setEstado(Entrega::ESTADO_TERMINADA);
+            $entrega->edita(0);
+        }
 
         if ($credencial->grava()) {
             header('Content-Type: application/json');

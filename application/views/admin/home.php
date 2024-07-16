@@ -48,7 +48,7 @@
                                     <?= $log->getAcao(); ?>
                                 </td>
                                 <td>
-                                    <?= $log->getDescricao(); ?>
+                                    <?= substr($log->getDescricao(), 0, 255); ?>
                                 </td>
                             </tr>
                             <?

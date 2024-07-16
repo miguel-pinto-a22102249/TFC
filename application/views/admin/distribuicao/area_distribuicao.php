@@ -134,7 +134,7 @@ $this->load->model('Entidade_Distribuidora');
                     </div>
 
 
-                    <button class="bottom btn-style" type="submit">Adicionar</button>
+                    <button class="bottom btn-style" type="submit">Gerar</button>
                 </form>
             </div>
         </div>

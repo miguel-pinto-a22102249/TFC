@@ -41,16 +41,58 @@ if (count($distribuicoesPorAgregado) > 0) { ?>
                     <? foreach ($distribuicoesPorAgregado as $IdAgregado => $distribuicaoAgregado) {
                         $numeroGrupoDistribuicao = $distribuicaoAgregado[0]->getNumeroGrupoDistribuicao();
 
+
+                        $ProdutosQuantidadesAgregado = [];
+                        $IdEntregaAgregado = null;
+
+                        foreach ($distribuicaoAgregado as $distribuicao) {
+                            $IdsEntregas = json_decode($distribuicao->getIdsEntregas());
+                            foreach ($IdsEntregas as $IdEntrega) {
+                                $entrega = $entregas[$IdEntrega];
+                                $IdEntregaAgregado = $IdEntrega;
+                                $IdsDistriIndividuais = json_decode($entrega->getIdsDistribuicoesIndividuais());
+                                foreach ($IdsDistriIndividuais as $IdDistriIndividual) {
+                                    $distribuicaoIndividual = $distribuicoes_individuais[$IdDistriIndividual];
+                                    $ProdutosDistribuicaoIndividual = json_decode($distribuicaoIndividual->getProdutosQuantidades());
+                                    foreach ($ProdutosDistribuicaoIndividual as $IdProduto => $Quantidade) {
+                                        if (!key_exists($IdProduto, $ProdutosQuantidadesAgregado)) {
+                                            $ProdutosQuantidadesAgregado[$IdProduto] = 0;
+                                        }
+                                        $ProdutosQuantidadesAgregado[$IdProduto] += $Quantidade;// Aqui vamos junatar todas as quantidades de produtos do agregado
+                                    }
+                                } ?>
+                            <? } ?>
+                            <?
+                        }
+
+
                         $credencialB = false;
-                        foreach ($credenciais as $credencial) {
-                            if ($credencial->getGrupoDistribuicao() == $numeroGrupoDistribuicao
-                                && json_decode($credencial->getIdsObjetosAssociados()) == $distribuicaoAgregado[0]->getId()) {
-                                $credencialB = $credencial;
-                                break;
+
+                        if (count($credenciais) > 0) {
+                            $CI = &get_instance();
+                            foreach ($credenciais as $credencial) {
+                                // Decodifica a string JSON
+                                $idsObjetosAssociados = json_decode($credencial->getIdsObjetosAssociados(), true);
+
+                                // Verifica se a decodificação resultou em um array
+                                if (is_array($idsObjetosAssociados)) {
+                                    // Verifica se o ID desejado está no array de IDs
+                                    if ($credencial->getGrupoDistribuicao() == $numeroGrupoDistribuicao
+                                        && in_array($entregas[$IdEntregaAgregado]->getId(), $idsObjetosAssociados)) {
+                                        $credencialB = $credencial;
+                                        break;
+                                    }
+                                }else if($idsObjetosAssociados == $entregas[$IdEntregaAgregado]->getId()){
+                                    $credencialB = $credencial;
+                                    break;
+                                }
                             }
                         }
 
+
                         ?>
+
+
                         <tr class="tr-accordion">
                             <td class="trigger">
                                 <? if (!$credencialB) { ?>
@@ -73,39 +115,20 @@ if (count($distribuicoesPorAgregado) > 0) { ?>
                                     echo $agregados[$IdAgregado]->getNissConstituintePrincipal();
                                 } ?>
                             </td>
+
+
                             <td>
-                                <? if ($distribuicaoAgregado[0]->getEstado() == Distribuicao::ESTADO_TERMINADA) { ?>
-                                    <span class="tag-estado-sucesso"><?= $distribuicaoAgregado[0]->getDesignacaoEstado() ?></span>
+                                <? if ($entregas[$IdEntregaAgregado]->getEstado() == Entrega::ESTADO_TERMINADA) { ?>
+                                    <span class="tag-estado-sucesso"><?= $entregas[$IdEntregaAgregado]->getDesignacaoEstado() ?></span>
                                 <? } else { ?>
-                                    <span class="tag-estado-aviso"><?= $distribuicaoAgregado[0]->getDesignacaoEstado() ?></span>
+                                    <span class="tag-estado-aviso"><?= $entregas[$IdEntregaAgregado]->getDesignacaoEstado() ?></span>
                                 <? } ?>
                             </td>
                             <td>
-                                <?
-                                $ProdutosQuantidadesAgregado = [];
-                                foreach ($distribuicaoAgregado as $distribuicao) { ?>
-                                    <?
-                                    $IdsEntregas = json_decode($distribuicao->getIdsEntregas());
-                                    foreach ($IdsEntregas as $IdEntrega) {
-                                        $entrega = $entregas[$IdEntrega];
-                                        $IdsDistriIndividuais = json_decode($entrega->getIdsDistribuicoesIndividuais());
-                                        foreach ($IdsDistriIndividuais as $IdDistriIndividual) {
-                                            $distribuicaoIndividual = $distribuicoes_individuais[$IdDistriIndividual];
-                                            $ProdutosDistribuicaoIndividual = json_decode($distribuicaoIndividual->getProdutosQuantidades());
-                                            foreach ($ProdutosDistribuicaoIndividual as $IdProduto => $Quantidade) {
-                                                if (!key_exists($IdProduto, $ProdutosQuantidadesAgregado)) {
-                                                    $ProdutosQuantidadesAgregado[$IdProduto] = 0;
-                                                }
-                                                $ProdutosQuantidadesAgregado[$IdProduto] += $Quantidade;// Aqui vamos junatar todas as quantidades de produtos do agregado
-                                            }
-                                        } ?>
-                                    <? } ?>
-                                    <?
-                                }
-                                ?>
+
                                 <details>
                                     <summary>Ver produtos atribuidos</summary>
-                                    <table class="display dataTable responsive">
+                                    <table class="display responsive">
                                         <thead>
                                         <tr>
                                             <th>Produto</th>

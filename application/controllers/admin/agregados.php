@@ -159,7 +159,7 @@ class Agregados extends CI_Controller {
             $errors = [];
 
             // Construa um array de erros associados aos campos
-            $fields = ['NissConstituintePrincipal', 'Grupo', 'IdsEntidadesDistribuidoras','Morada'];
+            $fields = ['NissConstituintePrincipal', 'Grupo', 'IdsEntidadesDistribuidoras', 'Morada'];
 
             foreach ($fields as $field) {
                 $error = form_error($field);
@@ -247,7 +247,7 @@ class Agregados extends CI_Controller {
             echo json_encode(['success' => true, 'message' => 'Agregado eliminado com sucesso.']);
         } else {
             header('Content-Type: application/json');
-            echo json_encode(['success' => false, 'message' => 'Não foi possivel eliminar o Agregado solicitado.']);
+            echo json_encode(['success' => false, 'message' => 'Não foi possível eliminar o Agregado solicitado.']);
         }
     }
 
@@ -266,13 +266,14 @@ class Agregados extends CI_Controller {
         $IdAgregado = $this->input->post('IdAgregado');
         $DataNascimento = $this->input->post('DataNascimento');
 
-        $this->form_validation->set_rules('Niss', 'Niss', 'required|numeric');
+        $this->form_validation->set_rules('Niss', 'Niss', 'required|numeric|is_unique[' . Constituinte::TABELA . '.Niss]');
         $this->form_validation->set_rules('IdEscalao', 'IdEscalao', 'required|numeric');
         $this->form_validation->set_rules('IdAgregado', 'IdAgregado', 'required|numeric');
         $this->form_validation->set_rules('IdAgregado', 'IdAgregado', 'required|date_valid');
 
         $this->form_validation->set_message('required', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
         $this->form_validation->set_message('numeric', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
+        $this->form_validation->set_message('is_unique', '<i class="fas fa-exclamation-triangle"></i> Já existe um constituinte com este niss.');
 
         if ($this->form_validation->run() === false) {
             $errors = [];
@@ -382,12 +383,17 @@ class Agregados extends CI_Controller {
         $IdEscalao = $this->input->post('IdEscalao');
         $IdAgregado = $this->input->post('IdAgregado');
 
-        $this->form_validation->set_rules('Niss', 'Niss', 'required|numeric');
+        if ($Niss != $Constituinte->getNiss()) {
+            $this->form_validation->set_rules('Niss', 'Niss', 'required|numeric|is_unique[' . Constituinte::TABELA . '.Niss]');
+        } else {
+            $this->form_validation->set_rules('Niss', 'Niss', 'required|numeric');
+        }
         $this->form_validation->set_rules('IdEscalao', 'IdEscalao', 'required|numeric');
         $this->form_validation->set_rules('IdAgregado', 'IdAgregado', 'required|numeric');
 
         $this->form_validation->set_message('required', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
         $this->form_validation->set_message('numeric', '<i class="fas fa-exclamation-triangle"></i> Por favor preencha o campo corretamente.');
+        $this->form_validation->set_message('is_unique', '<i class="fas fa-exclamation-triangle"></i> Já existe um constituinte com este niss.');
 
         if ($this->form_validation->run() === false) {
             $errors = [];

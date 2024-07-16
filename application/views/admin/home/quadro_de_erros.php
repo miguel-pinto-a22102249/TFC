@@ -3,7 +3,7 @@ $this->load->model('Produto');
 $this->load->model('Distribuicao');
 $this->load->model('Agregado_Familiar');
 $this->load->model('Constituinte');
-$produtos_sem_stock = (new Produto())->obtemElementos(null, ['StockAtual' => 0]);
+$produtos_sem_stock = (new Produto())->obtemElementos(null, ['StockAtual' => [0,"where"]]);
 $distribuicoes = (new Distribuicao())->obtemElementos(null, null);
 $agregados = (new Agregado_Familiar())->obtemElementos(null, null);
 $constituintes = (new Constituinte())->obtemElementos(null, null);

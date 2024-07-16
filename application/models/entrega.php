@@ -37,6 +37,8 @@ class Entrega extends Model_Base {
     const TIPO_ENTREGA_LOCAL = '20';
     const TIPO_ENTREGA_RESIDENCIA = '21';
 
+    const ESTADO_TERMINADA = 2;
+
     public function __construct() {
         parent::__construct();
         $this->load->database('default');
@@ -110,6 +112,20 @@ class Entrega extends Model_Base {
      */
     public function setTipoEntrega($TipoEntrega): void {
         $this->TipoEntrega = $TipoEntrega;
+    }
+
+    public function getDesignacaoEstado() {
+        switch ($this->Estado) {
+            case self::ESTADO_TERMINADA:
+                echo "Terminada";
+                break;
+            case self::ESTADO_ATIVO:
+                echo "Por Assinar";
+                break;
+            case self::ESTADO_INATIVO:
+                echo "Inativo";
+                break;
+        }
     }
 
 

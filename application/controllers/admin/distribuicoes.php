@@ -36,14 +36,15 @@ class Distribuicoes extends CI_Controller {
     public function listar() {
         $CI = &get_instance();
 
-        $this->db->select('DATE(Data) as Data, NumeroGrupoDistribuicao, COUNT(*) as numero_distribuicoes');
+        $this->db->select('DATE(DataCriacao) as Data, NumeroGrupoDistribuicao, COUNT(*) as numero_distribuicoes');
         $this->db->from('distribuicao');
         $this->db->group_by('Data, NumeroGrupoDistribuicao');
         $this->db->order_by('NumeroGrupoDistribuicao', 'DESC');
         $query = $this->db->get();
         $resultados = $query->result();
+        $CI->firephp->log($resultados);
 
-        $credenciais = (new Credencial())->obtemElementos(null, null);
+        $credenciais = (new Credencial())->obtemElementos(null, null, ['TipoCredencial' => [Credencial::TIPO_CREDENCIAL_A, 'where']]);
 
 
         $this->load->view('admin/template/header', ["tituloArea" => "Distribuições", "subtituloArea" => "Listar", "acoes" => [
@@ -113,13 +114,13 @@ class Distribuicoes extends CI_Controller {
         $this->load->model('entrega');
 
         $distribuicoes = (new Distribuicao())->obtemElementos(null, ['NumeroGrupoDistribuicao' => $NumeroGrupoDistribuicao]);
-        $credenciais = (new Credencial())->obtemElementos(null, null);
+        $credenciais = (new Credencial())->obtemElementos(null, ['TipoCredencial' => [Credencial::TIPO_CREDENCIAL_B, 'where']]);
         $IDSEntregas = [];
         foreach ($distribuicoes as $distribuicao) {
             $IDSEntregas = array_merge($IDSEntregas, json_decode($distribuicao->getIdsEntregas()));
         }
 
-        $entregas = (new Entrega())->obtemElementos(null, ['Estado' => ESTADO_ATIVO, 'Id' => [$IDSEntregas, 'where_in']]);
+        $entregas = (new Entrega())->obtemElementos(null, ['Id' => [$IDSEntregas, 'where_in']]);
 
         $IDSDistribuicoesIndividuais = [];
         foreach ($entregas as $entrega) {

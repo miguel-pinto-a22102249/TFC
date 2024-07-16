@@ -83,7 +83,7 @@ setTimeout(function() {
         let data = {
             'html': htmlContent.html()
         };
-        data.IdDistribuicao = $('#IdDistribuicao').val();
+        data.IdsObjetosAssociados = $('#IdsObjetosAssociados').val();
         data.GrupoDistribuicao = $('#GrupoDistribuicao').val();
         data.TipoCredencial = $('#TipoCredencial').val();
 
